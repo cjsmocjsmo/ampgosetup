@@ -62,17 +62,6 @@ func CheckError(err error, msg string) {
 	}
 }
 
-//SetUpCheck exported
-// func SetUpCheck() {
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	MAINc := sesC.DB("maindb").C("maindb")
-// 	count, _ := MAINc.Count()
-// 	if count < 1 {
-// 		SetUp()
-// 	}
-// }
-
 // //GMainAll exported
 // func GMainAll() (Main2SL []map[string]string) {
 // 	sesCopy := DBcon()
@@ -153,24 +142,24 @@ func main() {
 	fmt.Println("creating and inserting thumbnails is complete")
 	fmt.Println("Inserting album and artists ids is complete")
 
-	// //AggArtist
-	// DistArtist := GDistArtist2()
-	// fmt.Printf("\n\n\n this is DistArtist %s \n\n\n", DistArtist)
-	// var wg5 sync.WaitGroup
-	// artIdx := 0
-	// for _, DArtt := range DistArtist {
-	// 	wg5.Add(1)
-	// 	artIdx++
-	// 	go func(DArtt map[string]string, artIdx int) {
-	// 		GAI := GArtInfo2(DArtt)
-	// 		APL := ArtPipeline(DArtt)
-	// 		AlbID := AddAlbumID(APL)
-	// 		InsArtIPipe2(GAI, AlbID, artIdx)
-	// 		wg5.Done()
-	// 	}(DArtt, artIdx)
-	// 	wg5.Wait()
-	// }
-	// fmt.Println("AggArtists is complete")
+	//AggArtist
+	DistArtist := GDistArtist2()
+	fmt.Printf("\n\n\n this is DistArtist %s \n\n\n", DistArtist)
+	var wg5 sync.WaitGroup
+	artIdx := 0
+	for _, DArtt := range DistArtist {
+		wg5.Add(1)
+		artIdx++
+		go func(DArtt map[string]string, artIdx int) {
+			GAI := GArtInfo2(DArtt)
+			APL := ArtPipeline(DArtt)
+			AlbID := AddAlbumID(APL)
+			InsArtIPipe2(GAI, AlbID, artIdx)
+			wg5.Done()
+		}(DArtt, artIdx)
+		wg5.Wait()
+	}
+	fmt.Println("AggArtists is complete")
 
 	// ArtistOffset()
 	// fmt.Println("ArtistOffset is complete")

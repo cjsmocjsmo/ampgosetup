@@ -48,7 +48,6 @@ func gAlbumInfo(Alb string) string {
 
 //UpdateMainDB exported
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
-	fmt.Println(m2)
 	artID := gArtistInfo(m2["artist"])
 	albID := gAlbumInfo(m2["album"])
 	Doko.Dirpath = m2["dirpath"]

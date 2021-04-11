@@ -4,6 +4,7 @@ RUN mkdir /go/src/ampgo
 WORKDIR /go/src/ampgo
 
 COPY ampgosetup.go .
+COPY artist.go .
 COPY mp3.go .
 COPY songs.go .
 COPY go.mod .
