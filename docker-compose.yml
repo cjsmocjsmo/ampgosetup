@@ -52,8 +52,8 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /media/pi/HD/Music
-      # device: /home/pi/Music
+      # device: /media/pi/HD/Music
+      device: /home/pi/Music
       # device: /media/pi/FOO/Music
       # device: /media/pi/PiTB/media
       o: bind
@@ -63,8 +63,8 @@ volumes:
     driver_opts:
       type: none
       # device: /home/pi/Thumbnails
-      # device: /home/pi/Thumbnails
-      device: /media/pi/HD/Thumbnails
+      device: /home/pi/Thumbnails
+      # device: /media/pi/HD/Thumbnails
       o: bind
 
   # ampgostaticvol:
@@ -81,8 +81,8 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      # device: /home/pi/data/db
-      device: /media/pi/HD/data/db
+      device: /home/pi/data/db
+      # device: /media/pi/HD/data/db
       o: bind
 
   # mgojsvol:
