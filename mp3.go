@@ -138,6 +138,7 @@ func TaGmap(apath string) (TAGmap Tagmap) {
 	TAGmap.AlbumID = "None"
 	TAGmap.Title = title
 	TAGmap.Genre = genre
+	TAGmap.Page = "None"
 	TAGmap.PicID = uuid
 	TAGmap.PicDB = "None"
 	TAGmap.PicPath = picpath

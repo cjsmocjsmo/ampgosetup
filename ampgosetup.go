@@ -115,8 +115,6 @@ func main() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	TitleOffset()
-
 	dalb := GDistAlbum()
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
@@ -139,43 +137,21 @@ func main() {
 		wg2.Wait()
 	}
 
-	// thumbdir := os.Getenv("AMPGO_THUMB_PATH") + "/*.jpg"
-	// thumbglob, _ := filepath.Glob(thumbdir)
-	// var wg4 sync.WaitGroup
-	// for _, thumb := range thumbglob {
-	// 	wg4.Add(1)
-	// 	go func(thumb string) {
-	// 		Thumbnails(thumb)
-	// 		wg4.Done()
-	// 	}(thumb)
-	// 	wg4.Wait()
-	// }
+	TitleOffset()
 
-	// AllObj := GMAll()
+	AllObj := GMAll()
+	var wg3 sync.WaitGroup
+	for _, blob := range AllObj {
+		wg3.Add(1)
+		go func(blob map[string]string) {
+			UpdateMainDB(blob)
+			wg3.Done()
+		}(blob)
+		wg3.Wait()
+	}
 
-	// // var wg sync.WaitGroup
-	// // for _, d := range(AllObj) {
-	// // 	wg.Add(1)
-	// // 	go func () {
-	// // 		GetPicForAlbum(d)
-	// // 		wg.Done()
-	// // 	}()
-	// // 	wg.Wait()
-	// // }
-
-	// var wg3 sync.WaitGroup
-	// for _, blob := range AllObj {
-	// 	wg3.Add(1)
-	// 	go func(blob map[string]string) {
-	// 		UpdateMainDB(blob)
-	// 		wg3.Done()
-	// 	}(blob)
-	// 	wg3.Wait()
-	// }
-
-	// fmt.Println("creating and inserting thumbnails is complete")
-
-	// fmt.Println("Inserting album and artists ids is complete")
+	fmt.Println("creating and inserting thumbnails is complete")
+	fmt.Println("Inserting album and artists ids is complete")
 
 	// //AggArtist
 	// DistArtist := GDistArtist2()

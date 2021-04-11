@@ -27,70 +27,34 @@ import (
 )
 
 //GArtistInfo exported
-func GArtistInfo(Art string) string {
+func gArtistInfo(Art string) string {
 	sesCopy := DBcon()
 	defer sesCopy.Close()
 	DARTc := sesCopy.DB("tempdb2").C("artistid")
 	var ArtInfo map[string]string = make(map[string]string)
 	DARTc.Find(bson.M{"artist": Art}).One(&ArtInfo)
-	return ArtInfo["artistid"]
+	return ArtInfo["artistID"]
 }
 
 //GAlbumInfo exported
-func GAlbumInfo(Alb string) string {
+func gAlbumInfo(Alb string) string {
 	sesCopy := DBcon()
 	defer sesCopy.Close()
 	DALBc := sesCopy.DB("tempdb2").C("albumid")
 	var AlbInfo map[string]string = make(map[string]string)
 	DALBc.Find(bson.M{"album": Alb}).One(&AlbInfo)
-	return AlbInfo["albumid"]
+	return AlbInfo["albumID"]
 }
-
-//NoArtList Exported
-var NoArtList []string
-
-//CheckThumbDB ex
-func CheckThumbDB(alb string) string {
-	sses := DBcon()
-	defer sses.Close()
-	Thumbdb := sses.DB("thumbnails").C("meta")
-	b1 := bson.M{"album": alb}
-	b2 := bson.M{}
-	var Gofthumb map[string]string = make(map[string]string)
-	err := Thumbdb.Find(b1).Select(b2).One(&Gofthumb)
-	if err != nil {
-		fmt.Println("CheckThumbDB has fucked up")
-		NoArtList = append(NoArtList, alb)
-		return "None"
-	}
-	return Gofthumb["imgID"]
-}
-
-//CheckUnknownDB exported
-// func CheckUnknownDB(dirp string) string {
-// 	fmt.Printf("this is dirp from unknowdb %s", dirp)
-// 	sess := DBcon()
-// 	defer sess.Close()
-// 	Unknowndb := sess.DB("unknownjpg").C("meta")
-// 	b1 := bson.M{"dirpath": dirp}
-// 	b2 := bson.M{}
-// 	var Gofunknown map[string]string = make(map[string]string)
-// 	err := Unknowndb.Find(b1).Select(b2).One(&Gofunknown)
-// 	if err != nil {
-// 		fmt.Println("CheckUnknownDB has fucked up")
-// 	}
-// 	fmt.Printf("\n\n\n THIS IS GOFUNKNOWN %s \n\n\n", &Gofunknown)
-// 	return Gofunknown["imgID"]
-// }
 
 //UpdateMainDB exported
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
-	artID := GArtistInfo(m2["artist"])
-	albID := GAlbumInfo(m2["album"])
+	fmt.Println(m2)
+	artID := gArtistInfo(m2["artist"])
+	albID := gAlbumInfo(m2["album"])
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
-	Doko.FileID = m2["fileID"]
 	Doko.Extension = m2["extension"]
+	Doko.FileID = m2["fileID"]
 	Doko.Filesize = m2["filesize"]
 	Doko.Artist = m2["artist"]
 	Doko.ArtistID = artID
@@ -98,15 +62,11 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.AlbumID = albID
 	Doko.Title = m2["title"]
 	Doko.Genre = m2["genre"]
-	imid := CheckThumbDB(m2["album"])
-	if imid != "None" {
-		Doko.PicID = imid
-		Doko.PicDB = "thumbnails"
-		// Doko.PicCol = "meta"
-	}
+	Doko.PicID = m2["picID"]
+	Doko.PicDB = "thumbnails"
 	Doko.Page = m2["page"]
 	Doko.Idx = m2["idx"]
-
+	Doko.PicPath = m2["picPath"]
 	sesC := DBcon()
 	defer sesC.Close()
 	DOKOc := sesC.DB("maindb").C("maindb")
@@ -138,8 +98,8 @@ func TitleOffset() (Tmap Tagmap) {
 		}
 		var idx string = strconv.Itoa(count)
 		Tmap.Filename = A["filename"]
-		Tmap.FileID = A["fileID"]
 		Tmap.Extension = A["extension"]
+		Tmap.FileID = A["fileID"]
 		Tmap.Filesize = A["filesize"]
 		Tmap.Artist = A["artist"]
 		Tmap.ArtistID = A["artistID"]
@@ -148,9 +108,9 @@ func TitleOffset() (Tmap Tagmap) {
 		Tmap.Title = A["title"]
 		Tmap.Genre = A["genre"]
 		Tmap.PicID = A["picID"]
+		Tmap.PicPath = A["picPath"]
 		Tmap.Dirpath = A["dirpath"]
 		Tmap.PicDB = A["picDB"]
-		// Tmap.PicCol = A["picCol"]
 		Tmap.Idx = idx
 		TmpDBc := sesCopy.DB("tempdb2").C("titleoffset")
 		TmpDBc.Insert(Tmap)
