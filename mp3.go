@@ -68,6 +68,7 @@ func resizeImage(infile string, outfile string) string {
 	CheckError(err, "resizeImage: image save has fucked up")
 	return outfile
 }
+
 //DumpArtToFile is exported
 func DumpArtToFile(apath string) (string, string, string, string, string) {
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
@@ -91,7 +92,6 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		defer g.Close()
 		if err != nil {
 			fmt.Println(f)
-
 			fmt.Println(err)
 		}
 		n3, err := g.Write(pic.Picture)
@@ -183,6 +183,5 @@ func InsArtistID(art string) {
 	TArtIc := sesC.DB("tempdb2").C("artistid")
 	uuid, _ := UUID()
 	DARTI := map[string]string{"artist": art, "artistID": uuid}
-	// fmt.Printf("this is artistid %s", &DARTI)
 	TArtIc.Insert(&DARTI)
 }

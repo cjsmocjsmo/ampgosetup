@@ -5,8 +5,9 @@ WORKDIR /go/src/ampgo
 
 COPY ampgosetup.go .
 COPY artist.go .
-COPY mp3.go .
+COPY album.go .
 COPY songs.go .
+COPY mp3.go .
 COPY go.mod .
 COPY go.sum .
 RUN export GOPATH=/go/src/ampgo

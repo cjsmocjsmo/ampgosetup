@@ -22,20 +22,15 @@ package main
 
 import (
 	"os"
-	// "io"
 	"fmt"
 	"log"
 	"path"
 	"sync"
 	"time"
-	// "strings"
-	//"crypto/sha512"
-	//"encoding/hex"
-	// "gopkg.in/mgo.v2"
 	"github.com/globalsign/mgo"
 	"path/filepath"
 	"runtime"
-	// "strconv"
+	"strconv"
 )
 
 //Set Constants
@@ -61,15 +56,6 @@ func CheckError(err error, msg string) {
 		panic(err)
 	}
 }
-
-// //GMainAll exported
-// func GMainAll() (Main2SL []map[string]string) {
-// 	sesCopy := DBcon()
-// 	defer sesCopy.Close()
-// 	MAINc := sesCopy.DB("tempdb2").C("titleoffset")
-// 	MAINc.Find(nil).All(&Main2SL)
-// 	return
-// }
 
 //GMAll exported
 func GMAll() (Main2SL []map[string]string) {
@@ -144,7 +130,6 @@ func main() {
 
 	//AggArtist
 	DistArtist := GDistArtist2()
-	fmt.Printf("\n\n\n this is DistArtist %s \n\n\n", DistArtist)
 	var wg5 sync.WaitGroup
 	artIdx := 0
 	for _, DArtt := range DistArtist {
@@ -164,53 +149,31 @@ func main() {
 	ArtistOffset()
 	fmt.Println("ArtistOffset is complete")
 
-	// // //AggAlbum
-	// fmt.Println("AggAlbum has started")
-	// DistAlbum3 := GDistAlbum3()
+	//AggAlbum
+	fmt.Println("AggAlbum has started")
+	DistAlbum3 := GDistAlbum3()
+	var wg6 sync.WaitGroup
+	albIdx := 0
+	for _, DAlb := range DistAlbum3 {
+		wg6.Add(1)
+		albIdx++
+		go func(DAlb map[string]string, albIdx int) {
+			artist, artistID, album, albumID, picPath, page, idx := GAlbInfo(DAlb)
+			
+			APL := AlbPipeline(DAlb)
+			nss := len(APL)
+			songcount := strconv.Itoa(nss)
 
-	// for i, DAlb := range DistAlbum3 {
-	// 	B64Image := GetSImage(DAlb)
-	// 	GAI := GAlbInfo(DAlb)
-	// 	APL := AlbPipeline(DAlb)
-	// 	ATID := AddTitleID(APL)
+			ATID := AddTitleID(APL)
+			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, page, idx)
+			wg6.Done()
+		}(DAlb, albIdx)
+		wg6.Wait()
+	}
 
-	// 	Artist := GAI["artist"]
-	// 	ArtistID := GAI["artistID"]
-	// 	Album := GAI["album"]
-	// 	AlbumID := GAI["albumID"]
-
-	// 	nss := len(APL) //titlez
-	// 	numson := strconv.Itoa(nss)
-
-	// 	var AView AlbvieW
-	// 	AView.Artist = Artist
-	// 	AView.ArtistID = ArtistID
-	// 	AView.Album = Album
-	// 	AView.AlbumID = AlbumID
-	// 	AView.Songs = ATID
-	// 	AView.Page = 0
-	// 	AView.NumSongs = numson
-	// 	AView.HSImage = B64Image
-	// 	AView.Idx = i
-	// 	InsAlbViewID(AView)
-	// }
-
-	// AlbumOffset()
-	// fmt.Println("AlbumOffset is complete")
-
-	// FileSizeF()
-	// fmt.Println("Stats are complete")
-
-	// // // RPics()
-	// // // fmt.Println("RPics is complete")
-
-	// // TextSearchIndexes()
-	// // fmt.Println("text search indexes complete")
-
-	// DropTempDBs()
-
+	AlbumOffset()
+	fmt.Println("AlbumOffset is complete")
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
-	// fmt.Printf("\n This is noartlist \n %v \n", NoArtList)
 }

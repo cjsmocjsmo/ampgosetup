@@ -34,7 +34,7 @@ func GDistArtist2() (DArtAll []map[string]string) {
 	MAINc := sesC.DB("maindb").C("maindb")
 	var DArtist []string
 	MAINc.Find(nil).Distinct("artist", &DArtist)
-	fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
+	// fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
 	for _, art := range DArtist {
 		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
 		MAINc := sesC.DB("maindb").C("maindb")
@@ -125,16 +125,6 @@ func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int) {
 	}
 }
 
-//GAVCount exported
-// func GAVCount() (zee int) {
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	ARTc := sesC.DB("artistview").C("artistviews")
-// 	zee, err := ARTc.Count()
-// 	CheckError(err, "GAVCount: albumcount has fucked up")
-// 	return
-// }
-
 //GAVAll exported
 func GAVAll() (Artview []ArtVIEW) {
 	sesC := DBcon()
@@ -147,48 +137,36 @@ func GAVAll() (Artview []ArtVIEW) {
 
 //ArtistOffset exported
 func ArtistOffset() {
-
-	// zeebee := GAVCount()
 	ArtVieW := GAVAll()
 	var artcount int = 0
 	var page int = 1
 	for _, art := range ArtVieW {
 		artcount++
-
 		switch {
 		case artcount < OffSet:
 			var BOO ArtVIEW
-
-			// pa := strconv.Itoa(page)
 			BOO.Artist = art.Artist
 			BOO.ArtistID = art.ArtistID
 			BOO.Albums = art.Albums
 			BOO.Page = page
 			BOO.Idx = art.Idx
-
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-
 		case artcount == OffSet:
-
 			artcount = 0
 			page++
-			// pa := strconv.Itoa(page)
-
 			var BOO ArtVIEW
 			BOO.Artist = art.Artist
 			BOO.ArtistID = art.ArtistID
 			BOO.Albums = art.Albums
 			BOO.Page = page
 			BOO.Idx = art.Idx
-
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-
 		}
 	}
 }
