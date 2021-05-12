@@ -54,7 +54,7 @@ volumes:
       type: none
       # device: /media/pi/1EBA-071A/ssd3/
       # device: /media/pi/HD/Music
-      device: /home/pi/Music
+      device: /home/pipi/Music
       # device: /media/pi/FOO/Music
       # device: /media/pi/PiTB/media
       o: bind
@@ -65,7 +65,7 @@ volumes:
       type: none
       # device: /media/pi/1EBA-071A/Thumbnails/
       # device: /home/pi/Thumbnails
-      device: /home/pi/Thumbnails
+      device: /home/pipi/Thumbnails
       # device: /media/pi/HD/Thumbnails
       o: bind
 
@@ -83,7 +83,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/pi/Data/db
+      device: /home/pipi/Data/db
       # device: /media/pi/HD/data/db
       o: bind
 
