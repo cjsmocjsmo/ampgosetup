@@ -30,7 +30,7 @@ services:
       - AMPGO_THUMB_PATH=/root/thumb
       - AMPGO_TEMPLATE_ADDRESS=./static/templates/AMPGO.template
       - AMPGO_SERVER_PORT=9090
-      - AMPGO_SERVER_ADDRESS=http://192.168.0.93
+      - AMPGO_SERVER_ADDRESS=http://192.168.0.91
       # - MONGO_INITDB_ROOT_USERNAME=root
       # - MONGO_INITDB_ROOT_PASSWORD=example
     networks:
@@ -53,8 +53,8 @@ volumes:
     driver_opts:
       type: none
       # device: /media/pi/1EBA-071A/ssd3/
-      device: /media/pi/HD/Music
-      # device: /home/pi/Music
+      # device: /media/pi/HD/Music
+      device: /home/pi/Music
       # device: /media/pi/FOO/Music
       # device: /media/pi/PiTB/media
       o: bind
@@ -65,8 +65,8 @@ volumes:
       type: none
       # device: /media/pi/1EBA-071A/Thumbnails/
       # device: /home/pi/Thumbnails
-      # device: /home/pi/Thumbnails
-      device: /media/pi/HD/Thumbnails
+      device: /home/pi/Thumbnails
+      # device: /media/pi/HD/Thumbnails
       o: bind
 
   # ampgostaticvol:
@@ -83,8 +83,8 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      # device: /home/pi/data/db
-      device: /media/pi/HD/data/db
+      device: /home/pi/Data/db
+      # device: /media/pi/HD/data/db
       o: bind
 
   # mgojsvol:
