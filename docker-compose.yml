@@ -3,8 +3,8 @@ version: "3.3"
 services:
   db:
     
-    # image: mongo:latest
-    image: andresvidal/rpi3-mongodb3:latest
+    image: mongo:latest
+    # image: andresvidal/rpi3-mongodb3:latest
     container_name: "ampgodb_container"
     volumes:
       - mongovol:/root/data/db
