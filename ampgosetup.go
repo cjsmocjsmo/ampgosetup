@@ -86,9 +86,9 @@ func SetUpCheck() {
 	sesC := DBcon()
 	defer sesC.Close()
 	MAINc := sesC.DB("maindb").C("maindb")
-	count := MAINc.Count()
+	count, err := MAINc.Count()
 	if err != nil {
-		fmt.Println(msg)
+		fmt.Println("Already Setup")
 		panic(err)
 	}
 	if count < 1 {
