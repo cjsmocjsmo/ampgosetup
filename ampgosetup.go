@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-package main
+package ampgosetup
 
 import (
 	"os"
@@ -83,7 +83,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 }
 
 //SetUp is exported to main
-func main() {
+func Setup() {
 	ti := time.Now()
 	fmt.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
