@@ -91,6 +91,8 @@ func SetUpCheck() {
 		fmt.Println("Already Setup")
 		panic(err)
 	}
+	fmt.Println("THIS IS COUNT")
+	fmt.Println(count)
 	if count < 1 {
 		Setup()
 	}
