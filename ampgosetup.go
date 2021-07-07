@@ -82,6 +82,20 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	return nil
 }
 
+func SetUpCheck() {
+	sesC := DBcon()
+	defer sesC.Close()
+	MAINc := sesC.DB("maindb").C("maindb")
+	count := MAINc.Count()
+	if err != nil {
+		fmt.Println(msg)
+		panic(err)
+	}
+	if count < 1 {
+		Setup()
+	}
+}
+
 //SetUp is exported to main
 func Setup() {
 	ti := time.Now()
