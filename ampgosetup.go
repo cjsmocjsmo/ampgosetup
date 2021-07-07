@@ -83,19 +83,32 @@ func visit(pAth string, f os.FileInfo, err error) error {
 }
 
 func SetUpCheck() {
-	sesC := DBcon()
-	defer sesC.Close()
-	MAINc := sesC.DB("maindb").C("maindb")
-	count, err := MAINc.Count()
-	if err != nil {
-		fmt.Println("Already Setup")
-		panic(err)
-	}
-	fmt.Println("THIS IS COUNT")
-	fmt.Println(count)
-	if count < 1 {
+	fileinfo, err := os.Stat("setup.txt")
+    if os.IsNotExist(err) {
 		Setup()
-	}
+        // log.Fatal("File does not exist.")
+		// panic(err)
+    }
+    log.Println(fileinfo)
+
+
+
+
+
+	// sesC := DBcon()
+	// defer sesC.Close()
+	// MAINc := sesC.DB("maindb").C("maindb")
+	// count, err := MAINc.Count()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	fmt.Println("Already Setup")
+	// 	// panic(err)
+	// }
+	// fmt.Println("THIS IS COUNT")
+	// fmt.Println(count)
+	// if count < 1 {
+	// 	Setup()
+	// }
 }
 
 //SetUp is exported to main
@@ -189,6 +202,33 @@ func Setup() {
 
 	AlbumOffset()
 	fmt.Println("AlbumOffset is complete")
+
+	var lines = []string{
+		"Go",
+		"is",
+		"the",
+		"best",
+		"programming",
+		"language",
+		"in",
+		"the",
+		"world",
+	}
+
+	f, err := os.Create("setup.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    // remember to close the file
+    defer f.Close()
+
+    for _, line := range lines {
+        _, err := f.WriteString(line + "\n")
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
