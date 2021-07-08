@@ -109,7 +109,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	// if count < 1 {
 	// 	Setup()
 	// }
-}
+//}
 
 //SetUp is exported to main
 func Setup() {
