@@ -91,7 +91,8 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		g, err := os.Create(dumpOutFile2)
 		defer g.Close()
 		if err != nil {
-			fmt.Println(f)
+			fmt.Println("Unable to create dumpOutFile2")
+			// fmt.Println(f)
 			fmt.Println(err)
 		}
 		n3, err := g.Write(pic.Picture)
