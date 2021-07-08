@@ -85,9 +85,12 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		if !ok {
 			log.Fatal("Couldn't assert picture frame")
 		}
-		dumpOutFile2 = "/root/fsData/thumb/" + tag.Artist() + "_-_" + tag.Album() + ".jpg"
-		fmt.Println("this is dumpOutfile2")
+		dumpOutFile2 = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+		fmt.Println("\n\n this is apath")
+		fmt.Println(apath)
 		fmt.Println(dumpOutFile2)
+		fmt.Println("this is dumpOutfile2 \n\n")
+
 		g, err := os.Create(dumpOutFile2)
 		defer g.Close()
 		if err != nil {

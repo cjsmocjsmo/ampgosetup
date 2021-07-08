@@ -70,10 +70,11 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
+		fmt.Println("FOOUND JPG")
 		fmt.Println(pAth)
 		// UnknownJpg(pAth)
 	} else if ext == ".mp3" {
-		fmt.Println("fuck")
+		fmt.Println("fuck yea mp3")
 		TaGmap(pAth)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
