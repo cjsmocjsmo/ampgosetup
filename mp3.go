@@ -94,6 +94,8 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 			log.Fatal("Couldn't assert picture frame")
 		}
 		dumpOutFile2 = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+		dumpOutFileThumb = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "thumb.jpg"
+		
 		fmt.Println("\n\n this is apath")
 		fmt.Println(apath)
 		fmt.Println(dumpOutFile2)
@@ -110,7 +112,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		CheckError(err, "dumpOutfile2 Write has fucked up")
 		fmt.Println(n3, "bytes written successfully")
 	}
-	outfile22 := resizeImage(dumpOutFile2, dumpOutFile2)
+	outfile22 := resizeImage(dumpOutFile2, dumpOutFileThumb)
 	return artist, album, title, genre, outfile22
 }
 // Tagmap exported
