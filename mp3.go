@@ -88,6 +88,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	defer tag.Close()
 	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
 	dumpOutFile2 := ""
+	dumpOutFileThumb := ""
 	for _, f := range pictures {
 		pic, ok := f.(id3v2.PictureFrame)
 		if !ok {
