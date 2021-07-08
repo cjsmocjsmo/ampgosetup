@@ -60,7 +60,7 @@ func resizeImage(infile string, outfile string) string {
 	pic, err := imaging.Open(infile)
 	if err != nil {
 		pic2, err2 := imaging.Open(os.Getenv("AMPGO_NO_ART_PIC_PATH"))
-		if err2 != nill{
+		if err2 != nil {
 			fmt.Println("FUCK ME RUNNING")
 		}
 		sjImage2 := imaging.Resize(pic2, 200, 0, imaging.Lanczos)
