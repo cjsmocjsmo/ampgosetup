@@ -82,14 +82,14 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	return nil
 }
 
-func SetUpCheck() {
-	fileinfo, err := os.Stat("setup.txt")
-    if os.IsNotExist(err) {
-		Setup()
-        // log.Fatal("File does not exist.")
-		// panic(err)
-    }
-    log.Println(fileinfo)
+// func SetUpCheck() {
+// 	fileinfo, err := os.Stat("setup.txt")
+//     if os.IsNotExist(err) {
+// 		Setup()
+//         // log.Fatal("File does not exist.")
+// 		// panic(err)
+//     }
+//     log.Println(fileinfo)
 
 
 
