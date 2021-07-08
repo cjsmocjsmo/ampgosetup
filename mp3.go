@@ -59,14 +59,7 @@ func UUID() (string, error) {
 func resizeImage(infile string, outfile string) string {
 	pic, err := imaging.Open(infile)
 	if err != nil {
-		pic2, err2 := imaging.Open(os.Getenv("AMPGO_NO_ART_PIC_PATH"))
-		if err2 != nil {
-			fmt.Println("FUCK ME RUNNING")
-		}
-		sjImage2 := imaging.Resize(pic2, 200, 0, imaging.Lanczos)
-		err = imaging.Save(sjImage2, outfile)
-		CheckError(err, "resizeImage: image save has fucked up")
-		return outfile
+		return os.Getenv("AMPGO_NO_ART_PIC_PATH")
 		// fmt.Println(infile)
 		// fmt.Println("this is file Open error noartthumb")
 		// print(err)
@@ -95,7 +88,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 			log.Fatal("Couldn't assert picture frame")
 		}
 		dumpOutFile2 = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
-		dumpOutFileThumb = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "thumb.jpg"
+		dumpOutFileThumb = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
 		
 		fmt.Println("\n\n this is apath")
 		fmt.Println(apath)
