@@ -59,9 +59,17 @@ func UUID() (string, error) {
 func resizeImage(infile string, outfile string) string {
 	pic, err := imaging.Open(infile)
 	if err != nil {
-		fmt.Println(infile)
-		fmt.Println("this is file Open error noartthumb")
-		print(err)
+		pic2, err2 := imaging.Open(os.Getenv("AMPGO_NO_ART_PIC_PATH"))
+		if err2 != nill{
+			fmt.Println("FUCK ME RUNNING")
+		}
+		sjImage2 := imaging.Resize(pic2, 200, 0, imaging.Lanczos)
+		err = imaging.Save(sjImage2, outfile)
+		CheckError(err, "resizeImage: image save has fucked up")
+		return outfile
+		// fmt.Println(infile)
+		// fmt.Println("this is file Open error noartthumb")
+		// print(err)
 	}
 	sjImage := imaging.Resize(pic, 200, 0, imaging.Lanczos)
 	err = imaging.Save(sjImage, outfile)
