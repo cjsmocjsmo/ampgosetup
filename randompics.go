@@ -157,7 +157,7 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 		ImageInfoMap.Dirpath = dir
 		ImageInfoMap.Filename = filename
 		ImageInfoMap.Imagesize = image_size
-		ImageInfoMap.imagehttpaddr = image_http_path
+		ImageInfoMap.ImageHttpAddr = image_http_path
 
 		fmt.Printf("this is ImageInfoMap %d", ImageInfoMap)
 
@@ -170,7 +170,7 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 
 	}
 
-
+	return 
 	// CreateIndexAlbumIDDB()
 	// ofse := os.Getenv("AMPGO_OFFSET")
 	// offset, _ := strconv.Atoi(ofse)
