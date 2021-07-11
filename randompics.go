@@ -24,10 +24,11 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"time"
-	// "gopkg.in/mgo.v2/bson"
+	// "time"
 	// "gopkg.in/mgo.v2"
-	mathrand "math/rand"
+	"gopkg.in/mgo.v2/bson"
+	// mathrand "math/rand"
+	"path/filepath"
 )
 
 //use index in albums db
@@ -66,31 +67,31 @@ import (
 // 	return
 // }
 
-func getDBCount() int {
-	sesC := DBcon()
-	defer sesC.Close()
-	ALBVc := sesC.DB("albview").C("albview")
-	count, _ := ALBVc.Count()
-	return count
-}
+// func getDBCount() int {
+// 	sesC := DBcon()
+// 	defer sesC.Close()
+// 	ALBVc := sesC.DB("albview").C("albview")
+// 	count, _ := ALBVc.Count()
+// 	return count
+// }
 
-func getRandNumb(dbc int) (myRand int) {
-	mathrand.Seed(time.Now().UnixNano())
-	min := 1
-	max := dbc
-	myRand = mathrand.Intn(max-min+1) + min
-	return
-}
+// func getRandNumb(dbc int) (myRand int) {
+// 	mathrand.Seed(time.Now().UnixNano())
+// 	min := 1
+// 	max := dbc
+// 	myRand = mathrand.Intn(max-min+1) + min
+// 	return
+// }
 
-func createRandNumList(dbc int) (randlist []int) {
-	ranpicnum := os.Getenv("AMPGO_NUM_RAND_PICS")
-	rpn, _ := strconv.Atoi(ranpicnum)
-	for i := 0; i < rpn; i++ {
-		r := getRandNumb(dbc)
-		randlist = append(randlist, r)
-	}
-	return
-}
+// func createRandNumList(dbc int) (randlist []int) {
+// 	ranpicnum := os.Getenv("AMPGO_NUM_RAND_PICS")
+// 	rpn, _ := strconv.Atoi(ranpicnum)
+// 	for i := 0; i < rpn; i++ {
+// 		r := getRandNumb(dbc)
+// 		randlist = append(randlist, r)
+// 	}
+// 	return
+// }
 
 // func getAlbIDList(randlist []int) (randpicidlist []string) {
 // 	for _, r := range randlist {
@@ -129,28 +130,55 @@ func createRandNumList(dbc int) (randlist []int) {
 // 	}
 // 	return NewList
 // }
+type ImageInfoMap struct {
+	ID bson.ObjectId `bson:"_id,omitempty"`
+	Dirpath   string `bson:"dirpath"`
+	Filename  string `bson:"filename"`
+	Imagesize string `bson:"imagesize"`
+	ImageHttpAddr string `bson:"imagehttpaddr`
 
+
+}
 //RanPics exported
-func RanPics() {
+func CreateRandomPicsDB() {
+	// =/root/static/
+	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
+	thumb_glob_path := thumb_path + "/*.jpg"
+	thumb_glob, err := filepath.Glob(thumb_glob_path)
+	if err != nil {
+		fmt.Println("CheckThumbDB has fucked up")
+	}
+	for _, v := range thumb_glob {
+		dir, filename := filepath.Split(v)
+		image_size := get_image_size(v)
+		// image_http_path := 
+
+		fmt.Printf("This is crap {}, {}, {}", dir, filename, image_size)
+
+
+
+	}
+
+
 	// CreateIndexAlbumIDDB()
 	// ofse := os.Getenv("AMPGO_OFFSET")
 	// offset, _ := strconv.Atoi(ofse)
-	dbc := getDBCount()
-	randlist := createRandNumList(dbc)
-	fmt.Println(randlist)
-	// albidlist := getAlbIDList(randlist)
 
-	// PL := getPicList(albidlist)
-
-	// var voo []int = []int{r1, r2, r3, r4, r5}
-
-	// Alblist := getAlbIDList()
-	// NumPics := getAlbumIDIndex(Alblist)
-	// Dest := shuffleList(NumPics)
-	// NL := RanNewList(Dest, Alblist)
-	// chunckit(NL)
 
 }
+
+
+func get_image_size(apath string) string {
+	fi, err := os.Stat(apath)
+	if err != nil {
+		fmt.Println(err)
+	}
+	size := fi.Size()
+	newsize := int(size)
+	
+	return strconv.Itoa(newsize)
+}
+
 
 // func chunckit(nl []map[string]string, ) {
 // 	var outslice []string

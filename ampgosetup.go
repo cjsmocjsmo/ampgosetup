@@ -202,7 +202,8 @@ func Setup() {
 	}
 
 	AlbumOffset()
-	
+
+	CreateRandomPicsDB()
 
 	var lines = []string{
 		"Go",
