@@ -130,17 +130,15 @@ import (
 // 	}
 // 	return NewList
 // }
-type ImageInfoMap struct {
+type Imageinfomap struct {
 	ID bson.ObjectId `bson:"_id,omitempty"`
 	Dirpath   string `bson:"dirpath"`
 	Filename  string `bson:"filename"`
 	Imagesize string `bson:"imagesize"`
 	ImageHttpAddr string `bson:"imagehttpaddr`
-
-
 }
 //RanPics exported
-func CreateRandomPicsDB() {
+func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 	// =/root/static/
 	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
 	thumb_glob_path := thumb_path + "/*.jpg"
@@ -148,13 +146,26 @@ func CreateRandomPicsDB() {
 	if err != nil {
 		fmt.Println("CheckThumbDB has fucked up")
 	}
+	
 	for _, v := range thumb_glob {
 		dir, filename := filepath.Split(v)
 		image_size := get_image_size(v)
-		// image_http_path := 
+		image_http_path := create_image_http_addr(v)
 
-		fmt.Printf("This is crap {}, {}, {}", dir, filename, image_size)
+		fmt.Printf("This is crap %d, %d, %d", dir, filename, image_size)
 
+		ImageInfoMap.Dirpath = dir
+		ImageInfoMap.Filename = filename
+		ImageInfoMap.Imagesize = image_size
+		ImageInfoMap.imagehttpaddr = image_http_path
+
+		fmt.Printf("this is ImageInfoMap %d", ImageInfoMap)
+
+		// ses := DBcon()
+		// defer ses.Close()
+		// tagz := ses.DB("coverart").C("meta1")
+		// tagz.Insert(TAGmap)
+		// return TAGmap
 
 
 	}
@@ -178,6 +189,17 @@ func get_image_size(apath string) string {
 	
 	return strconv.Itoa(newsize)
 }
+
+func create_image_http_addr(aimage string) string {
+	newpath := aimage[5:]
+	httppath := "https://192.168.0.91:9090/" + newpath
+	return httppath
+}
+
+
+
+
+
 
 
 // func chunckit(nl []map[string]string, ) {
