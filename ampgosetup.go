@@ -83,14 +83,14 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	return nil
 }
 
-// func SetUpCheck() {
-// 	fileinfo, err := os.Stat("setup.txt")
-//     if os.IsNotExist(err) {
-// 		Setup()
-//         // log.Fatal("File does not exist.")
-// 		// panic(err)
-//     }
-//     log.Println(fileinfo)
+func SetUpCheck() {
+	fileinfo, err := os.Stat("setup.txt")
+    if os.IsNotExist(err) {
+		Setup()
+        // log.Fatal("File does not exist.")
+		// panic(err)
+    }
+    log.Println(fileinfo)
 
 
 
@@ -110,7 +110,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	// if count < 1 {
 	// 	Setup()
 	// }
-//}
+}
 
 //SetUp is exported to main
 func Setup() {
@@ -202,7 +202,7 @@ func Setup() {
 	}
 
 	AlbumOffset()
-	fmt.Println("AlbumOffset is complete")
+	
 
 	var lines = []string{
 		"Go",
@@ -230,6 +230,7 @@ func Setup() {
         }
     }
 
+	fmt.Println("AlbumOffset is complete")
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
