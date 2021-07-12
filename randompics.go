@@ -23,12 +23,11 @@ package ampgosetup
 import (
 	"fmt"
 	"os"
+	"time"
 	"strings"
 	"strconv"
-	// "time"
-	// "gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
-	// mathrand "math/rand"
+	"github.com/globalsign/mgo/bson"
+	mathrand "math/rand"
 	"path/filepath"
 )
 
@@ -109,7 +108,7 @@ type Imageinfomap struct {
 	IType string `bson:"itype"`
 }
 //RanPics exported
-func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
+func CreateRandomPicsDB() (BulkImages []Imageinfomap) {
 	// =/root/static/
 	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
 	thumb_glob_path := thumb_path + "/*.jpg"
@@ -117,42 +116,48 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 	if err != nil {
 		fmt.Println("CheckThumbDB has fucked up")
 	}
-	
 	for i, v := range thumb_glob {
-		itype := "None"
-		if strings.Contains(v, "thumb") {
-			itype = "thumb"
-		} else {
-			itype = "original"
-		}
-		dir, filename := filepath.Split(v)
-		image_size := get_image_size(v)
-		image_http_path := create_image_http_addr(v)
-		idx := strconv.Itoa(i)
-
-
-		fmt.Println(dir)
-		fmt.Println(filename)
-		fmt.Println(image_size)
-		fmt.Println(image_http_path)
-		fmt.Println(idx)
-		fmt.Println(itype)
-
-		ImageInfoMap.Dirpath = dir
-		ImageInfoMap.Filename = filename
-		ImageInfoMap.Imagesize = image_size
-		ImageInfoMap.ImageHttpAddr = image_http_path
-		ImageInfoMap.Index = idx
-		ImageInfoMap.IType = itype
-		ses := DBcon()
-		defer ses.Close()
-		imageinfo := ses.DB("coverart").C("coverart")
-		imageinfo.Insert(ImageInfoMap)
-		return ImageInfoMap
+		var iim Imageinfomap = create_image_info_map(i, v)
+		BulkImages := append(BulkImages, iim)
+		return BulkImages
 	}
-	return
+	fmt.Println(BulkImages)
+	return 
 }
 
+func create_image_info_map(i int, afile string) (ImageInfoMap Imageinfomap) {
+	itype := "None"
+	if strings.Contains(afile, "thumb") {
+		itype = "thumb"
+	} else {
+		itype = "original"
+	}
+	dir, filename := filepath.Split(afile)
+	image_size := get_image_size(afile)
+	image_http_path := create_image_http_addr(afile)
+	ii := i + 1
+	idx := strconv.Itoa(ii)
+
+
+	fmt.Println(dir)
+	fmt.Println(filename)
+	fmt.Println(image_size)
+	fmt.Println(image_http_path)
+	fmt.Println(idx)
+	fmt.Println(itype)
+
+	ImageInfoMap.Dirpath = dir
+	ImageInfoMap.Filename = filename
+	ImageInfoMap.Imagesize = image_size
+	ImageInfoMap.ImageHttpAddr = image_http_path
+	ImageInfoMap.Index = idx
+	ImageInfoMap.IType = itype
+	ses := DBcon()
+	defer ses.Close()
+	imageinfo := ses.DB("coverart").C("coverart")
+	imageinfo.Insert(ImageInfoMap)
+	return 
+}
 
 func get_image_size(apath string) string {
 	fi, err := os.Stat(apath)
@@ -171,32 +176,28 @@ func create_image_http_addr(aimage string) string {
 	return httppath
 }
 
-
-
-
-
-
-
-// func chunckit(nl []map[string]string, ) {
-// 	var outslice []string
-// 	count := 0
-// 	for _, v := range nl {
-// 		count ++
-// 		if count == 5 {
-// 			outslice = append(outslice, v["albumid"])
-// 			sesCopy := DBcon()
-// 			defer sesCopy.Close()
-// 			RPICc := sesCopy.DB("goampgo").C("randompics")
-// 			RPICc.Insert(outslice)
-// 			count = 0
-// 			outslice = nil
-// 		} else if count < 5 {
-// 			outslice = append(outslice, v["albumid"])
-// 		} else {
-// 			fmt.Println("end of loop")
-// 		}
-// 	}
-// }
+func pagonate_coverart(alist []Imageinfomap) {
+	mathrand.Seed(time.Now().UnixNano())
+	mathrand.Shuffle(len(alist), func(i, j int) { alist[i], alist[j] = alist[j], alist[i] })
+	var outslice []Imageinfomap
+	count := 0
+	for _, v := range alist {
+		count ++
+		if count == 5 {
+			outslice = append(outslice, v)
+			sesCopy := DBcon()
+			defer sesCopy.Close()
+			RPICc := sesCopy.DB("coverart").C("rppages")
+			RPICc.Insert(outslice)
+			count = 0
+			outslice = nil
+		} else if count < 5 {
+			outslice = append(outslice, v)
+		} else {
+			fmt.Println("end of loop")
+		}
+	}
+}
 
 // func shuffleList(num []int) []int {
 // 	dest := make([]int, len(num))

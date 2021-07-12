@@ -91,25 +91,6 @@ func SetUpCheck() {
 		// panic(err)
     }
     log.Println(fileinfo)
-
-
-
-
-
-	// sesC := DBcon()
-	// defer sesC.Close()
-	// MAINc := sesC.DB("maindb").C("maindb")
-	// count, err := MAINc.Count()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// 	fmt.Println("Already Setup")
-	// 	// panic(err)
-	// }
-	// fmt.Println("THIS IS COUNT")
-	// fmt.Println(count)
-	// if count < 1 {
-	// 	Setup()
-	// }
 }
 
 //SetUp is exported to main
@@ -203,7 +184,9 @@ func Setup() {
 
 	AlbumOffset()
 
-	CreateRandomPicsDB()
+	alist := CreateRandomPicsDB()
+	fmt.Println(alist)
+	pagonate_coverart(alist)
 
 	var lines = []string{
 		"Go",
