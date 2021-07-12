@@ -27,20 +27,21 @@ import (
 	"path"
 	"sync"
 	"time"
-	"github.com/globalsign/mgo"
-	"path/filepath"
 	"runtime"
 	"strconv"
+	"path/filepath"
+	"github.com/globalsign/mgo"
 )
 
 //Set Constants
 const (
-	OffSet = 10
+	// OffSet := os.Getenv("AMPGO_OFFSET")
+	OffSet = 35
 )
 
 //DBcon exported
 func DBcon() *mgo.Session {
-	s, err := mgo.Dial(os.Getenv("AMP_AMPDB_ADDR"))
+	s, err := mgo.Dial(os.Getenv("AMPGO_AMPDB_ADDR"))
 	if err != nil {
 		log.Println("Session creation dial error")
 		log.Println(err)
@@ -175,6 +176,20 @@ func Setup() {
 	for _, DAlb := range DistAlbum3 {
 		wg6.Add(1)
 		albIdx++
+
+
+		// var page int
+		// i := 1
+		// if i < 12 {
+		// 	page = 1
+		// } else if i % 12 == 0 {
+		// 	page += 1
+		// } else {
+		// 	fmt.Println("I'm Not A Page")
+		// 	page = page
+		// }
+
+
 		go func(DAlb map[string]string, albIdx int) {
 			artist, artistID, album, albumID, picPath, page, idx := GAlbInfo(DAlb)
 			APL := AlbPipeline(DAlb)

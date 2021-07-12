@@ -48,7 +48,8 @@ func GAlbInfo(DAlb map[string]string) (string, string, string, string, string, s
 	defer sess.Close()
 	AMPc := sess.DB("maindb").C("maindb")
 	AMPc.Find(bson.M{"album": DAlb["album"]}).One(&AlbInfo2)
-	return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["page"], AlbInfo2["idx"]
+	// return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["page"], AlbInfo2["idx"]
+	return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["idx"], AlbInfo2["mainpage"]
 }
 
 //  exported
@@ -94,7 +95,7 @@ type AlbvieW struct {
 	Album    string              `bson:"album"`
 	AlbumID  string              `bson:"albumID"`
 	Songs    []map[string]string `bson:"songs"`
-	Page     string              `bson:"page"`
+	AlbumPage     string              `bson:"albumpage"`
 	NumSongs string              `bson:"numsongs"`
 	PicPath  string              `bson:"picPath"`
 	Idx      string              `bson:"idx"`
@@ -109,7 +110,7 @@ func InsAlbViewID(artist string, artistID string, album string, albumID string, 
 	AlbumID : albumID,
 	PicPath : picPath,
 	Songs : ATID,
-	Page : page,
+	AlbumPage : albumpage,
 	Idx : idx,
 	}
 	sess := DBcon()

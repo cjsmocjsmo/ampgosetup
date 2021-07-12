@@ -117,10 +117,10 @@ type Tagmap struct {
 	AlbumID   string `bson:"albumID"`
 	Title     string `bson:"title"`
 	Genre     string `bson:"genre"`
-	Page      string `bson:"page"`
+	MainPage  string `bson:"mainpage"`
 	PicID     string `bson:"picID"`
 	PicDB     string `bson:"picDB"`
-	PicPath    string `bson:"picPath"`
+	PicPath   string `bson:"picPath"`
 	Idx       string `bson:"idx"`
 }
 
@@ -142,7 +142,7 @@ func TaGmap(apath string, apage int, idx int) (TAGmap Tagmap) {
 	TAGmap.AlbumID = "None"
 	TAGmap.Title = title
 	TAGmap.Genre = genre
-	TAGmap.Page = page
+	TAGmap.MainPage = page
 	TAGmap.PicID = uuid
 	TAGmap.PicDB = "None"
 	TAGmap.PicPath = picpath
