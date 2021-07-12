@@ -86,12 +86,10 @@ func AddAlbumID(PL2 []Ap2) []map[string]string {
 	var AAID []map[string]string
 	for _, boo := range PL2 {
 		for _, boo2 := range boo.Albumz {
-			// fmt.Printf("\n\n\n THIS IS BOO %s \n\n\n", boo2)
 			var AAid map[string]string = make(map[string]string)
 			b1 := bson.M{"album": boo2}
 			b2 := bson.M{}
 			AMP2c.Find(b1).Select(b2).One(&AAid)
-			// fmt.Printf("\n\n\n\n THIS IS AAID %s \n\n\n\n", AAid)
 			AAID = append(AAID, AAid)
 		}
 	}

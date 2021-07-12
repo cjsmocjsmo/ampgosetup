@@ -23,12 +23,10 @@ package ampgosetup
 import (
 	"fmt"
 	"os"
-	// "time"
 	"strings"
 	"strconv"
-	"github.com/globalsign/mgo/bson"
-	// mathrand "math/rand"
 	"path/filepath"
+	"github.com/globalsign/mgo/bson"
 )
 
 type Imageinfomap struct {
@@ -44,7 +42,6 @@ type Imageinfomap struct {
 
 //RanPics exported
 func CreateRandomPicsDB() []Imageinfomap {
-	// =/root/static/
 	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
 	thumb_glob_path := thumb_path + "/*.jpg"
 	thumb_glob, err := filepath.Glob(thumb_glob_path)
@@ -59,14 +56,11 @@ func CreateRandomPicsDB() []Imageinfomap {
 		} else if i % 5 == 0 {
 			page += 1
 		} else {
-			fmt.Println("I'm Not A Page")
 			page = page
 		}
 		var iim Imageinfomap = create_image_info_map(i, v, page)
 		BulkImages = append(BulkImages, iim)
-		// return BulkImages
 	}
-	fmt.Println(BulkImages)
 	return BulkImages
 }
 
@@ -115,12 +109,3 @@ func create_image_http_addr(aimage string) string {
 	httppath := "https://192.168.0.91:9090" + aimage[5:]
 	return httppath
 }
-
-// func shuffleList(num []int) []int {
-// 	dest := make([]int, len(num))
-// 	perm := mathrand.Perm(len(num))
-// 	for i, v :=  range perm {
-// 		dest[v] = num[i]
-// 	}
-// 	return dest
-// }

@@ -23,7 +23,6 @@ package ampgosetup
 import (
 	"fmt"
 	"github.com/globalsign/mgo/bson"
-	// "gopkg.in/mgo.v2/bson"
 	"strconv"
 )
 

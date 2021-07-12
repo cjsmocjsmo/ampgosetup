@@ -61,9 +61,6 @@ func resizeImage(infile string, outfile string) string {
 	pic, err := imaging.Open(infile)
 	if err != nil {
 		return os.Getenv("AMPGO_NO_ART_PIC_PATH")
-		// fmt.Println(infile)
-		// fmt.Println("this is file Open error noartthumb")
-		// print(err)
 	}
 	sjImage := imaging.Resize(pic, 200, 0, imaging.Lanczos)
 	err = imaging.Save(sjImage, outfile)
@@ -92,15 +89,10 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
 		dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
 		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
-		fmt.Println("\n\n this is apath")
-		fmt.Println(apath)
-		fmt.Println(newdumpOutFile2)
-
 		g, err := os.Create(newdumpOutFile2)
 		defer g.Close()
 		if err != nil {
 			fmt.Println("Unable to create newdumpOutFile2")
-			// fmt.Println(f)
 			fmt.Println(err)
 		}
 		n3, err := g.Write(pic.Picture)
@@ -110,6 +102,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
 	return artist, album, title, genre, outfile22
 }
+
 // Tagmap exported
 type Tagmap struct {
 	ID bson.ObjectId `bson:"_id,omitempty"`

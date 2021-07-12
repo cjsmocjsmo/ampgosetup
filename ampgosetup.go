@@ -78,11 +78,10 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("I'm Not A Page")
 		page = page
 	}
+
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
-		fmt.Println(pAth)
-		// UnknownJpg(pAth)
 	} else if ext == ".mp3" {
 		fmt.Println("fuck yea mp3")
 		TaGmap(pAth, page, i)
@@ -97,8 +96,6 @@ func SetUpCheck() {
 	fileinfo, err := os.Stat("setup.txt")
     if os.IsNotExist(err) {
 		Setup()
-        // log.Fatal("File does not exist.")
-		// panic(err)
     }
     log.Println(fileinfo)
 }
@@ -180,11 +177,9 @@ func Setup() {
 		albIdx++
 		go func(DAlb map[string]string, albIdx int) {
 			artist, artistID, album, albumID, picPath, page, idx := GAlbInfo(DAlb)
-			
 			APL := AlbPipeline(DAlb)
 			nss := len(APL)
 			songcount := strconv.Itoa(nss)
-
 			ATID := AddTitleID(APL)
 			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, page, idx)
 			wg6.Done()
@@ -195,7 +190,6 @@ func Setup() {
 	AlbumOffset()
 
 	var bulklist []Imageinfomap = CreateRandomPicsDB()
-	fmt.Println(bulklist)
 
 	var lines = []string{
 		"Go",
