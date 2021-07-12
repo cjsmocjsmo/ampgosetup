@@ -24,7 +24,7 @@ import (
 	// "os"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
-	"strconv"
+	// "strconv"
 )
 
 //GDistArtist2 exported
@@ -101,18 +101,18 @@ type ArtVIEW struct {
 	Artist   string              `bson:"artist"`
 	ArtistID string              `bson:"artistID"`
 	Albums   []map[string]string `bson:"albums"`
-	Page     int                 `bson:"page"`
+	// Page     int                 `bson:"page"`
 	Idx      int                 `bson:"idx"`
 }
 
 //InsArtIPipe2 exported
 func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int) {
-	page, _ := strconv.Atoi(AI2["page"])
+	// page, _ := strconv.Atoi(AI2["page"])
 	var AV1 ArtVIEW
 	AV1.Artist = AI2["artist"]
 	AV1.ArtistID = AI2["artistID"]
 	AV1.Albums = aAID
-	AV1.Page = page
+	// AV1.Page = page
 	AV1.Idx = idxx
 	sesC := DBcon()
 	defer sesC.Close()
@@ -134,37 +134,37 @@ func GAVAll() (Artview []ArtVIEW) {
 }
 
 //ArtistOffset exported
-func ArtistOffset() {
-	ArtVieW := GAVAll()
-	var artcount int = 0
-	var page int = 1
-	for _, art := range ArtVieW {
-		artcount++
-		switch {
-		case artcount < OffSet:
-			var BOO ArtVIEW
-			BOO.Artist = art.Artist
-			BOO.ArtistID = art.ArtistID
-			BOO.Albums = art.Albums
-			BOO.Page = page
-			BOO.Idx = art.Idx
-			sesC := DBcon()
-			defer sesC.Close()
-			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-		case artcount == OffSet:
-			artcount = 0
-			page++
-			var BOO ArtVIEW
-			BOO.Artist = art.Artist
-			BOO.ArtistID = art.ArtistID
-			BOO.Albums = art.Albums
-			BOO.Page = page
-			BOO.Idx = art.Idx
-			sesC := DBcon()
-			defer sesC.Close()
-			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-		}
-	}
-}
+// func ArtistOffset() {
+// 	ArtVieW := GAVAll()
+// 	var artcount int = 0
+// 	var page int = 1
+// 	for _, art := range ArtVieW {
+// 		artcount++
+// 		switch {
+// 		case artcount < OffSet:
+// 			var BOO ArtVIEW
+// 			BOO.Artist = art.Artist
+// 			BOO.ArtistID = art.ArtistID
+// 			BOO.Albums = art.Albums
+// 			// BOO.Page = page
+// 			BOO.Idx = art.Idx
+// 			sesC := DBcon()
+// 			defer sesC.Close()
+// 			ARTc := sesC.DB("artistview").C("artistviews")
+// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+// 		case artcount == OffSet:
+// 			artcount = 0
+// 			page++
+// 			var BOO ArtVIEW
+// 			BOO.Artist = art.Artist
+// 			BOO.ArtistID = art.ArtistID
+// 			BOO.Albums = art.Albums
+// 			// BOO.Page = page
+// 			BOO.Idx = art.Idx
+// 			sesC := DBcon()
+// 			defer sesC.Close()
+// 			ARTc := sesC.DB("artistview").C("artistviews")
+// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+// 		}
+// 	}
+// }

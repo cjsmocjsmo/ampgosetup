@@ -165,8 +165,8 @@ func Setup() {
 	}
 	fmt.Println("AggArtists is complete")
 
-	ArtistOffset()
-	fmt.Println("ArtistOffset is complete")
+	// ArtistOffset()
+	// fmt.Println("ArtistOffset is complete")
 
 	//AggAlbum
 	fmt.Println("AggAlbum has started")
