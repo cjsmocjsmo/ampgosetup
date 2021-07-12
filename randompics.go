@@ -108,7 +108,7 @@ type Imageinfomap struct {
 	IType string `bson:"itype"`
 }
 //RanPics exported
-func CreateRandomPicsDB() (BulkImages []Imageinfomap) {
+func CreateRandomPicsDB() []Imageinfomap {
 	// =/root/static/
 	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
 	thumb_glob_path := thumb_path + "/*.jpg"
@@ -116,16 +116,17 @@ func CreateRandomPicsDB() (BulkImages []Imageinfomap) {
 	if err != nil {
 		fmt.Println("CheckThumbDB has fucked up")
 	}
+	var BulkImages []Imageinfomap
 	for i, v := range thumb_glob {
 		var iim Imageinfomap = create_image_info_map(i, v)
-		BulkImages := append(BulkImages, iim)
+		BulkImages = append(BulkImages, iim)
 		return BulkImages
 	}
 	fmt.Println(BulkImages)
-	return 
+	return BulkImages
 }
 
-func create_image_info_map(i int, afile string) (ImageInfoMap Imageinfomap) {
+func create_image_info_map(i int, afile string) Imageinfomap {
 	itype := "None"
 	if strings.Contains(afile, "thumb") {
 		itype = "thumb"
@@ -137,6 +138,7 @@ func create_image_info_map(i int, afile string) (ImageInfoMap Imageinfomap) {
 	image_http_path := create_image_http_addr(afile)
 	ii := i + 1
 	idx := strconv.Itoa(ii)
+	var ImageInfoMap Imageinfomap
 	ImageInfoMap.Dirpath = dir
 	ImageInfoMap.Filename = filename
 	ImageInfoMap.Imagesize = image_size
@@ -147,7 +149,7 @@ func create_image_info_map(i int, afile string) (ImageInfoMap Imageinfomap) {
 	defer ses.Close()
 	imageinfo := ses.DB("coverart").C("coverart")
 	imageinfo.Insert(ImageInfoMap)
-	return 
+	return ImageInfoMap
 }
 
 func get_image_size(apath string) string {

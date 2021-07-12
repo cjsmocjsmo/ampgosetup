@@ -153,8 +153,8 @@ func AlbumOffset() {
 			BOO.NumSongs = alb.NumSongs
 			BOO.PicPath = alb.PicPath
 			BOO.Idx = alb.Idx
-			fmt.Printf("\n\n this is boo album page %s \n\n", BOO.Album)
-			fmt.Printf("\n\n this is boo page %v \n\n", BOO.Page)
+			// fmt.Printf("\n\n this is boo album page %s \n\n", BOO.Album)
+			// fmt.Printf("\n\n this is boo page %v \n\n", BOO.Page)
 			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
 		case Albcount == OffSet:
 			Albcount = 0

@@ -184,7 +184,7 @@ func Setup() {
 
 	AlbumOffset()
 
-	bulklist := CreateRandomPicsDB()
+	var bulklist []Imageinfomap = CreateRandomPicsDB()
 	fmt.Println(bulklist)
 	pagonate_coverart(bulklist)
 
