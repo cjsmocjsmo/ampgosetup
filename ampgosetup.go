@@ -186,7 +186,6 @@ func Setup() {
 
 	var bulklist []Imageinfomap = CreateRandomPicsDB()
 	fmt.Println(bulklist)
-	pagonate_coverart(bulklist)
 
 	var lines = []string{
 		"Go",
