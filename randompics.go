@@ -171,29 +171,29 @@ func create_image_http_addr(aimage string) string {
 
 func pagonate_coverart(alist []Imageinfomap) {
 	fmt.Println("STARTING PAGINATION \n")
-	fmt.Println("THIS IS ALIST \n")
-	fmt.Println(alist)
+	// fmt.Println("THIS IS ALIST \n")
+	// fmt.Println(alist)
 	mathrand.Seed(time.Now().UnixNano())
 	mathrand.Shuffle(len(alist), func(i, j int) { alist[i], alist[j] = alist[j], alist[i] })
-	// var outslice []Imageinfomap
-	// count := 0
+	var outslice []Imageinfomap
+	count := 0
 	for _, v := range alist {
 		fmt.Println(v)
-		// count ++
-		// if count == 5 {
-		// 	outslice = append(outslice, v)
-		// 	fmt.Println(outslice)
-		// 	sesCopy := DBcon()
-		// 	defer sesCopy.Close()
-		// 	RPICc := sesCopy.DB("coverart").C("rppages")
-		// 	RPICc.Insert(outslice)
-		// 	count = 0
-		// 	outslice = nil
-		// } else if count < 5 {
-		// 	outslice = append(outslice, v)
-		// } else {
-		// 	fmt.Println("end of loop")
-		// }
+		count ++
+		if count == 5 {
+			outslice = append(outslice, v)
+			fmt.Println(outslice)
+			sesCopy := DBcon()
+			defer sesCopy.Close()
+			RPICc := sesCopy.DB("coverart").C("rppages")
+			RPICc.Insert(outslice)
+			count = 0
+			outslice = nil
+		} else if count < 5 {
+			outslice = append(outslice, v)
+		} else {
+			fmt.Println("\n END OF LOOP \n")
+		}
 	}
 }
 
