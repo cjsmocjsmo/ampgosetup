@@ -70,22 +70,21 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
 	var page int
 	i := 1
-	if i < 5 {
+	if i < 12 {
 		page = 1
-	} else if i % 5 == 0 {
+	} else if i % 12 == 0 {
 		page += 1
 	} else {
 		fmt.Println("I'm Not A Page")
+		page = page
 	}
 	ext := path.Ext(pAth)
-	count := 0
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
 		fmt.Println(pAth)
 		// UnknownJpg(pAth)
 	} else if ext == ".mp3" {
 		fmt.Println("fuck yea mp3")
-		count += 1
 		TaGmap(pAth, page, i)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")

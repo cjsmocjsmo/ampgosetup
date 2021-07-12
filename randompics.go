@@ -60,6 +60,7 @@ func CreateRandomPicsDB() []Imageinfomap {
 			page += 1
 		} else {
 			fmt.Println("I'm Not A Page")
+			page = page
 		}
 		var iim Imageinfomap = create_image_info_map(i, v, page)
 		BulkImages = append(BulkImages, iim)
