@@ -24,6 +24,7 @@ import (
 	"os"
 	"log"
 	"fmt"
+	"strings"
 	"strconv"
 	"crypto/rand"
 	"encoding/hex"
@@ -80,17 +81,17 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	CheckError(err, "Error while opening mp3 file")
 	defer tag.Close()
 	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
-	dumpOutFile2 := ""
-	dumpOutFileThumb := ""
+	newdumpOutFile2 := ""
+	newdumpOutFileThumb := ""
 	for _, f := range pictures {
 		pic, ok := f.(id3v2.PictureFrame)
 		if !ok {
 			log.Fatal("Couldn't assert picture frame")
 		}
-		dumpOutFile2 = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
-		newdumpOutFile2 := strings.Replace(dumpOutFile2, " ", -1)
-		dumpOutFileThumb = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
-		newdumpOutFileThumb := strings.Replace(dumpOutFileThumb, " ", -1)
+		dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+		newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
+		dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
+		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
 		fmt.Println("\n\n this is apath")
 		fmt.Println(apath)
 		fmt.Println(newdumpOutFile2)
