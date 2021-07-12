@@ -178,6 +178,7 @@ func pagonate_coverart(alist []Imageinfomap) {
 		count ++
 		if count == 5 {
 			outslice = append(outslice, v)
+			fmt.Println(outslice)
 			sesCopy := DBcon()
 			defer sesCopy.Close()
 			RPICc := sesCopy.DB("coverart").C("rppages")
