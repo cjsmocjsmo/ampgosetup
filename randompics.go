@@ -178,18 +178,19 @@ func pagonate_coverart(alist []Imageinfomap) {
 	var outslice []Imageinfomap
 	count := 0
 	for _, v := range alist {
-		fmt.Println(v)
 		count ++
 		if count == 5 {
 			outslice = append(outslice, v)
+			fmt.Println("EQUAL TO FIVE")
 			fmt.Println(outslice)
 			sesCopy := DBcon()
 			defer sesCopy.Close()
-			RPICc := sesCopy.DB("coverart").C("rppages")
+			RPICc := sesCopy.DB("coverpages").C("rppages")
 			RPICc.Insert(outslice)
 			count = 0
 			outslice = nil
 		} else if count < 5 {
+			fmt.Println("LESS THAN FIVE \n")
 			outslice = append(outslice, v)
 		} else {
 			fmt.Println("\n END OF LOOP \n")
