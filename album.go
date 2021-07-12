@@ -21,7 +21,7 @@ package ampgosetup
 import (
 	"fmt"
 	"strconv"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
 )
 
 // GDistAlbum3 exported

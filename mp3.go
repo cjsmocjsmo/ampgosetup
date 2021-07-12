@@ -29,7 +29,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"path/filepath"
-	"gopkg.in/mgo.v2/bson"
+	"github.com/globalsign/mgo/bson"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
 )
