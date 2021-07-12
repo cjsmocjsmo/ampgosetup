@@ -32,41 +32,9 @@ import (
 	"path/filepath"
 )
 
-//use index in albums db
 
-//create a count db.  Index and albumID
-//get db count
-//get 5 random numbers from 0-dbcount
-//use random numbers to search count db for album Index
-//return art
 
-// func distAlbIDList() (Alblist []string) {
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	ALBVc := sesC.DB("maindb").C("maindb")
-// 	err := ALBVc.Find(nil).Distinct("albumID", &Alblist)
-// 	if err != nil {
-// 		fmt.Println("random art fucked up")
-// 		fmt.Println(err)
-// 	}
-// 	return
-// }
 
-//CreateIndexAlbumIDDB exported
-// func CreateIndexAlbumIDDB() {
-// 	var NumPics []map[string]string
-// 	albidlist := distAlbIDList()
-// 	for i, ab := range albidlist {
-// 		ii := strconv.Itoa(i)
-// 		ace := map[string]string{"idxNum": ii, "albID": ab}
-// 		NumPics = append(NumPics, ace)
-// 	}
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	ALBVc := sesC.DB("goampgo").C("albidx")
-// 	ALBVc.Insert(&NumPics)
-// 	return
-// }
 
 // func getDBCount() int {
 // 	sesC := DBcon()
@@ -176,24 +144,13 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 		ImageInfoMap.ImageHttpAddr = image_http_path
 		ImageInfoMap.Index = idx
 		ImageInfoMap.IType = itype
-
-		fmt.Println(ImageInfoMap)
-
-		// ses := DBcon()
-		// defer ses.Close()
-		// tagz := ses.DB("coverart").C("meta1")
-		// tagz.Insert(TAGmap)
-		// return TAGmap
-
-
+		ses := DBcon()
+		defer ses.Close()
+		imageinfo := ses.DB("coverart").C("coverart")
+		imageinfo.Insert(ImageInfoMap)
+		return ImageInfoMap
 	}
-
-	return 
-	// CreateIndexAlbumIDDB()
-	// ofse := os.Getenv("AMPGO_OFFSET")
-	// offset, _ := strconv.Atoi(ofse)
-
-
+	return
 }
 
 
