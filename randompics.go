@@ -23,6 +23,7 @@ package ampgosetup
 import (
 	"fmt"
 	"os"
+	"strings"
 	"strconv"
 	// "time"
 	// "gopkg.in/mgo.v2"
@@ -136,6 +137,8 @@ type Imageinfomap struct {
 	Filename  string `bson:"filename"`
 	Imagesize string `bson:"imagesize"`
 	ImageHttpAddr string `bson:"imagehttpaddr`
+	Index string `bson:"index"`
+	IType string `bson:"itype"`
 }
 //RanPics exported
 func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
@@ -147,19 +150,31 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 		fmt.Println("CheckThumbDB has fucked up")
 	}
 	
-	for _, v := range thumb_glob {
+	for i, v := range thumb_glob {
+		itype := "None"
+		if strings.Contains(v, "thumb") {
+			itype = "thumb"
+		} else {
+			itype = "original"
+		}
 		dir, filename := filepath.Split(v)
 		image_size := get_image_size(v)
 		image_http_path := create_image_http_addr(v)
+		idx := strconv.Itoa(i)
 
-		fmt.Printf("This is crap %d, %d, %d", dir, filename, image_size)
+
+		fmt.Println(dir)
+		fmt.Println(filename)
+		fmt.Println(image_size)
 
 		ImageInfoMap.Dirpath = dir
 		ImageInfoMap.Filename = filename
 		ImageInfoMap.Imagesize = image_size
 		ImageInfoMap.ImageHttpAddr = image_http_path
+		ImageInfoMap.Index = idx
+		ImageInfoMap.IType = itype
 
-		fmt.Printf("this is ImageInfoMap %d", ImageInfoMap)
+		fmt.Println(ImageInfoMap)
 
 		// ses := DBcon()
 		// defer ses.Close()
