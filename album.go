@@ -69,7 +69,7 @@ func AlbPipeline(DAlb map[string]string) []string {
 	}).Iter()
 	err := pipeline2.All(&P2)
 	CheckError(err, "\n AlbPipeline: Agg Album pipeline2 fucked up")
-	fmt.Printf("this is P2 %s", P2)
+	// fmt.Printf("this is P2 %s", P2)
 	return P2[0].Titlez
 }
 

@@ -88,25 +88,25 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 			log.Fatal("Couldn't assert picture frame")
 		}
 		dumpOutFile2 = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+		newdumpOutFile2 := strings.Replace(dumpOutFile2, " ", -1)
 		dumpOutFileThumb = os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
-		
+		newdumpOutFileThumb := strings.Replace(dumpOutFileThumb, " ", -1)
 		fmt.Println("\n\n this is apath")
 		fmt.Println(apath)
-		fmt.Println(dumpOutFile2)
-		fmt.Println("this is dumpOutfile2 \n\n")
+		fmt.Println(newdumpOutFile2)
 
-		g, err := os.Create(dumpOutFile2)
+		g, err := os.Create(newdumpOutFile2)
 		defer g.Close()
 		if err != nil {
-			fmt.Println("Unable to create dumpOutFile2")
+			fmt.Println("Unable to create newdumpOutFile2")
 			// fmt.Println(f)
 			fmt.Println(err)
 		}
 		n3, err := g.Write(pic.Picture)
-		CheckError(err, "dumpOutfile2 Write has fucked up")
+		CheckError(err, "newdumpOutfile2 Write has fucked up")
 		fmt.Println(n3, "bytes written successfully")
 	}
-	outfile22 := resizeImage(dumpOutFile2, dumpOutFileThumb)
+	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
 	return artist, album, title, genre, outfile22
 }
 // Tagmap exported

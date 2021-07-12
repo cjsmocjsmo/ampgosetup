@@ -166,6 +166,9 @@ func CreateRandomPicsDB() (ImageInfoMap Imageinfomap) {
 		fmt.Println(dir)
 		fmt.Println(filename)
 		fmt.Println(image_size)
+		fmt.Println(image_http_path)
+		fmt.Println(idx)
+		fmt.Println(itype)
 
 		ImageInfoMap.Dirpath = dir
 		ImageInfoMap.Filename = filename
@@ -207,7 +210,7 @@ func get_image_size(apath string) string {
 
 func create_image_http_addr(aimage string) string {
 	newpath := aimage[5:]
-	httppath := "https://192.168.0.91:9090/" + newpath
+	httppath := "https://192.168.0.91:9090" + newpath
 	return httppath
 }
 
