@@ -184,9 +184,9 @@ func Setup() {
 
 	AlbumOffset()
 
-	alist := CreateRandomPicsDB()
-	fmt.Println(alist)
-	pagonate_coverart(alist)
+	bulklist := CreateRandomPicsDB()
+	fmt.Println(bulklist)
+	pagonate_coverart(bulklist)
 
 	var lines = []string{
 		"Go",

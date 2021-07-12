@@ -137,15 +137,6 @@ func create_image_info_map(i int, afile string) (ImageInfoMap Imageinfomap) {
 	image_http_path := create_image_http_addr(afile)
 	ii := i + 1
 	idx := strconv.Itoa(ii)
-
-
-	fmt.Println(dir)
-	fmt.Println(filename)
-	fmt.Println(image_size)
-	fmt.Println(image_http_path)
-	fmt.Println(idx)
-	fmt.Println(itype)
-
 	ImageInfoMap.Dirpath = dir
 	ImageInfoMap.Filename = filename
 	ImageInfoMap.Imagesize = image_size
@@ -177,11 +168,13 @@ func create_image_http_addr(aimage string) string {
 }
 
 func pagonate_coverart(alist []Imageinfomap) {
+	fmt.Println("STARTING PAGINATION \n")
 	mathrand.Seed(time.Now().UnixNano())
 	mathrand.Shuffle(len(alist), func(i, j int) { alist[i], alist[j] = alist[j], alist[i] })
 	var outslice []Imageinfomap
 	count := 0
 	for _, v := range alist {
+		fmt.Println(v)
 		count ++
 		if count == 5 {
 			outslice = append(outslice, v)
