@@ -132,7 +132,9 @@ type Tagmap struct {
 }
 
 // TAgMap exported
-func TaGmap(apath string) (TAGmap Tagmap) {
+func TaGmap(apath string, apage int, idx int) (TAGmap Tagmap) {
+	page := strconv.Itoa(apage)
+	index := strconv.Itoa(idx)
 	uuid, _ := UUID()
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	fname, size := getFileInfo(apath)
@@ -147,11 +149,11 @@ func TaGmap(apath string) (TAGmap Tagmap) {
 	TAGmap.AlbumID = "None"
 	TAGmap.Title = title
 	TAGmap.Genre = genre
-	TAGmap.Page = "None"
+	TAGmap.Page = page
 	TAGmap.PicID = uuid
 	TAGmap.PicDB = "None"
 	TAGmap.PicPath = picpath
-	TAGmap.Idx = "None"
+	TAGmap.Idx = index
 	ses := DBcon()
 	defer ses.Close()
 	tagz := ses.DB("tempdb1").C("meta1")
