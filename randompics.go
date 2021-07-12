@@ -171,8 +171,8 @@ func pagonate_coverart(alist []Imageinfomap) {
 	fmt.Println("STARTING PAGINATION \n")
 	mathrand.Seed(time.Now().UnixNano())
 	mathrand.Shuffle(len(alist), func(i, j int) { alist[i], alist[j] = alist[j], alist[i] })
-	var outslice []Imageinfomap
-	count := 0
+	// var outslice []Imageinfomap
+	// count := 0
 	for _, v := range alist {
 		fmt.Println(v)
 		// count ++
