@@ -120,7 +120,7 @@ func CreateRandomPicsDB() []Imageinfomap {
 	for i, v := range thumb_glob {
 		var iim Imageinfomap = create_image_info_map(i, v)
 		BulkImages = append(BulkImages, iim)
-		return BulkImages
+		// return BulkImages
 	}
 	fmt.Println(BulkImages)
 	return BulkImages
@@ -171,6 +171,8 @@ func create_image_http_addr(aimage string) string {
 
 func pagonate_coverart(alist []Imageinfomap) {
 	fmt.Println("STARTING PAGINATION \n")
+	fmt.Println("THIS IS ALIST \n")
+	fmt.Println(alist)
 	mathrand.Seed(time.Now().UnixNano())
 	mathrand.Shuffle(len(alist), func(i, j int) { alist[i], alist[j] = alist[j], alist[i] })
 	// var outslice []Imageinfomap
