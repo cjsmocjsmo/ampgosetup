@@ -19,8 +19,8 @@
 package ampgosetup
 
 import (
-	"fmt"
-	"strconv"
+	// "fmt"
+	// "strconv"
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -95,7 +95,7 @@ type AlbvieW struct {
 	Album    string              `bson:"album"`
 	AlbumID  string              `bson:"albumID"`
 	Songs    []map[string]string `bson:"songs"`
-	AlbumPage     string              `bson:"albumpage"`
+	// AlbumPage     string              `bson:"albumpage"`
 	NumSongs string              `bson:"numsongs"`
 	PicPath  string              `bson:"picPath"`
 	Idx      string              `bson:"idx"`
@@ -110,7 +110,7 @@ func InsAlbViewID(artist string, artistID string, album string, albumID string, 
 	AlbumID : albumID,
 	PicPath : picPath,
 	Songs : ATID,
-	AlbumPage : albumpage,
+	// AlbumPage : albumpage,
 	Idx : idx,
 	}
 	sess := DBcon()
@@ -131,44 +131,44 @@ func GAlbVCount() (AlbV []AlbvieW) {
 }
 
 //AlbumOffset exported
-func AlbumOffset() {
-	sess := DBcon()
-	defer sess.Close()
-	ALBcc := sess.DB("albview").C("albview")
-	ALBview := GAlbVCount()
-	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Page)
-	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
-	var Albcount int = 0
-	var page1 int = 1
-	for _, alb := range ALBview {
-		Albcount++
-		switch {
-		case Albcount < OffSet:
-			var BOO AlbvieW
-			BOO.Artist = alb.Artist
-			BOO.ArtistID = alb.ArtistID
-			BOO.Album = alb.Album
-			BOO.AlbumID = alb.AlbumID
-			BOO.Songs = alb.Songs
-			BOO.Page = strconv.Itoa(page1)
-			BOO.NumSongs = alb.NumSongs
-			BOO.PicPath = alb.PicPath
-			BOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
-		case Albcount == OffSet:
-			Albcount = 0
-			page1++
-			var MOO AlbvieW
-			MOO.Artist = alb.Artist
-			MOO.ArtistID = alb.ArtistID
-			MOO.Album = alb.Album
-			MOO.AlbumID = alb.AlbumID
-			MOO.Songs = alb.Songs
-			MOO.Page = strconv.Itoa(page1)
-			MOO.NumSongs = alb.NumSongs
-			MOO.PicPath = alb.PicPath
-			MOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID}, MOO)
-		}
-	}
-}
+// func AlbumOffset() {
+// 	sess := DBcon()
+// 	defer sess.Close()
+// 	ALBcc := sess.DB("albview").C("albview")
+// 	ALBview := GAlbVCount()
+	
+// 	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
+// 	var Albcount int = 0
+// 	// var page1 int = 1
+// 	for _, alb := range ALBview {
+// 		Albcount++
+// 		switch {
+// 		case Albcount < OffSet:
+// 			var BOO AlbvieW
+// 			BOO.Artist = alb.Artist
+// 			BOO.ArtistID = alb.ArtistID
+// 			BOO.Album = alb.Album
+// 			BOO.AlbumID = alb.AlbumID
+// 			BOO.Songs = alb.Songs
+// 			// BOO.Page = strconv.Itoa(page1)
+// 			BOO.NumSongs = alb.NumSongs
+// 			BOO.PicPath = alb.PicPath
+// 			BOO.Idx = alb.Idx
+// 			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
+// 		case Albcount == OffSet:
+// 			Albcount = 0
+// 			page1++
+// 			var MOO AlbvieW
+// 			MOO.Artist = alb.Artist
+// 			MOO.ArtistID = alb.ArtistID
+// 			MOO.Album = alb.Album
+// 			MOO.AlbumID = alb.AlbumID
+// 			MOO.Songs = alb.Songs
+// 			MOO.Page = strconv.Itoa(page1)
+// 			MOO.NumSongs = alb.NumSongs
+// 			MOO.PicPath = alb.PicPath
+// 			MOO.Idx = alb.Idx
+// 			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID}, MOO)
+// 		}
+// 	}
+// }

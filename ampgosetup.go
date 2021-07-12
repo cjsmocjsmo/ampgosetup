@@ -202,9 +202,10 @@ func Setup() {
 		wg6.Wait()
 	}
 
-	AlbumOffset()
+	// AlbumOffset()
 
 	var bulklist []Imageinfomap = CreateRandomPicsDB()
+	fmt.Println(bulklist)
 
 	var lines = []string{
 		"Go",
