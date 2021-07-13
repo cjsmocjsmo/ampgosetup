@@ -63,7 +63,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.Genre = m2["genre"]
 	Doko.PicID = m2["picID"]
 	Doko.PicDB = "thumbnails"
-	Doko.MainPage = m2["mainpage"]
+	Doko.TitlePage = m2["titlepage"]
 	Doko.Idx = m2["idx"]
 	Doko.PicPath = m2["picPath"]
 	sesC := DBcon()
@@ -88,12 +88,12 @@ func TitleOffset() (Tmap Tagmap) {
 		count++
 		if count <= OffSet {
 			PPage := strconv.Itoa(Pa)
-			Tmap.MainPage = PPage
+			Tmap.TitlePage = PPage
 		} else {
 			count = 1
 			Pa++
 			PPage := strconv.Itoa(Pa)
-			Tmap.MainPage = PPage
+			Tmap.TitlePage = PPage
 		}
 		var idx string = strconv.Itoa(count)
 		Tmap.Filename = A["filename"]

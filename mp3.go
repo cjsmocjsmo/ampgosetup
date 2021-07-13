@@ -106,22 +106,22 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 // Tagmap exported
 type Tagmap struct {
 	ID bson.ObjectId `bson:"_id,omitempty"`
-	Dirpath   string `bson:"dirpath"`
-	Filename  string `bson:"filename"`
-	Extension string `bson:"extension"`
-	FileID    string `bson:"fileID"`
-	Filesize  string `bson:"filesize"`
-	Artist    string `bson:"artist"`
-	ArtistID  string `bson:"artistID"`
-	Album     string `bson:"album"`
-	AlbumID   string `bson:"albumID"`
-	Title     string `bson:"title"`
-	Genre     string `bson:"genre"`
-	MainPage  string `bson:"mainpage"`
-	PicID     string `bson:"picID"`
-	PicDB     string `bson:"picDB"`
-	PicPath   string `bson:"picPath"`
-	Idx       string `bson:"idx"`
+	Dirpath    string `bson:"dirpath"`
+	Filename   string `bson:"filename"` 
+	Extension  string `bson:"extension"`
+	FileID     string `bson:"fileID"`
+	Filesize   string `bson:"filesize"`
+	Artist     string `bson:"artist"`
+	ArtistID   string `bson:"artistID"`
+	Album      string `bson:"album"`
+	AlbumID    string `bson:"albumID"`
+	Title      string `bson:"title"`
+	Genre      string `bson:"genre"`
+	TitlePage  string `bson:"titlepage"`
+	PicID      string `bson:"picID"`
+	PicDB      string `bson:"picDB"` 
+	PicPath    string `bson:"picPath"`
+	Idx        string    `bson:"idx"`
 }
 
 // TAgMap exported
@@ -142,7 +142,7 @@ func TaGmap(apath string, apage int, idx int) (TAGmap Tagmap) {
 	TAGmap.AlbumID = "None"
 	TAGmap.Title = title
 	TAGmap.Genre = genre
-	TAGmap.MainPage = page
+	TAGmap.TitlePage = page
 	TAGmap.PicID = uuid
 	TAGmap.PicDB = "None"
 	TAGmap.PicPath = picpath
@@ -154,7 +154,7 @@ func TaGmap(apath string, apage int, idx int) (TAGmap Tagmap) {
 	return TAGmap
 }
 
-func GDistAlbum() (DAlbum []string) {
+func GetDistAlbumMeta1() (DAlbum []string) {
 	sess := DBcon()
 	defer sess.Close()
 	MAINc := sess.DB("tempdb1").C("meta1")

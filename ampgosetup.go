@@ -59,7 +59,8 @@ func CheckError(err error, msg string) {
 }
 
 //GMAll exported
-func GMAll() (Main2SL []map[string]string) {
+// func GMAll() (Main2SL []map[string]string) {
+func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	sesC := DBcon()
 	defer sesC.Close()
 	MAINc := sesC.DB("tempdb2").C("titleoffset")
@@ -69,15 +70,15 @@ func GMAll() (Main2SL []map[string]string) {
 
 func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
-	var page int
+	var titlepage int
 	i := 1
-	if i < 12 {
-		page = 1
-	} else if i % 12 == 0 {
-		page += 1
+	if i < OffSet {
+		titlepage = 1
+	} else if i % OffSet == 0 {
+		titlepage += 1
 	} else {
 		fmt.Println("I'm Not A Page")
-		page = page
+		titlepage = titlepage
 	}
 
 	ext := path.Ext(pAth)
@@ -85,7 +86,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
 		fmt.Println("fuck yea mp3")
-		TaGmap(pAth, page, i)
+		TaGmap(pAth, titlepage, i)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
@@ -109,7 +110,7 @@ func Setup() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	dalb := GDistAlbum()
+	dalb := GetDistAlbumMeta1()
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
@@ -133,7 +134,8 @@ func Setup() {
 
 	TitleOffset()
 
-	AllObj := GMAll()
+	AllObj := GetTitleOffsetAll()
+
 	var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
 		wg3.Add(1)
@@ -150,17 +152,27 @@ func Setup() {
 	//AggArtist
 	DistArtist := GDistArtist2()
 	var wg5 sync.WaitGroup
-	artIdx := 0
-	for _, DArtt := range DistArtist {
+	var artpage int
+	for artIdx, DArtt := range DistArtist {
+		
+		if artIdx < OffSet {
+			artpage = 1
+		} else if artIdx % OffSet == 0 {
+			artpage++
+		} else {
+			artpage = artpage + 0
+		}
+
 		wg5.Add(1)
-		artIdx++
-		go func(DArtt map[string]string, artIdx int) {
+		go func(DArtt map[string]string, artIdx int, artpage int) {
 			GAI := GArtInfo2(DArtt)
 			APL := ArtPipeline(DArtt)
 			AlbID := AddAlbumID(APL)
-			InsArtIPipe2(GAI, AlbID, artIdx)
+			// aartIdX := strconv.Itoa(artIdx)
+			// aartpage := strconv.Itoa(artpage)
+			InsArtIPipe2(GAI, AlbID, artIdx, artpage)
 			wg5.Done()
-		}(DArtt, artIdx)
+		}(DArtt, artIdx, artpage)
 		wg5.Wait()
 	}
 	fmt.Println("AggArtists is complete")
@@ -171,34 +183,30 @@ func Setup() {
 	//AggAlbum
 	fmt.Println("AggAlbum has started")
 	DistAlbum3 := GDistAlbum3()
+
 	var wg6 sync.WaitGroup
-	albIdx := 0
-	for _, DAlb := range DistAlbum3 {
+	var albpage int
+	for albIdx, DAlb := range DistAlbum3 {
 		wg6.Add(1)
-		albIdx++
+		if albIdx < OffSet {
+			albpage = 1
+		} else if albIdx % OffSet == 0 {
+			albpage++
+		} else {
+			albpage = albpage + 0
+		}
 
-
-		// var page int
-		// i := 1
-		// if i < 12 {
-		// 	page = 1
-		// } else if i % 12 == 0 {
-		// 	page += 1
-		// } else {
-		// 	fmt.Println("I'm Not A Page")
-		// 	page = page
-		// }
-
-
-		go func(DAlb map[string]string, albIdx int) {
-			artist, artistID, album, albumID, picPath, page, idx := GAlbInfo(DAlb)
+		go func(DAlb map[string]string, albIdx int, albpage int) {
+			artist, artistID, album, albumID, picPath, idx := GAlbInfo(DAlb)
 			APL := AlbPipeline(DAlb)
 			nss := len(APL)
-			songcount := strconv.Itoa(nss)
+			
 			ATID := AddTitleID(APL)
-			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, page, idx)
+			songcount := strconv.Itoa(nss)
+			albpageconv := strconv.Itoa(albpage)
+			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, idx, albpageconv)
 			wg6.Done()
-		}(DAlb, albIdx)
+		}(DAlb, albIdx, albpage)
 		wg6.Wait()
 	}
 

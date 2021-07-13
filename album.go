@@ -47,14 +47,14 @@ func GDistAlbum3() (DAlbum []map[string]string) {
 	return
 }
 
-func GAlbInfo(DAlb map[string]string) (string, string, string, string, string, string, string) {
+func GAlbInfo(DAlb map[string]string) (string, string, string, string, string, string) {
 	var AlbInfo2 map[string]string = make(map[string]string)
 	sess := DBcon()
 	defer sess.Close()
 	AMPc := sess.DB("maindb").C("maindb")
 	AMPc.Find(bson.M{"album": DAlb["album"]}).One(&AlbInfo2)
 	// return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["page"], AlbInfo2["idx"]
-	return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["idx"], AlbInfo2["mainpage"]
+	return AlbInfo2["artist"], AlbInfo2["artistID"], AlbInfo2["album"], AlbInfo2["albumID"], AlbInfo2["picPath"], AlbInfo2["idx"] //, AlbInfo2["mainpage"]
 }
 
 //  exported
@@ -95,19 +95,19 @@ func AddTitleID(titlez []string) []map[string]string {
 
 // AlbvieW exported
 type AlbvieW struct {
-	Artist   string              `bson:"artist"`
-	ArtistID string              `bson:"artistID"`
-	Album    string              `bson:"album"`
-	AlbumID  string              `bson:"albumID"`
-	Songs    []map[string]string `bson:"songs"`
-	Page     string              `bson:"albumpage"`
-	NumSongs string              `bson:"numsongs"`
-	PicPath  string              `bson:"picPath"`
-	Idx      string              `bson:"idx"`
+	Artist    string              `bson:"artist"`
+	ArtistID  string              `bson:"artistID"`
+	Album     string              `bson:"album"`
+	AlbumID   string              `bson:"albumID"`
+	Songs     []map[string]string `bson:"songs"`
+	AlbumPage string                 `bson:"albumpage"`
+	NumSongs  string              `bson:"numsongs"`
+	PicPath   string              `bson:"picPath"`
+	Idx       string                 `bson:"idx"`
 }
 
 //InsAlbViewID exported
-func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount string, ATID []map[string]string, page string, idx string) AlbvieW {
+func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount string, ATID []map[string]string, albpage string, idx string) AlbvieW {
 	var AVV AlbvieW = AlbvieW {
 	Artist : artist,
 	ArtistID : artistID,
@@ -115,7 +115,7 @@ func InsAlbViewID(artist string, artistID string, album string, albumID string, 
 	AlbumID : albumID,
 	PicPath : picPath,
 	Songs : ATID,
-	Page : page,
+	AlbumPage : albpage,
 	Idx : idx,
 	}
 	sess := DBcon()

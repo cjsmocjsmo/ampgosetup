@@ -108,14 +108,14 @@ type ArtVIEW struct {
 }
 
 //InsArtIPipe2 exported
-func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int) {
+func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int, page int) {
 	// page, _ := strconv.Atoi(AI2["page"])
 	var AV1 ArtVIEW
 	AV1.Artist = AI2["artist"]
 	AV1.ArtistID = AI2["artistID"]
 	AV1.Albums = aAID
 	// AV1.Page = strconv.Itoa(page)
-	AV1.Page = AI2["page"]
+	AV1.Page = strconv.Itoa(page)
 	AV1.Idx = strconv.Itoa(idxx)
 	sesC := DBcon()
 	defer sesC.Close()
