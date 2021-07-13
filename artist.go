@@ -27,6 +27,8 @@ import (
 	// "strconv"
 )
 
+
+
 //GDistArtist2 exported
 func GDistArtist2() (DArtAll []map[string]string) {
 	sesC := DBcon()
@@ -136,35 +138,42 @@ func GAVAll() (Artview []ArtVIEW) {
 // ArtistOffset exported
 func ArtistOffset() {
 	ArtVieW := GAVAll()
-	var artcount int = 0
 	var page int = 1
-	for _, art := range ArtVieW {
-		artcount++
-		switch {
-			case artcount < OffSet:
-				var BOO ArtVIEW
-				BOO.Artist = art.Artist
-				BOO.ArtistID = art.ArtistID
-				BOO.Albums = art.Albums
-				BOO.Page = page
-				BOO.Idx = art.Idx
-				sesC := DBcon()
-				defer sesC.Close()
-				ARTc := sesC.DB("artistview").C("artistviews")
-				ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-			case artcount == OffSet:
-				artcount = 0
-				page++
-				var BOO ArtVIEW
-				BOO.Artist = art.Artist
-				BOO.ArtistID = art.ArtistID
-				BOO.Albums = art.Albums
-				BOO.Page = page
-				BOO.Idx = art.Idx
-				sesC := DBcon()
-				defer sesC.Close()
-				ARTc := sesC.DB("artistview").C("artistviews")
-				ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-			}
+	for i, art := range ArtVieW {
+		if i < Offset {
+			var BOO ArtVIEW
+			BOO.Artist = art.Artist
+			BOO.ArtistID = art.ArtistID
+			BOO.Albums = art.Albums
+			BOO.Page = page
+			BOO.Idx = art.Idx
+			sesC := DBcon()
+			defer sesC.Close()
+			ARTc := sesC.DB("artistview").C("artistviews")
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+		} else if i % Offset == 0 {
+			page++
+			var BOO ArtVIEW
+			BOO.Artist = art.Artist
+			BOO.ArtistID = art.ArtistID
+			BOO.Albums = art.Albums
+			BOO.Page = page
+			BOO.Idx = art.Idx
+			sesC := DBcon()
+			defer sesC.Close()
+			ARTc := sesC.DB("artistview").C("artistviews")
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+		} else {
+			var BOO ArtVIEW
+			BOO.Artist = art.Artist
+			BOO.ArtistID = art.ArtistID
+			BOO.Albums = art.Albums
+			BOO.Page = page
+			BOO.Idx = art.Idx
+			sesC := DBcon()
+			defer sesC.Close()
+			ARTc := sesC.DB("artistview").C("artistviews")
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+		}
 	}
 }

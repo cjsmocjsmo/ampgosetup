@@ -24,6 +24,11 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+const (
+	// OffSet := os.Getenv("AMPGO_OFFSET")
+	Offset = 35
+)
+
 // GDistAlbum3 exported
 func GDistAlbum3() (DAlbum []map[string]string) {
 	sess := DBcon()
@@ -138,12 +143,9 @@ func AlbumOffset() {
 	ALBview := GAlbVCount()
 	
 	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
-	var Albcount int = 0
 	var page1 int = 1
-	for _, alb := range ALBview {
-		Albcount++
-		switch {
-		case Albcount < OffSet:
+	for i, alb := range ALBview {
+		if i < Offset {
 			var BOO AlbvieW
 			BOO.Artist = alb.Artist
 			BOO.ArtistID = alb.ArtistID
@@ -155,9 +157,20 @@ func AlbumOffset() {
 			BOO.PicPath = alb.PicPath
 			BOO.Idx = alb.Idx
 			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
-		case Albcount == OffSet:
-			Albcount = 0
+		} else if i % Offset == 0 {
 			page1++
+			var MOO AlbvieW
+			MOO.Artist = alb.Artist
+			MOO.ArtistID = alb.ArtistID
+			MOO.Album = alb.Album
+			MOO.AlbumID = alb.AlbumID
+			MOO.Songs = alb.Songs
+			MOO.Page = strconv.Itoa(page1)
+			MOO.NumSongs = alb.NumSongs
+			MOO.PicPath = alb.PicPath
+			MOO.Idx = alb.Idx
+			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID}, MOO)
+		} else {
 			var MOO AlbvieW
 			MOO.Artist = alb.Artist
 			MOO.ArtistID = alb.ArtistID
