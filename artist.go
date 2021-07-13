@@ -24,7 +24,7 @@ import (
 	// "os"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
-	// "strconv"
+	"strconv"
 )
 
 
@@ -103,8 +103,8 @@ type ArtVIEW struct {
 	Artist   string              `bson:"artist"`
 	ArtistID string              `bson:"artistID"`
 	Albums   []map[string]string `bson:"albums"`
-	Page     int                 `bson:"page"`
-	Idx      int                 `bson:"idx"`
+	Page     string              `bson:"page"`
+	Idx      string              `bson:"idx"`
 }
 
 //InsArtIPipe2 exported
@@ -114,8 +114,9 @@ func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int) {
 	AV1.Artist = AI2["artist"]
 	AV1.ArtistID = AI2["artistID"]
 	AV1.Albums = aAID
-	// AV1.Page = page
-	AV1.Idx = idxx
+	// AV1.Page = strconv.Itoa(page)
+	AV1.Page = AI2["page"]
+	AV1.Idx = strconv.Itoa(idxx)
 	sesC := DBcon()
 	defer sesC.Close()
 	ARTV3c := sesC.DB("artistview").C("artistviews")
@@ -145,35 +146,35 @@ func ArtistOffset() {
 			BOO.Artist = art.Artist
 			BOO.ArtistID = art.ArtistID
 			BOO.Albums = art.Albums
-			BOO.Page = page
+			BOO.Page = strconv.Itoa(page)
 			BOO.Idx = art.Idx
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
 		} else if i % Offset == 0 {
 			page++
 			var BOO ArtVIEW
 			BOO.Artist = art.Artist
 			BOO.ArtistID = art.ArtistID
 			BOO.Albums = art.Albums
-			BOO.Page = page
+			BOO.Page = strconv.Itoa(page)
 			BOO.Idx = art.Idx
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
 		} else {
 			var BOO ArtVIEW
 			BOO.Artist = art.Artist
 			BOO.ArtistID = art.ArtistID
 			BOO.Albums = art.Albums
-			BOO.Page = page
+			BOO.Page = strconv.Itoa(page)
 			BOO.Idx = art.Idx
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
 		}
 	}
 }
