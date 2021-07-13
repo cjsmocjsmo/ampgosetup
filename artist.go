@@ -151,7 +151,7 @@ func ArtistOffset() {
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
 		} else if i % Offset == 0 {
 			page++
 			var BOO ArtVIEW
@@ -163,7 +163,7 @@ func ArtistOffset() {
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
 		} else {
 			var BOO ArtVIEW
 			BOO.Artist = art.Artist
@@ -174,7 +174,7 @@ func ArtistOffset() {
 			sesC := DBcon()
 			defer sesC.Close()
 			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": page}, BOO)
+			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
 		}
 	}
 }

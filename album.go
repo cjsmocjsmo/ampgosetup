@@ -156,7 +156,7 @@ func AlbumOffset() {
 			BOO.NumSongs = alb.NumSongs
 			BOO.PicPath = alb.PicPath
 			BOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
+			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID, "Page": alb.Page}, BOO)
 		} else if i % Offset == 0 {
 			page1++
 			var MOO AlbvieW
@@ -169,7 +169,7 @@ func AlbumOffset() {
 			MOO.NumSongs = alb.NumSongs
 			MOO.PicPath = alb.PicPath
 			MOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID}, MOO)
+			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
 		} else {
 			var MOO AlbvieW
 			MOO.Artist = alb.Artist
@@ -181,7 +181,7 @@ func AlbumOffset() {
 			MOO.NumSongs = alb.NumSongs
 			MOO.PicPath = alb.PicPath
 			MOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID}, MOO)
+			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
 		}
 	}
 }
