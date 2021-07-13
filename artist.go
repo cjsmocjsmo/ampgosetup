@@ -161,7 +161,7 @@ func ArtistOffset() {
 		ses := DBcon()
 		defer ses.Close()
 		tagz := ses.DB("tempdb2").C("artistviewoffset")
-		tagz.Insert(TAGmap)
+		tagz.Insert(BOO)
 
 	}
 }
