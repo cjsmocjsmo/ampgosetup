@@ -101,7 +101,7 @@ type ArtVIEW struct {
 	Artist   string              `bson:"artist"`
 	ArtistID string              `bson:"artistID"`
 	Albums   []map[string]string `bson:"albums"`
-	// Page     int                 `bson:"page"`
+	Page     int                 `bson:"page"`
 	Idx      int                 `bson:"idx"`
 }
 
@@ -133,38 +133,38 @@ func GAVAll() (Artview []ArtVIEW) {
 	return
 }
 
-//ArtistOffset exported
-// func ArtistOffset() {
-// 	ArtVieW := GAVAll()
-// 	var artcount int = 0
-// 	var page int = 1
-// 	for _, art := range ArtVieW {
-// 		artcount++
-// 		switch {
-// 		case artcount < OffSet:
-// 			var BOO ArtVIEW
-// 			BOO.Artist = art.Artist
-// 			BOO.ArtistID = art.ArtistID
-// 			BOO.Albums = art.Albums
-// 			// BOO.Page = page
-// 			BOO.Idx = art.Idx
-// 			sesC := DBcon()
-// 			defer sesC.Close()
-// 			ARTc := sesC.DB("artistview").C("artistviews")
-// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-// 		case artcount == OffSet:
-// 			artcount = 0
-// 			page++
-// 			var BOO ArtVIEW
-// 			BOO.Artist = art.Artist
-// 			BOO.ArtistID = art.ArtistID
-// 			BOO.Albums = art.Albums
-// 			// BOO.Page = page
-// 			BOO.Idx = art.Idx
-// 			sesC := DBcon()
-// 			defer sesC.Close()
-// 			ARTc := sesC.DB("artistview").C("artistviews")
-// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
-// 		}
-// 	}
-// }
+// ArtistOffset exported
+func ArtistOffset() {
+	ArtVieW := GAVAll()
+	var artcount int = 0
+	var page int = 1
+	for _, art := range ArtVieW {
+		artcount++
+		switch {
+			case artcount < OffSet:
+				var BOO ArtVIEW
+				BOO.Artist = art.Artist
+				BOO.ArtistID = art.ArtistID
+				BOO.Albums = art.Albums
+				BOO.Page = page
+				BOO.Idx = art.Idx
+				sesC := DBcon()
+				defer sesC.Close()
+				ARTc := sesC.DB("artistview").C("artistviews")
+				ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+			case artcount == OffSet:
+				artcount = 0
+				page++
+				var BOO ArtVIEW
+				BOO.Artist = art.Artist
+				BOO.ArtistID = art.ArtistID
+				BOO.Albums = art.Albums
+				BOO.Page = page
+				BOO.Idx = art.Idx
+				sesC := DBcon()
+				defer sesC.Close()
+				ARTc := sesC.DB("artistview").C("artistviews")
+				ARTc.Update(bson.M{"ArtistID": art.ArtistID}, BOO)
+			}
+	}
+}
