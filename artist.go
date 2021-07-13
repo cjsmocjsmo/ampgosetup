@@ -137,44 +137,44 @@ func GAVAll() (Artview []ArtVIEW) {
 }
 
 // ArtistOffset exported
-func ArtistOffset() {
-	ArtVieW := GAVAll()
-	var page int = 1
-	for i, art := range ArtVieW {
-		if i < Offset {
-			var BOO ArtVIEW
-			BOO.Artist = art.Artist
-			BOO.ArtistID = art.ArtistID
-			BOO.Albums = art.Albums
-			BOO.Page = strconv.Itoa(page)
-			BOO.Idx = art.Idx
-			sesC := DBcon()
-			defer sesC.Close()
-			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
-		} else if i % Offset == 0 {
-			page++
-			var BOO ArtVIEW
-			BOO.Artist = art.Artist
-			BOO.ArtistID = art.ArtistID
-			BOO.Albums = art.Albums
-			BOO.Page = strconv.Itoa(page)
-			BOO.Idx = art.Idx
-			sesC := DBcon()
-			defer sesC.Close()
-			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
-		} else {
-			var BOO ArtVIEW
-			BOO.Artist = art.Artist
-			BOO.ArtistID = art.ArtistID
-			BOO.Albums = art.Albums
-			BOO.Page = strconv.Itoa(page)
-			BOO.Idx = art.Idx
-			sesC := DBcon()
-			defer sesC.Close()
-			ARTc := sesC.DB("artistview").C("artistviews")
-			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
-		}
-	}
-}
+// func ArtistOffset() {
+// 	ArtVieW := GAVAll()
+// 	var page int = 1
+// 	for i, art := range ArtVieW {
+// 		if i < Offset {
+// 			var BOO ArtVIEW
+// 			BOO.Artist = art.Artist
+// 			BOO.ArtistID = art.ArtistID
+// 			BOO.Albums = art.Albums
+// 			BOO.Page = strconv.Itoa(page)
+// 			BOO.Idx = art.Idx
+// 			sesC := DBcon()
+// 			defer sesC.Close()
+// 			ARTc := sesC.DB("artistview").C("artistviews")
+// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
+// 		} else if i % Offset == 0 {
+// 			page++
+// 			var BOO ArtVIEW
+// 			BOO.Artist = art.Artist
+// 			BOO.ArtistID = art.ArtistID
+// 			BOO.Albums = art.Albums
+// 			BOO.Page = strconv.Itoa(page)
+// 			BOO.Idx = art.Idx
+// 			sesC := DBcon()
+// 			defer sesC.Close()
+// 			ARTc := sesC.DB("artistview").C("artistviews")
+// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
+// 		} else {
+// 			var BOO ArtVIEW
+// 			BOO.Artist = art.Artist
+// 			BOO.ArtistID = art.ArtistID
+// 			BOO.Albums = art.Albums
+// 			BOO.Page = strconv.Itoa(page)
+// 			BOO.Idx = art.Idx
+// 			sesC := DBcon()
+// 			defer sesC.Close()
+// 			ARTc := sesC.DB("artistview").C("artistviews")
+// 			ARTc.Update(bson.M{"ArtistID": art.ArtistID, "Page": art.Page}, BOO)
+// 		}
+// 	}
+// }

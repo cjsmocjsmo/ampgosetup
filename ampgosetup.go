@@ -165,7 +165,7 @@ func Setup() {
 	}
 	fmt.Println("AggArtists is complete")
 
-	ArtistOffset()
+	// ArtistOffset()
 	// fmt.Println("ArtistOffset is complete")
 
 	//AggAlbum
@@ -202,7 +202,7 @@ func Setup() {
 		wg6.Wait()
 	}
 
-	AlbumOffset()
+	// AlbumOffset()
 
 	var bulklist []Imageinfomap = CreateRandomPicsDB()
 	fmt.Println(bulklist)

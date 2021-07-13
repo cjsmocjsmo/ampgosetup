@@ -19,8 +19,8 @@
 package ampgosetup
 
 import (
-	"fmt"
-	"strconv"
+	// "fmt"
+	// "strconv"
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -136,52 +136,53 @@ func GAlbVCount() (AlbV []AlbvieW) {
 }
 
 //AlbumOffset exported
-func AlbumOffset() {
-	sess := DBcon()
-	defer sess.Close()
-	ALBcc := sess.DB("albview").C("albview")
-	ALBview := GAlbVCount()
+// func AlbumOffset() {
+// 	sess := DBcon()
+// 	defer sess.Close()
+// 	ALBcc := sess.DB("albview").C("albview")
+// 	ALBview := GAlbVCount()
 	
-	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
-	var page1 int = 1
-	for i, alb := range ALBview {
-		if i < Offset {
-			var BOO AlbvieW
-			BOO.Artist = alb.Artist
-			BOO.ArtistID = alb.ArtistID
-			BOO.Album = alb.Album
-			BOO.AlbumID = alb.AlbumID
-			BOO.Songs = alb.Songs
-			BOO.Page = strconv.Itoa(page1)
-			BOO.NumSongs = alb.NumSongs
-			BOO.PicPath = alb.PicPath
-			BOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID, "Page": alb.Page}, BOO)
-		} else if i % Offset == 0 {
-			page1++
-			var MOO AlbvieW
-			MOO.Artist = alb.Artist
-			MOO.ArtistID = alb.ArtistID
-			MOO.Album = alb.Album
-			MOO.AlbumID = alb.AlbumID
-			MOO.Songs = alb.Songs
-			MOO.Page = strconv.Itoa(page1)
-			MOO.NumSongs = alb.NumSongs
-			MOO.PicPath = alb.PicPath
-			MOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
-		} else {
-			var MOO AlbvieW
-			MOO.Artist = alb.Artist
-			MOO.ArtistID = alb.ArtistID
-			MOO.Album = alb.Album
-			MOO.AlbumID = alb.AlbumID
-			MOO.Songs = alb.Songs
-			MOO.Page = strconv.Itoa(page1)
-			MOO.NumSongs = alb.NumSongs
-			MOO.PicPath = alb.PicPath
-			MOO.Idx = alb.Idx
-			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
-		}
-	}
-}
+// 	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
+// 	var page1 int = 1
+// 	for i, alb := range ALBview {
+// 		if i < Offset {
+// 			var BOO AlbvieW
+// 			BOO.Artist = alb.Artist
+// 			BOO.ArtistID = alb.ArtistID
+// 			BOO.Album = alb.Album
+// 			BOO.AlbumID = alb.AlbumID
+// 			BOO.Songs = alb.Songs
+// 			BOO.Page = strconv.Itoa(page1)
+// 			BOO.NumSongs = alb.NumSongs
+// 			BOO.PicPath = alb.PicPath
+// 			BOO.Idx = alb.Idx
+// 			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
+// 			ALBcc.Update(bson.M{"Page": alb.Page}, BOO)
+// 		} else if i % Offset == 0 {
+// 			page1++
+// 			var MOO AlbvieW
+// 			MOO.Artist = alb.Artist
+// 			MOO.ArtistID = alb.ArtistID
+// 			MOO.Album = alb.Album
+// 			MOO.AlbumID = alb.AlbumID
+// 			MOO.Songs = alb.Songs
+// 			MOO.Page = strconv.Itoa(page1)
+// 			MOO.NumSongs = alb.NumSongs
+// 			MOO.PicPath = alb.PicPath
+// 			MOO.Idx = alb.Idx
+// 			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
+// 		} else {
+// 			var MOO AlbvieW
+// 			MOO.Artist = alb.Artist
+// 			MOO.ArtistID = alb.ArtistID
+// 			MOO.Album = alb.Album
+// 			MOO.AlbumID = alb.AlbumID
+// 			MOO.Songs = alb.Songs
+// 			MOO.Page = strconv.Itoa(page1)
+// 			MOO.NumSongs = alb.NumSongs
+// 			MOO.PicPath = alb.PicPath
+// 			MOO.Idx = alb.Idx
+// 			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
+// 		}
+// 	}
+// }
