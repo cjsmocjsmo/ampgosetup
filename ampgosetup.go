@@ -28,7 +28,7 @@ import (
 	"sync"
 	"time"
 	"runtime"
-	"strconv"
+	// "strconv"
 	"path/filepath"
 	"github.com/globalsign/mgo"
 )
@@ -197,14 +197,14 @@ func Setup() {
 		}
 
 		go func(DAlb map[string]string, albIdx int, albpage int) {
-			artist, artistID, album, albumID, picPath, idx := GAlbInfo(DAlb)
+			artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
 			APL := AlbPipeline(DAlb)
 			songcount := len(APL)
 			
 			ATID := AddTitleID(APL)
 			// songcount := strconv.Itoa(nss)
-			aidx, _ := strconv.Atoi(idx)
-			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, aidx, albpage)
+			// aidx, _ := strconv.Atoi(idx)
+			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albIdx, albpage)
 			wg6.Done()
 		}(DAlb, albIdx, albpage)
 		wg6.Wait()
