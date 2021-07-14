@@ -199,12 +199,12 @@ func Setup() {
 		go func(DAlb map[string]string, albIdx int, albpage int) {
 			artist, artistID, album, albumID, picPath, idx := GAlbInfo(DAlb)
 			APL := AlbPipeline(DAlb)
-			nss := len(APL)
+			songcount := len(APL)
 			
 			ATID := AddTitleID(APL)
-			songcount := strconv.Itoa(nss)
-			albpageconv := strconv.Itoa(albpage)
-			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, idx, albpageconv)
+			// songcount := strconv.Itoa(nss)
+			aidx, _ := strconv.Atoi(idx)
+			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, aidx, albpage)
 			wg6.Done()
 		}(DAlb, albIdx, albpage)
 		wg6.Wait()

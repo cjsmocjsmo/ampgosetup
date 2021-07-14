@@ -20,7 +20,7 @@ package ampgosetup
 
 import (
 	// "fmt"
-	// "strconv"
+	"strconv"
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -107,16 +107,20 @@ type AlbvieW struct {
 }
 
 //InsAlbViewID exported
-func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount string, ATID []map[string]string, albpage string, idx string) AlbvieW {
+func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) AlbvieW {
+	aalbpage := strconv.Itoa(albpage)
+	aidx := strconv.Itoa(idx)
+	asongcount := strconv.Itoa(songcount)
 	var AVV AlbvieW = AlbvieW {
 	Artist : artist,
 	ArtistID : artistID,
 	Album : album,
 	AlbumID : albumID,
+	NumSongs : asongcount,
 	PicPath : picPath,
 	Songs : ATID,
-	AlbumPage : albpage,
-	Idx : idx,
+	AlbumPage : aalbpage,
+	Idx : aidx,
 	}
 	sess := DBcon()
 	defer sess.Close()
