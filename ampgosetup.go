@@ -208,7 +208,7 @@ func Setup() {
 			// songcount := strconv.Itoa(nss)
 			// aidx, _ := strconv.Atoi(idx)
 			artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
-			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albIdx, albpage)
+			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
 			wg6.Done()
 		}(DAlb, albIdx, albpage)
 		wg6.Wait()
