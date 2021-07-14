@@ -107,26 +107,22 @@ type AlbvieW struct {
 }
 
 //InsAlbViewID exported
-func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) AlbvieW {
-	aalbpage := strconv.Itoa(albpage)
-	aidx := strconv.Itoa(idx)
-	asongcount := strconv.Itoa(songcount)
-	var AVV AlbvieW = AlbvieW {
-	Artist : artist,
-	ArtistID : artistID,
-	Album : album,
-	AlbumID : albumID,
-	NumSongs : asongcount,
-	PicPath : picPath,
-	Songs : ATID,
-	AlbumPage : aalbpage,
-	Idx : aidx,
-	}
+func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) (MyAlbview AlbvieW) {
+	MyAlbview.Artist = artist
+	MyAlbview.ArtistID = artistID
+	MyAlbview.Album = album
+	MyAlbview.AlbumID = albumID
+	MyAlbview.NumSongs = strconv.Itoa(songcount)
+	MyAlbview.PicPath = picPath
+	MyAlbview.Songs = ATID
+	MyAlbview.AlbumPage = strconv.Itoa(albpage)
+	MyAlbview.Idx = strconv.Itoa(idx)
+
 	sess := DBcon()
 	defer sess.Close()
 	AVc := sess.DB("albview").C("albview")
-	AVc.Insert(AVV)
-	return AVV
+	AVc.Insert(MyAlbview)
+	return
 }
 
 // GAlbVCount exported
