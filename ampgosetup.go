@@ -195,6 +195,10 @@ func Setup() {
 		} else {
 			albpage = albpage + 0
 		}
+		fmt.Println("\n THIS IS ALBPAGE")
+		fmt.Println(albpage)
+		fmt.Println("\n THIS IS ALBIDX")
+		fmt.Println(albIdx)
 
 		go func(DAlb map[string]string, albIdx int, albpage int) {
 			artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
