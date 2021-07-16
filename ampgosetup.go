@@ -25,12 +25,17 @@ import (
 	"fmt"
 	"log"
 	"path"
-	"sync"
+	// "sync"
 	"time"
 	"runtime"
+	"context"
 	// "strconv"
 	"path/filepath"
-	"github.com/globalsign/mgo"
+	// "github.com/globalsign/mgo"
+	"go.mongodb.org/mongo-driver/bson"
+    "go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/mongo/options"
+	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 //Set Constants
@@ -40,15 +45,68 @@ const (
 )
 
 //DBcon exported
-func DBcon() *mgo.Session {
-	s, err := mgo.Dial(os.Getenv("AMPGO_AMPDB_ADDR"))
-	if err != nil {
-		log.Println("Session creation dial error")
-		log.Println(err)
-	}
-	log.Println("Session Connection to db established")
-	return s
+// func DBcon() *mgo.Session {
+// 	s, err := mgo.Dial(os.Getenv("AMPGO_AMPDB_ADDR"))
+// 	if err != nil {
+// 		log.Println("Session creation dial error")
+// 		log.Println(err)
+// 	}
+// 	log.Println("Session Connection to db established")
+// 	return s
+// }
+
+// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+// client, err := mongo.Connect(context.ampgo(), clientOptions)
+// if err != nil {
+//     log.Fatal(err)
+// }
+// err = client.Ping(context.ampgo(), nil)
+
+// if err != nil {
+//     log.Fatal(err)
+// }
+
+// fmt.Println("Connected to MongoDB!")
+
+// maindb := client.Database("test").Collection("maindb")
+func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
+	defer cancel()
+
+	defer func() {
+		if err := client.Disconnect(ctx); err != nil {
+			panic(err)
+		}
+	}()
 }
+
+func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
+ 
+    ctx, cancel := context.WithTimeout(context.Background(),
+                                       30 * time.Second)
+    client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+    return client, ctx, cancel, err
+}
+
+func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
+ 
+    collection := client.Database(dataBase).Collection(col)
+     
+    result, err := collection.InsertOne(ctx, doc)
+    return result, err
+}
+
+func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
+	 
+		// select database and collection.
+	collection := client.Database(dataBase).Collection(col)
+		 
+		// collection has an method Find,
+		// that returns a mongo.cursor
+		// based on query and field.
+	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
+	return
+}
+
 
 //CheckError exported
 func CheckError(err error, msg string) {
@@ -60,12 +118,53 @@ func CheckError(err error, msg string) {
 
 //GMAll exported
 // func GMAll() (Main2SL []map[string]string) {
-func GetTitleOffsetAll() (Main2SL []map[string]string) {
-	sesC := DBcon()
-	defer sesC.Close()
-	MAINc := sesC.DB("tempdb2").C("titleoffset")
-	MAINc.Find(nil).All(&Main2SL)
-	return
+func GetTitleOffsetAll() {
+	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+    if err != nil {
+        panic(err)
+    }
+    defer Close(client, ctx, cancel)
+
+	var b1, b2  interface{}
+
+
+	b1 = bson.D{{}}
+	b2 = bson.D{{"_id", 0}}
+
+	cursor, err := Query(client, ctx, "tempdb2", "titleoffset", b1, b2)
+	// handle the errors.
+	if err != nil {
+	panic(err)
+	}
+
+	var results []bson.D
+
+	if err := cursor.All(ctx, &results); err != nil {
+     
+        // handle the error
+        panic(err)
+    }
+
+	// var myresults []string
+	
+
+	fmt.Println("Query Reult")
+    for _, doc := range results {
+        fmt.Println(doc)
+		// myresults = append(myresults, doc)
+    }
+	// return myresults
+
+	// insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", document)
+	// if err != nil {
+    //     panic(err)
+    // }
+
+	// sesC := DBcon()
+	// defer sesC.Close()
+	// MAINc := sesC.DB("tempdb2").C("titleoffset")
+	// MAINc.Find(nil).All(&Main2SL)
+	
 }
 
 func visit(pAth string, f os.FileInfo, err error) error {
@@ -110,143 +209,145 @@ func Setup() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	dalb := GetDistAlbumMeta1()
-	var wg1 sync.WaitGroup
-	for _, alb := range dalb {
-		wg1.Add(1)
-		go func(alb string) {
-			InsAlbumID(alb)
-			wg1.Done()
-		}(alb)
-		wg1.Wait()
-	}
+	// dalb := GetDistAlbumMeta1()
+	// var wg1 sync.WaitGroup
+	// for _, alb := range dalb {
+	// 	wg1.Add(1)
+	// 	go func(alb string) {
+	// 		InsAlbumID(alb)
+	// 		wg1.Done()
+	// 	}(alb)
+	// 	wg1.Wait()
+	// }
 
-	dart := GDistArtist()
-	var wg2 sync.WaitGroup
-	for _, art := range dart {
-		wg2.Add(1)
-		go func(art string) {
-			InsArtistID(art)
-			wg2.Done()
-		}(art)
-		wg2.Wait()
-	}
+	// dart := GDistArtist()
+	// var wg2 sync.WaitGroup
+	// for _, art := range dart {
+	// 	wg2.Add(1)
+	// 	go func(art string) {
+	// 		InsArtistID(art)
+	// 		wg2.Done()
+	// 	}(art)
+	// 	wg2.Wait()
+	// }
 
-	TitleOffset()
+	// TitleOffset()
 
-	AllObj := GetTitleOffsetAll()
+	// AllObj, _ := GetTitleOffsetAll()
 
-	var wg3 sync.WaitGroup
-	for _, blob := range AllObj {
-		wg3.Add(1)
-		go func(blob map[string]string) {
-			UpdateMainDB(blob)
-			wg3.Done()
-		}(blob)
-		wg3.Wait()
-	}
+	// var wg3 sync.WaitGroup
+	// for _, blob := range AllObj {
+	// 	wg3.Add(1)
+	// 	go func(blob map[string]string) {
+	// 		UpdateMainDB(blob)
+	// 		wg3.Done()
+	// 	}(blob)
+	// 	wg3.Wait()
+	// }
 
-	fmt.Println("creating and inserting thumbnails is complete")
-	fmt.Println("Inserting album and artists ids is complete")
+	// fmt.Println("creating and inserting thumbnails is complete")
+	// fmt.Println("Inserting album and artists ids is complete")
 
-	//AggArtist
-	DistArtist := GDistArtist2()
-	var wg5 sync.WaitGroup
-	var artpage int
-	for artIdx, DArtt := range DistArtist {
+	// //AggArtist
+	// DistArtist := GDistArtist2()
+	// var wg5 sync.WaitGroup
+	// var artpage int
+	// for artIdx, DArtt := range DistArtist {
 		
-		if artIdx < OffSet {
-			artpage = 1
-		} else if artIdx % OffSet == 0 {
-			artpage++
-		} else {
-			artpage = artpage + 0
-		}
+	// 	if artIdx < OffSet {
+	// 		artpage = 1
+	// 	} else if artIdx % OffSet == 0 {
+	// 		artpage++
+	// 	} else {
+	// 		artpage = artpage + 0
+	// 	}
 
-		wg5.Add(1)
-		go func(DArtt map[string]string, artIdx int, artpage int) {
-			GAI := GArtInfo2(DArtt)
-			APL := ArtPipeline(DArtt)
-			AlbID := AddAlbumID(APL)
-			// aartIdX := strconv.Itoa(artIdx)
-			// aartpage := strconv.Itoa(artpage)
-			InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-			wg5.Done()
-		}(DArtt, artIdx, artpage)
-		wg5.Wait()
-	}
-	fmt.Println("AggArtists is complete")
+	// 	wg5.Add(1)
+	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
+	// 		GAI := GArtInfo2(DArtt)
+	// 		APL := ArtPipeline(DArtt)
+	// 		AlbID := AddAlbumID(APL)
+	// 		// aartIdX := strconv.Itoa(artIdx)
+	// 		// aartpage := strconv.Itoa(artpage)
+	// 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
+	// 		wg5.Done()
+	// 	}(DArtt, artIdx, artpage)
+	// 	wg5.Wait()
+	// }
+	// fmt.Println("AggArtists is complete")
 
-	// ArtistOffset()
-	// fmt.Println("ArtistOffset is complete")
+	// // ArtistOffset()
+	// // fmt.Println("ArtistOffset is complete")
 
-	//AggAlbum
-	fmt.Println("AggAlbum has started")
-	DistAlbum3 := GDistAlbum3()
+	// //AggAlbum
+	// fmt.Println("AggAlbum has started")
+	// DistAlbum3 := GDistAlbum3()
 
-	var wg6 sync.WaitGroup
-	var albpage int
-	for albIdx, DAlb := range DistAlbum3 {
-		wg6.Add(1)
-		if albIdx < OffSet {
-			albpage = 1
-		} else if albIdx % OffSet == 0 {
-			albpage++
-		} else {
-			albpage = albpage + 0
-		}
-		fmt.Println("\n THIS IS ALBPAGE")
-		fmt.Println(albpage)
-		fmt.Println("\n THIS IS ALBIDX")
-		fmt.Println(albIdx)
+	// var wg6 sync.WaitGroup
+	// var albpage int
+	// for albIdx, DAlb := range DistAlbum3 {
+	// 	wg6.Add(1)
+	// 	if albIdx < OffSet {
+	// 		albpage = 1
+	// 	} else if albIdx % OffSet == 0 {
+	// 		albpage++
+	// 	} else {
+	// 		albpage = albpage + 0
+	// 	}
+	// 	fmt.Println("\n THIS IS ALBPAGE")
+	// 	fmt.Println(albpage)
+	// 	fmt.Println("\n THIS IS ALBIDX")
+	// 	fmt.Println(albIdx)
 
-		go func(DAlb map[string]string, albIdx int, albpage int) {
+	// 	go func(DAlb map[string]string, albIdx int, albpage int) {
 			
-			APL := AlbPipeline(DAlb)
-			songcount := len(APL)
-			ATID := AddTitleID(APL)
-			// songcount := strconv.Itoa(nss)
-			// aidx, _ := strconv.Atoi(idx)
-			artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
-			InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
-			wg6.Done()
-		}(DAlb, albIdx, albpage)
-		wg6.Wait()
-	}
+	// 		APL := AlbPipeline(DAlb)
+	// 		songcount := len(APL)
+	// 		ATID := AddTitleID(APL)
+	// 		// songcount := strconv.Itoa(nss)
+	// 		// aidx, _ := strconv.Atoi(idx)
+	// 		artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
+	// 		InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
+	// 		wg6.Done()
+	// 	}(DAlb, albIdx, albpage)
+	// 	wg6.Wait()
+	// }
 
-	// AlbumOffset()
+	// // AlbumOffset()
 
-	var bulklist []Imageinfomap = CreateRandomPicsDB()
-	fmt.Println(bulklist)
+	// var bulklist []Imageinfomap = CreateRandomPicsDB()
+	// fmt.Println(bulklist)
 
-	var lines = []string{
-		"Go",
-		"is",
-		"the",
-		"best",
-		"programming",
-		"language",
-		"in",
-		"the",
-		"world",
-	}
+	// var lines = []string{
+	// 	"Go",
+	// 	"is",
+	// 	"the",
+	// 	"best",
+	// 	"programming",
+	// 	"language",
+	// 	"in",
+	// 	"the",
+	// 	"world",
+	// }
 
-	f, err := os.Create("setup.txt")
-    if err != nil {
-        log.Fatal(err)
-    }
-    // remember to close the file
-    defer f.Close()
+	// f, err := os.Create("setup.txt")
+    // if err != nil {
+    //     log.Fatal(err)
+    // }
+    // // remember to close the file
+    // defer f.Close()
 
-    for _, line := range lines {
-        _, err := f.WriteString(line + "\n")
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+    // for _, line := range lines {
+    //     _, err := f.WriteString(line + "\n")
+    //     if err != nil {
+    //         log.Fatal(err)
+    //     }
+    // }
 
-	fmt.Println("AlbumOffset is complete")
+	// fmt.Println("AlbumOffset is complete")
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
 }
+
+

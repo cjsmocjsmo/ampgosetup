@@ -29,7 +29,8 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"path/filepath"
-	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/bson"
+	// "github.com/globalsign/mgo/bson"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
 )
@@ -68,7 +69,7 @@ func resizeImage(infile string, outfile string) string {
 	return outfile
 }
 
-//DumpArtToFile is exported
+// //DumpArtToFile is exported
 func DumpArtToFile(apath string) (string, string, string, string, string) {
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
 	artist := tag.Artist()
@@ -104,88 +105,116 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 }
 
 // Tagmap exported
-type Tagmap struct {
-	ID bson.ObjectId `bson:"_id,omitempty"`
-	Dirpath    string `bson:"dirpath"`
-	Filename   string `bson:"filename"` 
-	Extension  string `bson:"extension"`
-	FileID     string `bson:"fileID"`
-	Filesize   string `bson:"filesize"`
-	Artist     string `bson:"artist"`
-	ArtistID   string `bson:"artistID"`
-	Album      string `bson:"album"`
-	AlbumID    string `bson:"albumID"`
-	Title      string `bson:"title"`
-	Genre      string `bson:"genre"`
-	TitlePage  string `bson:"titlepage"`
-	PicID      string `bson:"picID"`
-	PicDB      string `bson:"picDB"` 
-	PicPath    string `bson:"picPath"`
-	Idx        string    `bson:"idx"`
-}
+// type Tagmap struct {
+// 	ID bson.ObjectId `bson:"_id,omitempty"`
+// 	Dirpath    string `bson:"dirpath"`
+// 	Filename   string `bson:"filename"` 
+// 	Extension  string `bson:"extension"`
+// 	FileID     string `bson:"fileID"`
+// 	Filesize   string `bson:"filesize"`
+// 	Artist     string `bson:"artist"`
+// 	ArtistID   string `bson:"artistID"`
+// 	Album      string `bson:"album"`
+// 	AlbumID    string `bson:"albumID"`
+// 	Title      string `bson:"title"`
+// 	Genre      string `bson:"genre"`
+// 	TitlePage  string `bson:"titlepage"`
+// 	PicID      string `bson:"picID"`
+// 	PicDB      string `bson:"picDB"` 
+// 	PicPath    string `bson:"picPath"`
+// 	Idx        string    `bson:"idx"`
+// }
 
 // TAgMap exported
-func TaGmap(apath string, apage int, idx int) (TAGmap Tagmap) {
+func TaGmap(apath string, apage int, idx int) {
 	page := strconv.Itoa(apage)
 	index := strconv.Itoa(idx)
 	uuid, _ := UUID()
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	fname, size := getFileInfo(apath)
-	TAGmap.Dirpath = filepath.Dir(apath)
-	TAGmap.Filename = fname
-	TAGmap.Extension = filepath.Ext(apath)
-	TAGmap.FileID = uuid
-	TAGmap.Filesize = size
-	TAGmap.Artist = artist
-	TAGmap.ArtistID = "None"
-	TAGmap.Album = album
-	TAGmap.AlbumID = "None"
-	TAGmap.Title = title
-	TAGmap.Genre = genre
-	TAGmap.TitlePage = page
-	TAGmap.PicID = uuid
-	TAGmap.PicDB = "None"
-	TAGmap.PicPath = picpath
-	TAGmap.Idx = index
-	ses := DBcon()
-	defer ses.Close()
-	tagz := ses.DB("tempdb1").C("meta1")
-	tagz.Insert(TAGmap)
-	return TAGmap
-}
 
-func GetDistAlbumMeta1() (DAlbum []string) {
-	sess := DBcon()
-	defer sess.Close()
-	MAINc := sess.DB("tempdb1").C("meta1")
-	MAINc.Find(nil).Distinct("album", &DAlbum)
+	var TaGmaP interface{}
+
+	TaGmaP = bson.D{
+		{"Dirpath", filepath.Dir(apath)},
+		{"Filename", fname},
+		{"Extension", filepath.Ext(apath)},
+		{"FileID", uuid},
+		{"Filesize", size},
+		{"Artist", artist},
+		{"ArtistID", "None"},
+		{"Album", album},
+		{"AlbumID", "None"},
+		{"Title", title},
+		{"Genre", genre},
+		{"TitlePage", page},
+		{"PicID", uuid},
+		{"PicDB", "None"},
+		{"PicPath", picpath},
+		{"Idx", index},
+	}
+	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", TaGmaP)
+	CheckError(err2, "Tempdb1 insertion has failed")
+	// handle the error
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+
+
+
+
+	// ses := DBcon()
+	// defer ses.Close()
+	// tagz := ses.DB("tempdb1").C("meta1")
+	// tagz.Insert(TAGmap)
+	// return TAGmap
 	return
 }
+
+
+
+
+
+
+
+
+
+// func GetDistAlbumMeta1() (DAlbum []string) {
+// 	sess := DBcon()
+// 	defer sess.Close()
+// 	MAINc := sess.DB("tempdb1").C("meta1")
+// 	MAINc.Find(nil).Distinct("album", &DAlbum)
+// 	return
+// }
 
 // InsAlbumID exported
-func InsAlbumID(alb string) {
-	uuid, _ := UUID()
-	sess := DBcon()
-	defer sess.Close()
-	TAlbIc := sess.DB("tempdb2").C("albumid")
-	DALBI := map[string]string{"album": alb, "albumID": uuid}
-	TAlbIc.Insert(&DALBI)
-}
+// func InsAlbumID(alb string) {
+// 	uuid, _ := UUID()
+// 	sess := DBcon()
+// 	defer sess.Close()
+// 	TAlbIc := sess.DB("tempdb2").C("albumid")
+// 	DALBI := map[string]string{"album": alb, "albumID": uuid}
+// 	TAlbIc.Insert(&DALBI)
+// }
 
-func GDistArtist() (DArtist []string) {
-	sesC := DBcon()
-	defer sesC.Close()
-	MAINc := sesC.DB("tempdb1").C("meta1")
-	MAINc.Find(nil).Distinct("artist", &DArtist)
-	return
-}
+// func GDistArtist() (DArtist []string) {
+// 	sesC := DBcon()
+// 	defer sesC.Close()
+// 	MAINc := sesC.DB("tempdb1").C("meta1")
+// 	MAINc.Find(nil).Distinct("artist", &DArtist)
+// 	return
+// }
 
 //InsArtistID exported
-func InsArtistID(art string) {
-	sesC := DBcon()
-	defer sesC.Close()
-	TArtIc := sesC.DB("tempdb2").C("artistid")
-	uuid, _ := UUID()
-	DARTI := map[string]string{"artist": art, "artistID": uuid}
-	TArtIc.Insert(&DARTI)
-}
+// func InsArtistID(art string) {
+// 	sesC := DBcon()
+// 	defer sesC.Close()
+// 	TArtIc := sesC.DB("tempdb2").C("artistid")
+// 	uuid, _ := UUID()
+// 	DARTI := map[string]string{"artist": art, "artistID": uuid}
+// 	TArtIc.Insert(&DARTI)
+// }
