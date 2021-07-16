@@ -194,11 +194,12 @@ func visit(pAth string, f os.FileInfo, err error) error {
 }
 
 func SetUpCheck() {
-	fileinfo, err := os.Stat("setup.txt")
-    if os.IsNotExist(err) {
-		Setup()
-    }
-    log.Println(fileinfo)
+	Setup()
+	// fileinfo, err := os.Stat("setup.txt")
+    // if os.IsNotExist(err) {
+	// 	Setup()
+    // }
+    // log.Println(fileinfo)
 }
 
 //SetUp is exported to main
