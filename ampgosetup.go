@@ -23,7 +23,7 @@ package ampgosetup
 import (
 	"os"
 	"fmt"
-	"log"
+	// "log"
 	"path"
 	// "sync"
 	"time"
