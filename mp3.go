@@ -153,7 +153,7 @@ func TaGmap(apath string, apage int, idx int) {
 		{"PicPath", picpath},
 		{"Idx", index},
 	}
-	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", TaGmaP)
