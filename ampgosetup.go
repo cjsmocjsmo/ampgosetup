@@ -177,17 +177,16 @@ func Setup() {
 	for _, a := range AllObj {
 		fmt.Println(a)
 	}
-	// AllObj, _ := GetTitleOffsetAll()
 
-	// var wg3 sync.WaitGroup
-	// for _, blob := range AllObj {
-	// 	wg3.Add(1)
-	// 	go func(blob map[string]string) {
-	// 		UpdateMainDB(blob)
-	// 		wg3.Done()
-	// 	}(blob)
-	// 	wg3.Wait()
-	// }
+	var wg3 sync.WaitGroup
+	for _, blob := range AllObj {
+		wg3.Add(1)
+		go func(blob map[string]string) {
+			UpdateMainDB(blob)
+			wg3.Done()
+		}(blob)
+		wg3.Wait()
+	}
 
 	// fmt.Println("creating and inserting thumbnails is complete")
 	// fmt.Println("Inserting album and artists ids is complete")
