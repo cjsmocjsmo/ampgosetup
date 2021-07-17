@@ -179,8 +179,11 @@ func GetDistAlbumMeta1() []string {
 	CheckError(err2, "MongoDB distinct album has failed")
 	fmt.Printf("%T\n", DD1)
 	fmt.Printf("%v\n", DD1)
+	var newlist []string
 	var DAlbum1 []string
 	for _, DD := range DD1 {
+		zoo := SPrintf("%s", DD)
+		newlist = append(newlist, zoo)
 		// DAlbum1 = append(DAlbum1, DD)
 		fmt.Println("this is DD")
 		fmt.Printf("%T\n", DD)
@@ -188,6 +191,7 @@ func GetDistAlbumMeta1() []string {
 	}
 
 	fmt.Println(DD1)
+	fmt.Println(newlist)
 
 	// for DD1.Next(context.TODO()) {
 	// 	var result  bson.M 
@@ -199,7 +203,7 @@ func GetDistAlbumMeta1() []string {
 
 
 
-	return DAlbum1
+	return DD1
 
 
 // // // 	sess := DBcon()
