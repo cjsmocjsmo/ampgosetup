@@ -174,24 +174,28 @@ func GetDistAlbumMeta1() []interface{} {
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
 
-	var DAlbum1 []interface{}
-	cur, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
+	// var DAlbum1 []interface{}
+	DAlbum1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
 
-	for _, j := range cur {
+	for _, j := range DAlbum1 {
 		fmt.Println("this is j")
+		fmt.Printf("%T\n", j)
+		b := j.(string)
+		fmt.Printf("%T\n", b)
+		fmt.Println(b)
 		fmt.Println(j)
 	}
 
-	fmt.Println(DAlbum1)
+	// fmt.Println(DAlbum1)
 
 	
-	for _, value := range DAlbum1 {
-		if value, ok := value.(string); ok {
-			fmt.Println("this is d1loop")
-			fmt.Println(value)
-		}
-	}
+	// for _, value := range DAlbum1 {
+	// 	if value, ok := value.(string); ok {
+	// 		fmt.Println("this is d1loop")
+	// 		fmt.Println(value)
+	// 	}
+	// }
 
 
 
