@@ -106,8 +106,8 @@ func CheckError(err error, msg string) {
 
 func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
-	var titlepage int
-	i := 1
+	var titlepage int = 0
+	var i int = 0
 	if i < OffSet {
 		i++
 		titlepage = 1
@@ -118,7 +118,8 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("I'm Not A Page")
 		titlepage = titlepage + 0
 	}
-
+	fmt.Println(i)
+	fmt.Println(titlepage)
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
@@ -149,81 +150,81 @@ func Setup() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	dalb := GetDistAlbumMeta1()
-	fmt.Println(dalb)
-	var wg1 sync.WaitGroup
-	for _, alb := range dalb {
-		wg1.Add(1)
-		go func(alb string) {
-			InsAlbumID(alb)
-			wg1.Done()
-		}(alb)
-		wg1.Wait()
-	}
-
-	dart := GDistArtist()
-	fmt.Println(dart)
-	var wg2 sync.WaitGroup
-	for _, art := range dart {
-		wg2.Add(1)
-		go func(art string) {
-			InsArtistID(art)
-			wg2.Done()
-		}(art)
-		wg2.Wait()
-	}
-
-	// TitleOffset()
-
-	AllObj := GetTitleOffsetAll()
-	// for _, a := range AllObj {
-	// 	fmt.Println(a)
+	// dalb := GetDistAlbumMeta1()
+	// fmt.Println(dalb)
+	// var wg1 sync.WaitGroup
+	// for _, alb := range dalb {
+	// 	wg1.Add(1)
+	// 	go func(alb string) {
+	// 		InsAlbumID(alb)
+	// 		wg1.Done()
+	// 	}(alb)
+	// 	wg1.Wait()
 	// }
 
-	var wg3 sync.WaitGroup
-	for _, blob := range AllObj {
-		wg3.Add(1)
-		go func(blob map[string]string) {
-			UpdateMainDB(blob)
-			wg3.Done()
-		}(blob)
-		wg3.Wait()
-	}
-
-	fmt.Println("creating and inserting thumbnails is complete")
-	fmt.Println("Inserting album and artists ids is complete")
-
-	// //AggArtist
-	DistArtist := GDistArtist2()
-	// for _, v := range DistArtist {
-	// 	fmt.Println(v)
+	// dart := GDistArtist()
+	// fmt.Println(dart)
+	// var wg2 sync.WaitGroup
+	// for _, art := range dart {
+	// 	wg2.Add(1)
+	// 	go func(art string) {
+	// 		InsArtistID(art)
+	// 		wg2.Done()
+	// 	}(art)
+	// 	wg2.Wait()
 	// }
-	var wg5 sync.WaitGroup
-	var artpage int
-	for artIdx, DArtt := range DistArtist {
-		if artIdx < OffSet {
-			artpage = 1
-		} else if artIdx % OffSet == 0 {
-			artpage++
-		} else {
-			artpage = artpage + 0
-		}
-		wg5.Add(1)
-		go func(DArtt map[string]string, artIdx int, artpage int) {
-			GAI := GArtInfo2(DArtt)
-			for _, g := range GAI {
-				fmt.Println(g)
-			}
-	// 		APL := ArtPipeline(DArtt)
-	// 		AlbID := AddAlbumID(APL)
-	// 		// aartIdX := strconv.Itoa(artIdx)
-	// 		// aartpage := strconv.Itoa(artpage)
-	// 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-			wg5.Done()
-		}(DArtt, artIdx, artpage)
-		wg5.Wait()
-	}
-	fmt.Println("AggArtists is complete")
+
+	// // TitleOffset()
+
+	// AllObj := GetTitleOffsetAll()
+	// // for _, a := range AllObj {
+	// // 	fmt.Println(a)
+	// // }
+
+	// var wg3 sync.WaitGroup
+	// for _, blob := range AllObj {
+	// 	wg3.Add(1)
+	// 	go func(blob map[string]string) {
+	// 		UpdateMainDB(blob)
+	// 		wg3.Done()
+	// 	}(blob)
+	// 	wg3.Wait()
+	// }
+
+	// fmt.Println("creating and inserting thumbnails is complete")
+	// fmt.Println("Inserting album and artists ids is complete")
+
+	// // //AggArtist
+	// DistArtist := GDistArtist2()
+	// // for _, v := range DistArtist {
+	// // 	fmt.Println(v)
+	// // }
+	// var wg5 sync.WaitGroup
+	// var artpage int
+	// for artIdx, DArtt := range DistArtist {
+	// 	if artIdx < OffSet {
+	// 		artpage = 1
+	// 	} else if artIdx % OffSet == 0 {
+	// 		artpage++
+	// 	} else {
+	// 		artpage = artpage + 0
+	// 	}
+	// 	wg5.Add(1)
+	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
+	// 		GAI := GArtInfo2(DArtt)
+	// 		for _, g := range GAI {
+	// 			fmt.Println(g)
+	// 		}
+	// // 		APL := ArtPipeline(DArtt)
+	// // 		AlbID := AddAlbumID(APL)
+	// // 		// aartIdX := strconv.Itoa(artIdx)
+	// // 		// aartpage := strconv.Itoa(artpage)
+	// // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
+	// 		wg5.Done()
+	// 	}(DArtt, artIdx, artpage)
+	// 	wg5.Wait()
+	// }
+	// fmt.Println("AggArtists is complete")
 
 	// // ArtistOffset()
 	// // fmt.Println("ArtistOffset is complete")

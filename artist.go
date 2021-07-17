@@ -53,6 +53,8 @@ func GDistArtist2() (DArtAll []map[string]string) {
 		var DArtA map[string]string = make(map[string]string)
 		err = collection.FindOne(context.Background(), filter).Decode(&DArtA)
 		if err != nil { log.Fatal(err) }
+		fmt.Println("\n\n\n This is DArtA")
+		fmt.Println(DArtA)
 		DArtAll = append(DArtAll, DArtA)
 	
 
