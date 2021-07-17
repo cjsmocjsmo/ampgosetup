@@ -255,3 +255,28 @@ func InsArtistID(art string) {
 // 	DARTI := map[string]string{"artist": art, "artistID": uuid}
 // 	TArtIc.Insert(&DARTI)
 }
+
+//GMAll exported
+// func GMAll() (Main2SL []map[string]string) {
+	func GetTitleOffsetAll() (Main2SL []map[string]string) {
+		// filter := bson.D{{}}
+		// opts := options.Distinct().SetMaxTime(2 * time.Second)
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		defer Close(client, ctx, cancel)
+		CheckError(err, "MongoDB connection has failed")
+		collection := client.Database("tempdb1").Collection("meta1")
+		cur, err := collection.Find(context.Background(), bson.D{})
+		if err != nil { log.Fatal(err) }
+	
+	
+		if err = cur.All(context.Background(), &Main2SL); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("\n\n\n This is Main2SL \n")
+		fmt.Println(Main2SL)
+		// sesC := DBcon()
+		// defer sesC.Close()
+		// MAINc := sesC.DB("tempdb2").C("titleoffset")
+		// MAINc.Find(nil).All(&Main2SL)
+		return
+	}

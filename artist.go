@@ -69,22 +69,39 @@ func GDistArtist2() (DArtAll []map[string]string) {
 }
 
 // //GArtInfo2 exported
-// func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {
+func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {
+	filter := bson.M{"album": Dart}
+	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("maindb").Collection("maindb")
+	// var ArtInfo2 map[string]string = make(map[string]string)
+	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo2)
+	if err != nil { log.Fatal(err) }
+	return
+
+
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	MAINc := sesC.DB("maindb").C("maindb")
 // 	b1 := bson.M{"artist": Dart["artist"]}
 // 	MAINc.Find(b1).One(&ArtInfo2)
-// 	return
-// }
+	return
+}
 
 // //Ap2 exported
-// type Ap2 struct {
-// 	Albumz []string
-// }
+type Ap2 struct {
+	Albumz []string
+}
 
 // //ArtPipeline exported
 // func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+
+
+
+
+
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	AMPc := sesC.DB("maindb").C("maindb")

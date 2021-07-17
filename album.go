@@ -106,43 +106,44 @@ type AlbvieW struct {
 	Album     string              `bson:"album"`
 	AlbumID   string              `bson:"albumID"`
 	Songs     []map[string]string `bson:"songs"`
-	AlbumPage string                 `bson:"albumpage"`
+	AlbumPage string              `bson:"albumpage"`
 	NumSongs  string              `bson:"numsongs"`
 	PicPath   string              `bson:"picPath"`
-	Idx       string                 `bson:"idx"`
+	Idx       string              `bson:"idx"`
 }
 
 // //InsAlbViewID exported
 func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) {
-// 	// MyAlbview.Artist = artist
-// 	// MyAlbview.ArtistID = artistID
-// 	// MyAlbview.Album = album
-// 	// MyAlbview.AlbumID = albumID
-// 	// MyAlbview.NumSongs = strconv.Itoa(songcount)
-// 	// MyAlbview.PicPath = picPath
-// 	// MyAlbview.Songs = ATID
-// 	// MyAlbview.AlbumPage = strconv.Itoa(albpage)
-// 	// MyAlbview.Idx = strconv.Itoa(idx)
-	numsongs := strconv.Itoa(songcount)
-	albpagE := strconv.Itoa(albpage)
-	index := strconv.Itoa(idx)
-	AlbView := bson.D{
-		{"Artist", artist},
-		{"ArtistID", artistID},
-		{"Album", album},
-		{"AlbumID", albumID},
-		{"NumSongs", numsongs},
-		{"PicPath", picPath},
-		{"Songs", ATID},
-		{"AlbumPage", albpagE},
-		{"Idx", index},
-	}
+	var MyAlbview AlbvieW
+	MyAlbview.Artist = artist
+	MyAlbview.ArtistID = artistID
+	MyAlbview.Album = album
+	MyAlbview.AlbumID = albumID
+	MyAlbview.NumSongs = strconv.Itoa(songcount)
+	MyAlbview.PicPath = picPath
+	MyAlbview.Songs = ATID
+	MyAlbview.AlbumPage = strconv.Itoa(albpage)
+	MyAlbview.Idx = strconv.Itoa(idx)
+	// numsongs := strconv.Itoa(songcount)
+	// albpagE := strconv.Itoa(albpage)
+	// index := strconv.Itoa(idx)
+	// AlbView := bson.D{
+	// 	{"Artist", artist},
+	// 	{"ArtistID", artistID},
+	// 	{"Album", album},
+	// 	{"AlbumID", albumID},
+	// 	{"NumSongs", numsongs},
+	// 	{"PicPath", picPath},
+	// 	{"Songs", ATID},
+	// 	{"AlbumPage", albpagE},
+	// 	{"Idx", index},
+	// }
 
 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
 	CheckError(err, "Connections has failed")
     defer Close(client, ctx, cancel)
 
-	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", AlbView)
+	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", &MyAlbview)
 	CheckError(err, "titleoffset insertion has fucked up")
 	fmt.Println(insertOneResult)
 

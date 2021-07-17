@@ -23,7 +23,7 @@ package ampgosetup
 import (
 	"os"
 	"fmt"
-	"log"
+	// "log"
 	"path"
 	"sync"
 	"time"
@@ -31,7 +31,7 @@ import (
 	"context"
 	// "strconv"
 	"path/filepath"
-	"go.mongodb.org/mongo-driver/bson"
+	// "go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
@@ -64,11 +64,11 @@ func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, 
     return result, err
 }
 
-func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
-	collection := client.Database(dataBase).Collection(col)
-	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
-	return
-}
+// func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
+// 	collection := client.Database(dataBase).Collection(col)
+// 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
+// 	return
+// }
 
 
 //CheckError exported
@@ -79,30 +79,30 @@ func CheckError(err error, msg string) {
 	}
 }
 
-//GMAll exported
-// func GMAll() (Main2SL []map[string]string) {
-func GetTitleOffsetAll() (Main2SL []map[string]string) {
-	// filter := bson.D{{}}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb1").Collection("meta1")
-	cur, err := collection.Find(context.Background(), bson.D{})
-	if err != nil { log.Fatal(err) }
+// //GMAll exported
+// // func GMAll() (Main2SL []map[string]string) {
+// func GetTitleOffsetAll() (Main2SL []map[string]string) {
+// 	// filter := bson.D{{}}
+// 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb1").Collection("meta1")
+// 	cur, err := collection.Find(context.Background(), bson.D{})
+// 	if err != nil { log.Fatal(err) }
 
 
-	if err = cur.All(context.Background(), &Main2SL); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("\n\n\n This is Main2SL \n")
-	fmt.Println(Main2SL)
-	// sesC := DBcon()
-	// defer sesC.Close()
-	// MAINc := sesC.DB("tempdb2").C("titleoffset")
-	// MAINc.Find(nil).All(&Main2SL)
-	return
-}
+// 	if err = cur.All(context.Background(), &Main2SL); err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println("\n\n\n This is Main2SL \n")
+// 	fmt.Println(Main2SL)
+// 	// sesC := DBcon()
+// 	// defer sesC.Close()
+// 	// MAINc := sesC.DB("tempdb2").C("titleoffset")
+// 	// MAINc.Find(nil).All(&Main2SL)
+// 	return
+// }
 
 func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
@@ -116,7 +116,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		titlepage++
 	} else {
 		fmt.Println("I'm Not A Page")
-		titlepage = titlepage
+		titlepage = titlepage + 0
 	}
 
 	ext := path.Ext(pAth)
@@ -195,34 +195,35 @@ func Setup() {
 
 	// //AggArtist
 	DistArtist := GDistArtist2()
-	for _, v := range DistArtist {
-		fmt.Println(v)
-	}
-	// var wg5 sync.WaitGroup
-	// var artpage int
-	// for artIdx, DArtt := range DistArtist {
-		
-	// 	if artIdx < OffSet {
-	// 		artpage = 1
-	// 	} else if artIdx % OffSet == 0 {
-	// 		artpage++
-	// 	} else {
-	// 		artpage = artpage + 0
-	// 	}
-
-	// 	wg5.Add(1)
-	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
-	// 		GAI := GArtInfo2(DArtt)
+	// for _, v := range DistArtist {
+	// 	fmt.Println(v)
+	// }
+	var wg5 sync.WaitGroup
+	var artpage int
+	for artIdx, DArtt := range DistArtist {
+		if artIdx < OffSet {
+			artpage = 1
+		} else if artIdx % OffSet == 0 {
+			artpage++
+		} else {
+			artpage = artpage + 0
+		}
+		wg5.Add(1)
+		go func(DArtt map[string]string, artIdx int, artpage int) {
+			GAI := GArtInfo2(DArtt)
+			for _, g := range GAI {
+				fmt.Println(g)
+			}
 	// 		APL := ArtPipeline(DArtt)
 	// 		AlbID := AddAlbumID(APL)
 	// 		// aartIdX := strconv.Itoa(artIdx)
 	// 		// aartpage := strconv.Itoa(artpage)
 	// 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-	// 		wg5.Done()
-	// 	}(DArtt, artIdx, artpage)
-	// 	wg5.Wait()
-	// }
-	// fmt.Println("AggArtists is complete")
+			wg5.Done()
+		}(DArtt, artIdx, artpage)
+		wg5.Wait()
+	}
+	fmt.Println("AggArtists is complete")
 
 	// // ArtistOffset()
 	// // fmt.Println("ArtistOffset is complete")
