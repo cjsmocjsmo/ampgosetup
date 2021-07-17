@@ -23,7 +23,7 @@ package ampgosetup
 import (
 	"os"
 	"fmt"
-	// "log"
+	"log"
 	"path"
 	"sync"
 	"time"
@@ -88,6 +88,10 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
+	cur, err := collection.Find(context.Background(), bson.D{})
+	if err != nil { log.Fatal(err) }
+
+
 	if err = cur.All(context.Background(), &Main2SL); err != nil {
 		log.Fatal(err)
 	}
@@ -97,7 +101,7 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	// defer sesC.Close()
 	// MAINc := sesC.DB("tempdb2").C("titleoffset")
 	// MAINc.Find(nil).All(&Main2SL)
-	
+	return
 }
 
 func visit(pAth string, f os.FileInfo, err error) error {
@@ -169,7 +173,11 @@ func Setup() {
 
 	// TitleOffset()
 
-	AllObj, _ := GetTitleOffsetAll()
+	AllObj := GetTitleOffsetAll()
+	for _, a := range AllObj {
+		fmt.Println(a)
+	}
+	// AllObj, _ := GetTitleOffsetAll()
 
 	// var wg3 sync.WaitGroup
 	// for _, blob := range AllObj {

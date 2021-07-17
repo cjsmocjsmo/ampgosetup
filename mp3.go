@@ -222,7 +222,7 @@ func GDistArtist() []string {
 	DArtist, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
 	var DArtist1 []string
-	for _, DA := range DArtist1 {
+	for _, DA := range DArtist {
 		zooo := fmt.Sprintf("%s", DA)
 		DArtist1 = append(DArtist1, zooo)
 	}
