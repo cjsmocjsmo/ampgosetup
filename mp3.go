@@ -166,7 +166,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 
 
-func GetDistAlbumMeta1() []string {
+func GetDistAlbumMeta1() []interface{} {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -180,9 +180,9 @@ func GetDistAlbumMeta1() []string {
 	fmt.Printf("%T\n", DD1)
 	fmt.Printf("%v\n", DD1)
 	var newlist []string
-	var DAlbum1 []string
+	// var DAlbum1 []string
 	for _, DD := range DD1 {
-		zoo := SPrintf("%s", DD)
+		zoo := fmt.Sprintf("%s", DD)
 		newlist = append(newlist, zoo)
 		// DAlbum1 = append(DAlbum1, DD)
 		fmt.Println("this is DD")
@@ -190,7 +190,7 @@ func GetDistAlbumMeta1() []string {
 		fmt.Println(DD)
 	}
 
-	fmt.Println(DD1)
+	// fmt.Println(DD1)
 	fmt.Println(newlist)
 
 	// for DD1.Next(context.TODO()) {
