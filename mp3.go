@@ -166,7 +166,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 
 
-func GetDistAlbumMeta1() []interface{} {
+func GetDistAlbumMeta1() []string {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -192,7 +192,7 @@ func GetDistAlbumMeta1() []interface{} {
 }
 
 // InsAlbumID exported
-func InsAlbumID(alb interface{}) {
+func InsAlbumID(alb string) {
 	uuid, _ := UUID()
 	var Albid interface{}
 	Albid = bson.D{
