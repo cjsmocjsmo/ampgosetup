@@ -177,7 +177,8 @@ func GetDistAlbumMeta1() []string {
 	// var DAlbum1 []interface{}
 	DD1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
-
+	fmt.Printf("%T\n", DD1)
+	fmt.Printf("%v\n", DD1)
 	var DAlbum1 []string
 	for _, DD := range DD1 {
 		// DAlbum1 = append(DAlbum1, DD)
@@ -186,7 +187,7 @@ func GetDistAlbumMeta1() []string {
 		fmt.Println(DD)
 	}
 
-	fmt.Println(DAlbum1)
+	fmt.Println(DD1)
 
 	// for DD1.Next(context.TODO()) {
 	// 	var result  bson.M 
