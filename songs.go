@@ -21,7 +21,7 @@
 package ampgosetup
 
 import (
-	"fmt"
+	// "fmt"
 	"log"
 	"context"
 	// "strconv"
@@ -29,7 +29,7 @@ import (
 )
 
 //GArtistInfo exported
-func gArtistInfo(Art string) map[string]string {
+func gArtistInfo(Art string) string {
 	filter := bson.M{"artist": Art}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -39,7 +39,7 @@ func gArtistInfo(Art string) map[string]string {
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
 	if err != nil { log.Fatal(err) }
-	return ArtInfo
+	return ArtInfo["artistid"]
 
 	// sesCopy := DBcon()
 	// defer sesCopy.Close()
@@ -50,7 +50,7 @@ func gArtistInfo(Art string) map[string]string {
 }
 
 // //GAlbumInfo exported
-func gAlbumInfo(Alb string) map[string]string {
+func gAlbumInfo(Alb string) string {
 	filter := bson.M{"album": Alb}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -60,7 +60,7 @@ func gAlbumInfo(Alb string) map[string]string {
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
 	if err != nil { log.Fatal(err) }
-	return AlbInfo
+	return AlbInfo["albumid"]
 // 	sesCopy := DBcon()
 // 	defer sesCopy.Close()
 // 	DALBc := sesCopy.DB("tempdb2").C("albumid")
@@ -72,31 +72,29 @@ func gAlbumInfo(Alb string) map[string]string {
 // //UpdateMainDB exported
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	artID := gArtistInfo(m2["artist"])
-	fmt.Println("\n\n\n This is artid")
-	fmt.Println(artID)
-	// albID := gAlbumInfo(m2["album"])
-	// Doko.Dirpath = m2["dirpath"]
-	// Doko.Filename = m2["filename"]
-	// Doko.Extension = m2["extension"]
-	// Doko.FileID = m2["fileID"]
-	// Doko.Filesize = m2["filesize"]
-	// Doko.Artist = m2["artist"]
-	// Doko.ArtistID = artID
-	// Doko.Album = m2["album"]
-	// Doko.AlbumID = albID
-	// Doko.Title = m2["title"]
-	// Doko.Genre = m2["genre"]
-	// Doko.PicID = m2["picID"]
-	// Doko.PicDB = "thumbnails"
-	// Doko.TitlePage = m2["titlepage"]
-	// Doko.Idx = m2["idx"]
-	// Doko.PicPath = m2["picPath"]
+	albID := gAlbumInfo(m2["album"])
+	Doko.Dirpath = m2["dirpath"]
+	Doko.Filename = m2["filename"]
+	Doko.Extension = m2["extension"]
+	Doko.FileID = m2["fileID"]
+	Doko.Filesize = m2["filesize"]
+	Doko.Artist = m2["artist"]
+	Doko.ArtistID = artID
+	Doko.Album = m2["album"]
+	Doko.AlbumID = albID
+	Doko.Title = m2["title"]
+	Doko.Genre = m2["genre"]
+	Doko.PicID = m2["picID"]
+	Doko.PicDB = "thumbnails"
+	Doko.TitlePage = m2["titlepage"]
+	Doko.Idx = m2["idx"]
+	Doko.PicPath = m2["picPath"]
 
-	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	// CheckError(err, "Connections has failed")
-	// defer Close(client, ctx, cancel)
-	// _, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
-	// CheckError(err2, "maindb insertion has failed")
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
+	CheckError(err2, "maindb insertion has failed")
 
 
 	// sesC := DBcon()
