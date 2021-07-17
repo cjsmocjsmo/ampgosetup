@@ -166,39 +166,16 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 
 
-func GetDistAlbumMeta1() []interface{} {
+func GetDistAlbumMeta1() (DAlbum []interface{}) {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
-
-	var DAlbum []interface{}
-	cur, err := collection.Distinct(context.TODO(), "album", filter, opts)
-	// .Decode(DAlbum)
-	for _, j := range DAlbum {
-		fmt.Println(j)
-	}
-	for _, c := range cur {
-		fmt.Println(c)
-	}
-	
-	CheckError(err, "MongoDB distinct album has failed")
-	// for i, f := range DAlbum {
-	// 	fmt.Println(f)
-	// }
-	return DAlbum
-
-// // 	// CheckError(err3, "MongoDB distinct album decode has failed")
-// // 	// for _, v := range DAlbum {
-// // 	// 	fmt.Println(v)
-// 	// }
-
-	
-	
-	
-
+	_, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
+	CheckError(err2, "MongoDB distinct album has failed")
+	return
 
 
 // // // 	sess := DBcon()
@@ -209,7 +186,7 @@ func GetDistAlbumMeta1() []interface{} {
 }
 
 // InsAlbumID exported
-func InsAlbumID(alb string) {
+func InsAlbumID(alb interface{}) {
 	uuid, _ := UUID()
 	var Albid interface{}
 	Albid = bson.D{
@@ -229,13 +206,22 @@ func InsAlbumID(alb string) {
 // 	TAlbIc.Insert(&DALBI)
 }
 
-// func GDistArtist() (DArtist []string) {
+func GDistArtist() (DArtist []interface{}) {
+	filter := bson.D{{}}
+	opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb1").Collection("meta1")
+	_, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
+	CheckError(err2, "MongoDB distinct album has failed")
+	return 
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	MAINc := sesC.DB("tempdb1").C("meta1")
 // 	MAINc.Find(nil).Distinct("artist", &DArtist)
 // 	return
-// }
+}
 
 //InsArtistID exported
 func InsArtistID(art string) {

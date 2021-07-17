@@ -25,7 +25,7 @@ import (
 	"fmt"
 	// "log"
 	"path"
-	// "sync"
+	"sync"
 	"time"
 	"runtime"
 	"context"
@@ -198,15 +198,15 @@ func Setup() {
 
 	dalb := GetDistAlbumMeta1()
 	fmt.Println(dalb)
-	// var wg1 sync.WaitGroup
-	// for _, alb := range dalb {
-	// 	wg1.Add(1)
-	// 	go func(alb string) {
-	// 		InsAlbumID(alb)
-	// 		wg1.Done()
-	// 	}(alb)
-	// 	wg1.Wait()
-	// }
+	var wg1 sync.WaitGroup
+	for _, alb := range dalb {
+		wg1.Add(1)
+		go func(alb interface{}) {
+			InsAlbumID(alb)
+			wg1.Done()
+		}(alb)
+		wg1.Wait()
+	}
 
 	// dart := GDistArtist()
 	// var wg2 sync.WaitGroup
