@@ -166,7 +166,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 
 
-func GetDistAlbumMeta1() []interface{} {
+func GetDistAlbumMeta1() []string {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -175,24 +175,26 @@ func GetDistAlbumMeta1() []interface{} {
 	collection := client.Database("tempdb1").Collection("meta1")
 
 	// var DAlbum1 []interface{}
-	DAlbum1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
+	DD1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
 
-	for _, j := range DAlbum1 {
-		fmt.Println("this is j")
-		fmt.Printf("%T\n", j)
-		
-	}
+	// var DAlbum1 []string
+	// for _, DD := range DD1 {
+	// 	// DAlbum1 = append(DAlbum1, DD)
+	// 	fmt.Println("this is DD")
+	// 	fmt.Printf("%T\n", DD)
+	// 	fmt.Println(DD)
+	// }
 
 	// fmt.Println(DAlbum1)
 
-	
-	// for _, value := range DAlbum1 {
-	// 	if value, ok := value.(string); ok {
-	// 		fmt.Println("this is d1loop")
-	// 		fmt.Println(value)
-	// 	}
-	// }
+	for DD1.Next(context.TODO()) {
+		var result  bson.M 
+		if err := DD1.Decode(&result); err !=nill {
+			log.Fatal(err)
+		}
+		fmt.Println(result)
+	}
 
 
 
