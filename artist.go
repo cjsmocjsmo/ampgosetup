@@ -20,33 +20,53 @@
 
 package ampgosetup
 
-// import (
-// 	// "os"
-// 	"fmt"
-// 	"github.com/globalsign/mgo/bson"
-// 	"strconv"
-// )
+import (
+	// "os"
+	"fmt"
+	"log"
+	"context"
+	"go.mongodb.org/mongo-driver/bson"
+	// "strconv"
+)
 
 
 
 // //GDistArtist2 exported
-// func GDistArtist2() (DArtAll []map[string]string) {
+func GDistArtist2() (DArtAll []map[string]string) {
+	DArtist := GDistArtist()
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	MAINc := sesC.DB("maindb").C("maindb")
 // 	var DArtist []string
 // 	MAINc.Find(nil).Distinct("artist", &DArtist)
-// 	// fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
-// 	for _, art := range DArtist {
-// 		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
+
+
+	fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
+	for _, art := range DArtist {
+		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
+		filter := bson.M{"artist": art}
+		// opts := options.Distinct().SetMaxTime(2 * time.Second)
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		defer Close(client, ctx, cancel)
+		CheckError(err, "MongoDB connection has failed")
+		collection := client.Database("maindb").Collection("maindb")
+		var DArtA map[string]string = make(map[string]string)
+		err = collection.FindOne(context.Background(), filter).Decode(&DArtA)
+		if err != nil { log.Fatal(err) }
+		DArtAll = append(DArtAll, DArtA)
+	
+
+
+
+
 // 		MAINc := sesC.DB("maindb").C("maindb")
 // 		b1 := bson.M{"artist": art}
 // 		var DArtA map[string]string = make(map[string]string)
 // 		MAINc.Find(b1).One(&DArtA)
 // 		DArtAll = append(DArtAll, DArtA)
-// 	}
-// 	return
-// }
+	}
+	return
+}
 
 // //GArtInfo2 exported
 // func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {

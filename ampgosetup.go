@@ -109,9 +109,11 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	var titlepage int
 	i := 1
 	if i < OffSet {
+		i++
 		titlepage = 1
 	} else if i % OffSet == 0 {
-		titlepage += 1
+		i++
+		titlepage++
 	} else {
 		fmt.Println("I'm Not A Page")
 		titlepage = titlepage
@@ -174,9 +176,9 @@ func Setup() {
 	// TitleOffset()
 
 	AllObj := GetTitleOffsetAll()
-	for _, a := range AllObj {
-		fmt.Println(a)
-	}
+	// for _, a := range AllObj {
+	// 	fmt.Println(a)
+	// }
 
 	var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
@@ -188,11 +190,14 @@ func Setup() {
 		wg3.Wait()
 	}
 
-	// fmt.Println("creating and inserting thumbnails is complete")
-	// fmt.Println("Inserting album and artists ids is complete")
+	fmt.Println("creating and inserting thumbnails is complete")
+	fmt.Println("Inserting album and artists ids is complete")
 
 	// //AggArtist
-	// DistArtist := GDistArtist2()
+	DistArtist := GDistArtist2()
+	for _, v := range DistArtist {
+		fmt.Println(v)
+	}
 	// var wg5 sync.WaitGroup
 	// var artpage int
 	// for artIdx, DArtt := range DistArtist {
