@@ -166,16 +166,30 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 
 
-func GetDistAlbumMeta1() (DAlbum []interface{}) {
+func GetDistAlbumMeta1() []interface{} {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
+
+	var DAlbum1 []interface{}
 	_, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
-	return
+
+	fmt.Println(DAlbum1)
+
+	
+	for _, value := range DAlbum1 {
+		fmt.Println("this is d1loop")
+		fmt.Println(value)
+		
+	}
+
+
+
+	return DAlbum1
 
 
 // // // 	sess := DBcon()
