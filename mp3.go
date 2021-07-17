@@ -181,10 +181,7 @@ func GetDistAlbumMeta1() []interface{} {
 	for _, j := range DAlbum1 {
 		fmt.Println("this is j")
 		fmt.Printf("%T\n", j)
-		b := j.(string)
-		fmt.Printf("%T\n", b)
-		fmt.Println(b)
-		fmt.Println(j)
+		
 	}
 
 	// fmt.Println(DAlbum1)
