@@ -18,11 +18,17 @@
 
 package ampgosetup
 
-// import (
-// 	// "fmt"
-// 	"strconv"
+import (
+	"fmt"
+	"time"
+	"context"
+	"log"
+	"strconv"
+	// "go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 // 	"github.com/globalsign/mgo/bson"
-// )
+)
 
 // const (
 // 	// OffSet := os.Getenv("AMPGO_OFFSET")
@@ -93,21 +99,21 @@ package ampgosetup
 // 	return TAAID
 // }
 
-// // AlbvieW exported
-// type AlbvieW struct {
-// 	Artist    string              `bson:"artist"`
-// 	ArtistID  string              `bson:"artistID"`
-// 	Album     string              `bson:"album"`
-// 	AlbumID   string              `bson:"albumID"`
-// 	Songs     []map[string]string `bson:"songs"`
-// 	AlbumPage string                 `bson:"albumpage"`
-// 	NumSongs  string              `bson:"numsongs"`
-// 	PicPath   string              `bson:"picPath"`
-// 	Idx       string                 `bson:"idx"`
-// }
+// AlbvieW exported
+type AlbvieW struct {
+	Artist    string              `bson:"artist"`
+	ArtistID  string              `bson:"artistID"`
+	Album     string              `bson:"album"`
+	AlbumID   string              `bson:"albumID"`
+	Songs     []map[string]string `bson:"songs"`
+	AlbumPage string                 `bson:"albumpage"`
+	NumSongs  string              `bson:"numsongs"`
+	PicPath   string              `bson:"picPath"`
+	Idx       string                 `bson:"idx"`
+}
 
 // //InsAlbViewID exported
-// func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) {
+func InsAlbViewID(artist string, artistID string, album string, albumID string, picPath string, songcount int, ATID []map[string]string, albpage int, idx int) {
 // 	// MyAlbview.Artist = artist
 // 	// MyAlbview.ArtistID = artistID
 // 	// MyAlbview.Album = album
@@ -117,84 +123,63 @@ package ampgosetup
 // 	// MyAlbview.Songs = ATID
 // 	// MyAlbview.AlbumPage = strconv.Itoa(albpage)
 // 	// MyAlbview.Idx = strconv.Itoa(idx)
-// 	numsongs := strconv.Itoa(songcount)
-// 	albpagE := strconv.Itoa(albpage)
-// 	index := strconv.Itoa(idx)
-// 	AlbView = bson.D{
-// 		{"Artist", artist},
-// 		{"ArtistID", artistID},
-// 		{"Album", album},
-// 		{"AlbumID", albumID},
-// 		{"NumSongs", numsongs},
-// 		{"PicPath", picPath},
-// 		{"Songs", ATID},
-// 		{"AlbumPage", albpagE},
-// 		{"Idx", index},
-// 	}
+	numsongs := strconv.Itoa(songcount)
+	albpagE := strconv.Itoa(albpage)
+	index := strconv.Itoa(idx)
+	AlbView := bson.D{
+		{"Artist", artist},
+		{"ArtistID", artistID},
+		{"Album", album},
+		{"AlbumID", albumID},
+		{"NumSongs", numsongs},
+		{"PicPath", picPath},
+		{"Songs", ATID},
+		{"AlbumPage", albpagE},
+		{"Idx", index},
+	}
 
-// 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-// 	CheckError(err, "Connections has failed")
-//     // if err != nil {
-//     //     panic(err)
-//     // }
-//     defer Close(client, ctx, cancel)
+	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	CheckError(err, "Connections has failed")
+    defer Close(client, ctx, cancel)
 
-// 	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", AlbView)
-// 	CheckError(err, "titleoffset insertion has fucked up")
-// 	// if err != nil {
-//     //     panic(err)
-//     // }
+	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", AlbView)
+	CheckError(err, "titleoffset insertion has fucked up")
+	fmt.Println(insertOneResult)
 
 // 	// sess := DBcon()
 // 	// defer sess.Close()
 // 	// AVc := sess.DB("albview").C("albview")
 // 	// AVc.Insert(MyAlbview)
-// 	return
-// }
+	return
+}
 
 // // GAlbVCount exported
-// func GAlbVCount() []string {
-// 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-//     if err != nil {
-//         panic(err)
-//     }
-//     defer Close(client, ctx, cancel)
+func GAlbVCount() int64 {
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+		
+	coll := client.Database("tempdb1").Collection("meta1")
 
-// 	var b1, b2  interface{}
+    defer Close(client, ctx, cancel)
+	opts := options.Count().SetMaxTime(2 * time.Second)
 
+	count, err := coll.CountDocuments(
+		context.TODO(),
+		bson.D{{}},
+		opts)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("the alb count is %v documents", count)
+	return count
 
-// 	b1 = bson.D{{}}
-// 	b2 = bson.D{{"_id", 0}}
-
-// 	cursor, err := Query(client, ctx, "albview", "albview", b1, b2)
-// 	CheckError(err, "cursor has fucked up")
-// 	// handle the errors.
-// 	// if err != nil {
-// 	// panic(err)
-// 	// }
-
-// 	var results []bson.D
-
-// 	if err := cursor.All(ctx, &results); err != nil {
-     
-//         // handle the error
-//         panic(err)
-//     }
-
-// 	var foo []string
-// 	fmt.Println("Query Reult")
-//     for _, doc := range results {
-//         fmt.Println(doc)
-// 		foo = append(foo, doc)
-// 	}
-// 	return foo
 // 	// sess := DBcon()
 // 	// defer sess.Close()
 // 	// ALBc := sess.DB("albview").C("albview")
 // 	// err := ALBc.Find(nil).All(&AlbV)
 // 	// CheckError(err, "GALBVCount: albumcount has fucked up")
 // 	// return
-// }
+}
 
 // //AlbumOffset exported
 // // func AlbumOffset() {

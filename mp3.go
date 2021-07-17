@@ -24,12 +24,15 @@ import (
 	"os"
 	"log"
 	"fmt"
+	"time"
+	"context"
 	"strings"
 	"strconv"
 	"crypto/rand"
 	"encoding/hex"
 	"path/filepath"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	// "github.com/globalsign/mgo/bson"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
@@ -105,73 +108,53 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 }
 
 // Tagmap exported
-// type Tagmap struct {
-// 	ID bson.ObjectId `bson:"_id,omitempty"`
-// 	Dirpath    string `bson:"dirpath"`
-// 	Filename   string `bson:"filename"` 
-// 	Extension  string `bson:"extension"`
-// 	FileID     string `bson:"fileID"`
-// 	Filesize   string `bson:"filesize"`
-// 	Artist     string `bson:"artist"`
-// 	ArtistID   string `bson:"artistID"`
-// 	Album      string `bson:"album"`
-// 	AlbumID    string `bson:"albumID"`
-// 	Title      string `bson:"title"`
-// 	Genre      string `bson:"genre"`
-// 	TitlePage  string `bson:"titlepage"`
-// 	PicID      string `bson:"picID"`
-// 	PicDB      string `bson:"picDB"` 
-// 	PicPath    string `bson:"picPath"`
-// 	Idx        string    `bson:"idx"`
-// }
+type Tagmap struct {
+	Dirpath    string `bson:"dirpath"`
+	Filename   string `bson:"filename"` 
+	Extension  string `bson:"extension"`
+	FileID     string `bson:"fileID"`
+	Filesize   string `bson:"filesize"`
+	Artist     string `bson:"artist"`
+	ArtistID   string `bson:"artistID"`
+	Album      string `bson:"album"`
+	AlbumID    string `bson:"albumID"`
+	Title      string `bson:"title"`
+	Genre      string `bson:"genre"`
+	TitlePage  string `bson:"titlepage"`
+	PicID      string `bson:"picID"`
+	PicDB      string `bson:"picDB"` 
+	PicPath    string `bson:"picPath"`
+	Idx        string    `bson:"idx"`
+}
 
 // TAgMap exported
-func TaGmap(apath string, apage int, idx int) {
+func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	page := strconv.Itoa(apage)
 	index := strconv.Itoa(idx)
 	uuid, _ := UUID()
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	fname, size := getFileInfo(apath)
-
-	var TaGmaP interface{}
-
-	TaGmaP = bson.D{
-		{"Dirpath", filepath.Dir(apath)},
-		{"Filename", fname},
-		{"Extension", filepath.Ext(apath)},
-		{"FileID", uuid},
-		{"Filesize", size},
-		{"Artist", artist},
-		{"ArtistID", "None"},
-		{"Album", album},
-		{"AlbumID", "None"},
-		{"Title", title},
-		{"Genre", genre},
-		{"TitlePage", page},
-		{"PicID", uuid},
-		{"PicDB", "None"},
-		{"PicPath", picpath},
-		{"Idx", index},
-	}
+	TaGmaP.Dirpath = filepath.Dir(apath)
+	TaGmaP.Filename = fname
+	TaGmaP.Extension = filepath.Ext(apath)
+	TaGmaP.FileID = uuid
+	TaGmaP.Filesize = size
+	TaGmaP.Artist = artist
+	TaGmaP.ArtistID = "None"
+	TaGmaP.Album = album
+	TaGmaP.AlbumID = "None"
+	TaGmaP.Title = title
+	TaGmaP.Genre = genre
+	TaGmaP.TitlePage = page
+	TaGmaP.PicID = uuid
+	TaGmaP.PicDB = "None"
+	TaGmaP.PicPath = picpath
+	TaGmaP.Idx = index
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", TaGmaP)
+	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", &TaGmaP)
 	CheckError(err2, "Tempdb1 insertion has failed")
-	// handle the error
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-
-
-
-
-	// ses := DBcon()
-	// defer ses.Close()
-	// tagz := ses.DB("tempdb1").C("meta1")
-	// tagz.Insert(TAGmap)
-	// return TAGmap
 	return
 }
 
@@ -183,23 +166,68 @@ func TaGmap(apath string, apage int, idx int) {
 
 
 
-// func GetDistAlbumMeta1() (DAlbum []string) {
-// 	sess := DBcon()
-// 	defer sess.Close()
-// 	MAINc := sess.DB("tempdb1").C("meta1")
-// 	MAINc.Find(nil).Distinct("album", &DAlbum)
-// 	return
-// }
+func GetDistAlbumMeta1() []interface{} {
+	filter := bson.D{{}}
+	opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb1").Collection("meta1")
+
+	var DAlbum []interface{}
+	cur, err := collection.Distinct(context.TODO(), "album", filter, opts)
+	// .Decode(DAlbum)
+	for _, j := range DAlbum {
+		fmt.Println(j)
+	}
+	for _, c := range cur {
+		fmt.Println(c)
+	}
+	
+	CheckError(err, "MongoDB distinct album has failed")
+	// for i, f := range DAlbum {
+	// 	fmt.Println(f)
+	// }
+	return DAlbum
+
+// // 	// CheckError(err3, "MongoDB distinct album decode has failed")
+// // 	// for _, v := range DAlbum {
+// // 	// 	fmt.Println(v)
+// 	// }
+
+	
+	
+	
+
+
+
+// // // 	sess := DBcon()
+// // // 	defer sess.Close()
+// // // 	MAINc := sess.DB("tempdb1").C("meta1")
+// // // 	MAINc.Find(nil).Distinct("album", &DAlbum)
+	
+}
 
 // InsAlbumID exported
-// func InsAlbumID(alb string) {
-// 	uuid, _ := UUID()
+func InsAlbumID(alb string) {
+	uuid, _ := UUID()
+	var Albid interface{}
+	Albid = bson.D{
+		{"album", alb},
+		{"albumID", uuid},
+	}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "tempdb2", "albumid", Albid)
+	CheckError(err2, "albumID insertion has failed")
+	return
 // 	sess := DBcon()
 // 	defer sess.Close()
 // 	TAlbIc := sess.DB("tempdb2").C("albumid")
 // 	DALBI := map[string]string{"album": alb, "albumID": uuid}
 // 	TAlbIc.Insert(&DALBI)
-// }
+}
 
 // func GDistArtist() (DArtist []string) {
 // 	sesC := DBcon()
@@ -210,11 +238,23 @@ func TaGmap(apath string, apage int, idx int) {
 // }
 
 //InsArtistID exported
-// func InsArtistID(art string) {
+func InsArtistID(art string) {
+	uuid, _ := UUID()
+	var Artid interface{}
+	Artid = bson.D{
+		{"artist", art},
+		{"artistID", uuid},
+	}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "tempdb2", "artistid", Artid)
+	CheckError(err2, "artistID insertion has failed")
+	return
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	TArtIc := sesC.DB("tempdb2").C("artistid")
 // 	uuid, _ := UUID()
 // 	DARTI := map[string]string{"artist": art, "artistID": uuid}
 // 	TArtIc.Insert(&DARTI)
-// }
+}

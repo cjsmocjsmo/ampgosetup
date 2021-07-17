@@ -55,20 +55,7 @@ const (
 // 	return s
 // }
 
-// clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-// client, err := mongo.Connect(context.ampgo(), clientOptions)
-// if err != nil {
-//     log.Fatal(err)
-// }
-// err = client.Ping(context.ampgo(), nil)
 
-// if err != nil {
-//     log.Fatal(err)
-// }
-
-// fmt.Println("Connected to MongoDB!")
-
-// maindb := client.Database("test").Collection("maindb")
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
 
@@ -81,8 +68,7 @@ func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc)
 
 func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
  
-    ctx, cancel := context.WithTimeout(context.Background(),
-                                       30 * time.Second)
+    ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
     client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
     return client, ctx, cancel, err
 }
@@ -210,7 +196,8 @@ func Setup() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	// dalb := GetDistAlbumMeta1()
+	dalb := GetDistAlbumMeta1()
+	fmt.Println(dalb)
 	// var wg1 sync.WaitGroup
 	// for _, alb := range dalb {
 	// 	wg1.Add(1)
