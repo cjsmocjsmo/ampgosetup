@@ -212,16 +212,21 @@ func InsAlbumID(alb string) {
 // 	TAlbIc.Insert(&DALBI)
 }
 
-func GDistArtist() (DArtist []interface{}) {
+func GDistArtist() []string {
 	filter := bson.D{{}}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
-	_, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
+	DArtist, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
-	return 
+	var DArtist1 []string
+	for _, DA := range DArtist1 {
+		zooo := fmt.Sprintf("%s", DA)
+		DArtist1 = append(DArtist1, zooo)
+	}
+	return DArtist1
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	MAINc := sesC.DB("tempdb1").C("meta1")

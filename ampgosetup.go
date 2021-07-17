@@ -39,14 +39,12 @@ import (
 
 //Set Constants
 const (
-	// OffSet := os.Getenv("AMPGO_OFFSET")
 	OffSet = 35
 )
 
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
-
 	defer func() {
 		if err := client.Disconnect(ctx); err != nil {
 			panic(err)
@@ -55,28 +53,19 @@ func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc)
 }
 
 func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
- 
-    ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
     client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
     return client, ctx, cancel, err
 }
 
 func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
- 
     collection := client.Database(dataBase).Collection(col)
-     
     result, err := collection.InsertOne(ctx, doc)
     return result, err
 }
 
 func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
-	 
-		// select database and collection.
 	collection := client.Database(dataBase).Collection(col)
-		 
-		// collection has an method Find,
-		// that returns a mongo.cursor
-		// based on query and field.
 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
 	return
 }
@@ -92,48 +81,18 @@ func CheckError(err error, msg string) {
 
 //GMAll exported
 // func GMAll() (Main2SL []map[string]string) {
-func GetTitleOffsetAll() {
-	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-    if err != nil {
-        panic(err)
-    }
-    defer Close(client, ctx, cancel)
-
-	var b1, b2  interface{}
-
-
-	b1 = bson.D{{}}
-	b2 = bson.D{{"_id", 0}}
-
-	cursor, err := Query(client, ctx, "tempdb2", "titleoffset", b1, b2)
-	// handle the errors.
-	if err != nil {
-	panic(err)
+func GetTitleOffsetAll() (Main2SL []map[string]string) {
+	// filter := bson.D{{}}
+	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb1").Collection("meta1")
+	if err = cur.All(context.Background(), &Main2SL); err != nil {
+		log.Fatal(err)
 	}
-
-	var results []bson.D
-
-	if err := cursor.All(ctx, &results); err != nil {
-     
-        // handle the error
-        panic(err)
-    }
-
-	// var myresults []string
-	
-
-	fmt.Println("Query Reult")
-    for _, doc := range results {
-        fmt.Println(doc)
-		// myresults = append(myresults, doc)
-    }
-	// return myresults
-
-	// insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", document)
-	// if err != nil {
-    //     panic(err)
-    // }
-
+	fmt.Println("\n\n\n This is Main2SL \n")
+	fmt.Println(Main2SL)
 	// sesC := DBcon()
 	// defer sesC.Close()
 	// MAINc := sesC.DB("tempdb2").C("titleoffset")
@@ -196,20 +155,21 @@ func Setup() {
 		wg1.Wait()
 	}
 
-	// dart := GDistArtist()
-	// var wg2 sync.WaitGroup
-	// for _, art := range dart {
-	// 	wg2.Add(1)
-	// 	go func(art string) {
-	// 		InsArtistID(art)
-	// 		wg2.Done()
-	// 	}(art)
-	// 	wg2.Wait()
-	// }
+	dart := GDistArtist()
+	fmt.Println(dart)
+	var wg2 sync.WaitGroup
+	for _, art := range dart {
+		wg2.Add(1)
+		go func(art string) {
+			InsArtistID(art)
+			wg2.Done()
+		}(art)
+		wg2.Wait()
+	}
 
 	// TitleOffset()
 
-	// AllObj, _ := GetTitleOffsetAll()
+	AllObj, _ := GetTitleOffsetAll()
 
 	// var wg3 sync.WaitGroup
 	// for _, blob := range AllObj {
