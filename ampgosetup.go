@@ -31,7 +31,6 @@ import (
 	"context"
 	// "strconv"
 	"path/filepath"
-	// "github.com/globalsign/mgo"
 	"go.mongodb.org/mongo-driver/bson"
     "go.mongodb.org/mongo-driver/mongo"
     "go.mongodb.org/mongo-driver/mongo/options"
@@ -43,17 +42,6 @@ const (
 	// OffSet := os.Getenv("AMPGO_OFFSET")
 	OffSet = 35
 )
-
-//DBcon exported
-// func DBcon() *mgo.Session {
-// 	s, err := mgo.Dial(os.Getenv("AMPGO_AMPDB_ADDR"))
-// 	if err != nil {
-// 		log.Println("Session creation dial error")
-// 		log.Println(err)
-// 	}
-// 	log.Println("Session Connection to db established")
-// 	return s
-// }
 
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
@@ -198,15 +186,15 @@ func Setup() {
 
 	dalb := GetDistAlbumMeta1()
 	fmt.Println(dalb)
-	// var wg1 sync.WaitGroup
-	// for _, alb := range dalb {
-	// 	wg1.Add(1)
-	// 	go func(alb string) {
-	// 		InsAlbumID(alb)
-	// 		wg1.Done()
-	// 	}(alb)
-	// 	wg1.Wait()
-	// }
+	var wg1 sync.WaitGroup
+	for _, alb := range dalb {
+		wg1.Add(1)
+		go func(alb string) {
+			InsAlbumID(alb)
+			wg1.Done()
+		}(alb)
+		wg1.Wait()
+	}
 
 	// dart := GDistArtist()
 	// var wg2 sync.WaitGroup
