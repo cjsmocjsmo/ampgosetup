@@ -201,7 +201,7 @@ func Setup() {
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
-		go func(alb interface{}) {
+		go func(alb string) {
 			InsAlbumID(alb)
 			wg1.Done()
 		}(alb)
