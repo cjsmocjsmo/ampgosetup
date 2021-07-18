@@ -21,7 +21,7 @@
 package ampgosetup
 
 import (
-	// "fmt"
+	"fmt"
 	"log"
 	"context"
 	// "strconv"
@@ -29,7 +29,7 @@ import (
 )
 
 //GArtistInfo exported
-func gArtistInfo(Art string) string {
+func gArtistInfo(Art string) map[string]string {
 	filter := bson.M{"artist": Art}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -51,7 +51,7 @@ func gArtistInfo(Art string) string {
 }
 
 // //GAlbumInfo exported
-func gAlbumInfo(Alb string) string {
+func gAlbumInfo(Alb string) map[string]string {
 	filter := bson.M{"album": Alb}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
