@@ -116,6 +116,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		titlepage++
 	} else {
 		fmt.Println("I'm Not A Page")
+		i++
 		titlepage = titlepage + 0
 	}
 	fmt.Println(i)
