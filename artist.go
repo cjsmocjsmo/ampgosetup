@@ -27,6 +27,7 @@ import (
 	"time"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	// "strconv"
 )
@@ -107,9 +108,30 @@ type Ap2 struct {
 }
 
 // //ArtPipeline exported
-// func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+	pipeline := mongo.Pipeline{
+		{{"$match", bson.D{{"artist", dart["artist"]}}}},
+		// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+		{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
+		{{"$project", bson.D{{"albumz", 1}}}},
 
-
+	}
+	// filter := bson.M{"album": Dart["album"]}
+	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	db := client.Database("maindb").Collection("maindb")
+	// var AP2 []Ap2
+	cur, err := db.Aggregate(context.TODO(), pipeline)
+	cur.Decode(&AP2)
+	for _, ag := range AP2 {
+		fmt.Println(ag)
+	}
+	// for _, ag1 := range agg {
+	// 	fmt.Println(ag1)
+	// }
+	
 
 
 
@@ -125,9 +147,9 @@ type Ap2 struct {
 // 	if err != nil {
 // 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
 // 	}
-// 	return
-// }
-
+	return
+}
+// 
 // //AddAlbumID exported
 // func AddAlbumID(PL2 []Ap2) []map[string]string {
 // 	sesC := DBcon()

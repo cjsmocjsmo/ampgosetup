@@ -210,11 +210,14 @@ func Setup() {
 		}
 		wg5.Add(1)
 		go func(DArtt map[string]string, artIdx int, artpage int) {
+			
 			GAI := GArtInfo2(DArtt)
-			for _, g := range GAI {
-				fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
+			log.Println(GAI)
+			log.Println("starting APL")
+			APL := ArtPipeline(DArtt)
+			for _, apl := range APL {
+				fmt.Println(apl)
 			}
-	// // // 		APL := ArtPipeline(DArtt)
 	// // // 		AlbID := AddAlbumID(APL)
 	// // // 		// aartIdX := strconv.Itoa(artIdx)
 	// // // 		// aartpage := strconv.Itoa(artpage)
