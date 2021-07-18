@@ -24,8 +24,10 @@ import (
 	// "os"
 	"fmt"
 	"log"
+	"time"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	// "strconv"
 )
 
@@ -33,12 +35,19 @@ import (
 
 // //GDistArtist2 exported
 func GDistArtist2() (DArtAll []map[string]string) {
-	DArtist := GDistArtist()
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	MAINc := sesC.DB("maindb").C("maindb")
-// 	var DArtist []string
-// 	MAINc.Find(nil).Distinct("artist", &DArtist)
+	filter := bson.D{}
+	opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("maindb").Collection("maindb")
+	DA1, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
+	CheckError(err2, "MongoDB distinct album has failed")
+	var DArtist []string
+	for _, DA := range DA1 {
+		zoo := fmt.Sprintf("%s", DA)
+		DArtist = append(DArtist, zoo)
+	}
 
 
 	fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)

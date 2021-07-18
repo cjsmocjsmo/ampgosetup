@@ -163,7 +163,7 @@ func Setup() {
 	// //AggArtist
 	DistArtist := GDistArtist2()
 	for _, v := range DistArtist {
-		fmt.Println(v)
+		fmt.Printf("%v this is GDistArtist2", v)
 	}
 	// var wg5 sync.WaitGroup
 	// var artpage int
@@ -197,7 +197,10 @@ func Setup() {
 
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
-	// DistAlbum3 := GDistAlbum3()
+	DistAlbum3 := GDistAlbum3()
+	for _, v := range DistAlbum3 {
+		fmt.Printf("%v this is DistAlbum3", v)
+	}
 
 	// var wg6 sync.WaitGroup
 	// var albpage int

@@ -36,7 +36,40 @@ import (
 // )
 
 // // GDistAlbum3 exported
-// func GDistAlbum3() (DAlbum []map[string]string) {
+func GDistAlbum3() (DAlbAll []map[string]string) {
+	filter := bson.D{}
+	opts := options.Distinct().SetMaxTime(2 * time.Second)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("maindb").Collection("maindb")
+	DA1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
+	CheckError(err2, "MongoDB distinct album has failed")
+	var DAlbum []string
+	for _, DA := range DA1 {
+		zoo := fmt.Sprintf("%s", DA)
+		DAlbum = append(DAlbum, zoo)
+	}
+
+
+	fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
+	for _, alb := range DAlbum {
+		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", alb)
+		filter := bson.M{"artist": alb}
+		// opts := options.Distinct().SetMaxTime(2 * time.Second)
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		defer Close(client, ctx, cancel)
+		CheckError(err, "MongoDB connection has failed")
+		collection := client.Database("maindb").Collection("maindb")
+		var DAlbA map[string]string = make(map[string]string)
+		err = collection.FindOne(context.Background(), filter).Decode(&DAlbA)
+		if err != nil { log.Fatal(err) }
+		fmt.Println("\n\n\n This is DAlbA")
+		fmt.Println(DAlbA)
+		DAlbAll = append(DAlbAll, DAlbA)
+	}
+	return
+}
 // 	sess := DBcon()
 // 	defer sess.Close()
 // 	MAINc := sess.DB("maindb").C("maindb")
@@ -124,25 +157,9 @@ func InsAlbViewID(artist string, artistID string, album string, albumID string, 
 	MyAlbview.Songs = ATID
 	MyAlbview.AlbumPage = strconv.Itoa(albpage)
 	MyAlbview.Idx = strconv.Itoa(idx)
-	// numsongs := strconv.Itoa(songcount)
-	// albpagE := strconv.Itoa(albpage)
-	// index := strconv.Itoa(idx)
-	// AlbView := bson.D{
-	// 	{"Artist", artist},
-	// 	{"ArtistID", artistID},
-	// 	{"Album", album},
-	// 	{"AlbumID", albumID},
-	// 	{"NumSongs", numsongs},
-	// 	{"PicPath", picPath},
-	// 	{"Songs", ATID},
-	// 	{"AlbumPage", albpagE},
-	// 	{"Idx", index},
-	// }
-
 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
 	CheckError(err, "Connections has failed")
     defer Close(client, ctx, cancel)
-
 	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", &MyAlbview)
 	CheckError(err, "titleoffsetdb insertion has fucked up")
 	fmt.Println(insertOneResult)
@@ -176,55 +193,3 @@ func GAlbVCount() int64 {
 // 	// CheckError(err, "GALBVCount: albumcount has fucked up")
 // 	// return
 }
-
-// //AlbumOffset exported
-// // func AlbumOffset() {
-// // 	sess := DBcon()
-// // 	defer sess.Close()
-// // 	ALBcc := sess.DB("albview").C("albview")
-// // 	ALBview := GAlbVCount()
-	
-// // 	fmt.Printf("THIS IS ALBview FOR ALBUMVIEW %v", ALBview[0].Idx)
-// // 	var page1 int = 1
-// // 	for i, alb := range ALBview {
-// // 		if i < Offset {
-// // 			var BOO AlbvieW
-// // 			BOO.Artist = alb.Artist
-// // 			BOO.ArtistID = alb.ArtistID
-// // 			BOO.Album = alb.Album
-// // 			BOO.AlbumID = alb.AlbumID
-// // 			BOO.Songs = alb.Songs
-// // 			BOO.Page = strconv.Itoa(page1)
-// // 			BOO.NumSongs = alb.NumSongs
-// // 			BOO.PicPath = alb.PicPath
-// // 			BOO.Idx = alb.Idx
-// // 			ALBcc.Update(bson.M{"ArtistID": alb.ArtistID}, BOO)
-// // 			ALBcc.Update(bson.M{"Page": alb.Page}, BOO)
-// // 		} else if i % Offset == 0 {
-// // 			page1++
-// // 			var MOO AlbvieW
-// // 			MOO.Artist = alb.Artist
-// // 			MOO.ArtistID = alb.ArtistID
-// // 			MOO.Album = alb.Album
-// // 			MOO.AlbumID = alb.AlbumID
-// // 			MOO.Songs = alb.Songs
-// // 			MOO.Page = strconv.Itoa(page1)
-// // 			MOO.NumSongs = alb.NumSongs
-// // 			MOO.PicPath = alb.PicPath
-// // 			MOO.Idx = alb.Idx
-// // 			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
-// // 		} else {
-// // 			var MOO AlbvieW
-// // 			MOO.Artist = alb.Artist
-// // 			MOO.ArtistID = alb.ArtistID
-// // 			MOO.Album = alb.Album
-// // 			MOO.AlbumID = alb.AlbumID
-// // 			MOO.Songs = alb.Songs
-// // 			MOO.Page = strconv.Itoa(page1)
-// // 			MOO.NumSongs = alb.NumSongs
-// // 			MOO.PicPath = alb.PicPath
-// // 			MOO.Idx = alb.Idx
-// // 			ALBcc.Update(bson.M{"AlbumID": alb.AlbumID, "Page": alb.Page}, MOO)
-// // 		}
-// // 	}
-// // }
