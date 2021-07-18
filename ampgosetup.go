@@ -42,7 +42,6 @@ const (
 	OffSet = 35
 )
 
-
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
 	defer func() {
@@ -79,35 +78,9 @@ func CheckError(err error, msg string) {
 	}
 }
 
-// //GMAll exported
-// // func GMAll() (Main2SL []map[string]string) {
-// func GetTitleOffsetAll() (Main2SL []map[string]string) {
-// 	// filter := bson.D{{}}
-// 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-// 	defer Close(client, ctx, cancel)
-// 	CheckError(err, "MongoDB connection has failed")
-// 	collection := client.Database("tempdb1").Collection("meta1")
-// 	cur, err := collection.Find(context.Background(), bson.D{})
-// 	if err != nil { log.Fatal(err) }
-
-
-// 	if err = cur.All(context.Background(), &Main2SL); err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	fmt.Println("\n\n\n This is Main2SL \n")
-// 	fmt.Println(Main2SL)
-// 	// sesC := DBcon()
-// 	// defer sesC.Close()
-// 	// MAINc := sesC.DB("tempdb2").C("titleoffset")
-// 	// MAINc.Find(nil).All(&Main2SL)
-// 	return
-// }
 var titlepage int = 0
 var i int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
-	// println("this is path from visit \n")
-	
 	if i < OffSet {
 		i++
 		titlepage = 1
@@ -119,13 +92,10 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		i++
 		titlepage = titlepage + 0
 	}
-	fmt.Println(i)
-	fmt.Println(titlepage)
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
-		fmt.Println("fuck yea mp3")
 		TaGmap(pAth, titlepage, i)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
@@ -151,29 +121,29 @@ func Setup() {
 
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 
-	// dalb := GetDistAlbumMeta1()
-	// fmt.Println(dalb)
-	// var wg1 sync.WaitGroup
-	// for _, alb := range dalb {
-	// 	wg1.Add(1)
-	// 	go func(alb string) {
-	// 		InsAlbumID(alb)
-	// 		wg1.Done()
-	// 	}(alb)
-	// 	wg1.Wait()
-	// }
+	dalb := GetDistAlbumMeta1()
+	fmt.Println(dalb)
+	var wg1 sync.WaitGroup
+	for _, alb := range dalb {
+		wg1.Add(1)
+		go func(alb string) {
+			InsAlbumID(alb)
+			wg1.Done()
+		}(alb)
+		wg1.Wait()
+	}
 
-	// dart := GDistArtist()
-	// fmt.Println(dart)
-	// var wg2 sync.WaitGroup
-	// for _, art := range dart {
-	// 	wg2.Add(1)
-	// 	go func(art string) {
-	// 		InsArtistID(art)
-	// 		wg2.Done()
-	// 	}(art)
-	// 	wg2.Wait()
-	// }
+	dart := GDistArtist()
+	fmt.Println(dart)
+	var wg2 sync.WaitGroup
+	for _, art := range dart {
+		wg2.Add(1)
+		go func(art string) {
+			InsArtistID(art)
+			wg2.Done()
+		}(art)
+		wg2.Wait()
+	}
 
 	// // TitleOffset()
 

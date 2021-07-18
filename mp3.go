@@ -31,11 +31,10 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"path/filepath"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	// "github.com/globalsign/mgo/bson"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func getFileInfo(apath string) (filename string, size string) {
@@ -95,10 +94,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
 		g, err := os.Create(newdumpOutFile2)
 		defer g.Close()
-		if err != nil {
-			fmt.Println("Unable to create newdumpOutFile2")
-			fmt.Println(err)
-		}
+		CheckError(err, "Unable to create newdumpOutFile2")
 		n3, err := g.Write(pic.Picture)
 		CheckError(err, "newdumpOutfile2 Write has fucked up")
 		fmt.Println(n3, "bytes written successfully")
@@ -158,22 +154,13 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	return
 }
 
-
-
-
-
-
-
-
-
 func GetDistAlbumMeta1() []string {
-	filter := bson.D{{}}
+	filter := bson.D{}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
-
 	DD1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
 	CheckError(err2, "MongoDB distinct album has failed")
 	var DAlbum1 []string
@@ -182,13 +169,6 @@ func GetDistAlbumMeta1() []string {
 		DAlbum1 = append(DAlbum1, zoo)
 	}
 	return DAlbum1
-
-
-// // // 	sess := DBcon()
-// // // 	defer sess.Close()
-// // // 	MAINc := sess.DB("tempdb1").C("meta1")
-// // // 	MAINc.Find(nil).Distinct("album", &DAlbum)
-	
 }
 
 // InsAlbumID exported
@@ -205,11 +185,6 @@ func InsAlbumID(alb string) {
 	_, err2 := InsertOne(client, ctx, "tempdb2", "albumid", Albid)
 	CheckError(err2, "albumID insertion has failed")
 	return
-// 	sess := DBcon()
-// 	defer sess.Close()
-// 	TAlbIc := sess.DB("tempdb2").C("albumid")
-// 	DALBI := map[string]string{"album": alb, "albumID": uuid}
-// 	TAlbIc.Insert(&DALBI)
 }
 
 func GDistArtist() []string {
@@ -227,11 +202,6 @@ func GDistArtist() []string {
 		DArtist1 = append(DArtist1, zooo)
 	}
 	return DArtist1
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	MAINc := sesC.DB("tempdb1").C("meta1")
-// 	MAINc.Find(nil).Distinct("artist", &DArtist)
-// 	return
 }
 
 //InsArtistID exported
@@ -248,35 +218,21 @@ func InsArtistID(art string) {
 	_, err2 := InsertOne(client, ctx, "tempdb2", "artistid", Artid)
 	CheckError(err2, "artistID insertion has failed")
 	return
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	TArtIc := sesC.DB("tempdb2").C("artistid")
-// 	uuid, _ := UUID()
-// 	DARTI := map[string]string{"artist": art, "artistID": uuid}
-// 	TArtIc.Insert(&DARTI)
 }
 
 //GMAll exported
-// func GMAll() (Main2SL []map[string]string) {
-	func GetTitleOffsetAll() (Main2SL []map[string]string) {
-		// filter := bson.D{{}}
-		// opts := options.Distinct().SetMaxTime(2 * time.Second)
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		defer Close(client, ctx, cancel)
-		CheckError(err, "MongoDB connection has failed")
-		collection := client.Database("tempdb1").Collection("meta1")
-		cur, err := collection.Find(context.Background(), bson.D{})
-		if err != nil { log.Fatal(err) }
-	
-	
-		if err = cur.All(context.Background(), &Main2SL); err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println("\n\n\n This is Main2SL \n")
-		fmt.Println(Main2SL)
-		// sesC := DBcon()
-		// defer sesC.Close()
-		// MAINc := sesC.DB("tempdb2").C("titleoffset")
-		// MAINc.Find(nil).All(&Main2SL)
-		return
+func GMAll() (Main2SL []map[string]string) {
+	filter := bson.D{}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb1").Collection("meta1")
+	cur, err := collection.Find(context.Background(), filter)
+	if err != nil { log.Fatal(err) }
+	if err = cur.All(context.Background(), &Main2SL); err != nil {
+		log.Fatal(err)
 	}
+	// fmt.Println("\n\n\n This is Main2SL \n")
+	// fmt.Println(Main2SL)
+	return
+}
