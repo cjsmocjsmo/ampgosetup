@@ -39,7 +39,8 @@ func gArtistInfo(Art string) string {
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
 	if err != nil { log.Fatal(err) }
-	return ArtInfo["artistid"]
+	fmt.Printf("%v THIS IS ArtInfo", ArtInfo)
+	return ArtInfo
 
 	// sesCopy := DBcon()
 	// defer sesCopy.Close()
@@ -60,7 +61,8 @@ func gAlbumInfo(Alb string) string {
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
 	if err != nil { log.Fatal(err) }
-	return AlbInfo["albumid"]
+	fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
+	return AlbInfo
 // 	sesCopy := DBcon()
 // 	defer sesCopy.Close()
 // 	DALBc := sesCopy.DB("tempdb2").C("albumid")
@@ -79,9 +81,9 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.FileID = m2["fileID"]
 	Doko.Filesize = m2["filesize"]
 	Doko.Artist = m2["artist"]
-	Doko.ArtistID = artID
+	Doko.ArtistID = artID["artistID"]
 	Doko.Album = m2["album"]
-	Doko.AlbumID = albID
+	Doko.AlbumID = albID["albumID"]
 	Doko.Title = m2["title"]
 	Doko.Genre = m2["genre"]
 	Doko.PicID = m2["picID"]
