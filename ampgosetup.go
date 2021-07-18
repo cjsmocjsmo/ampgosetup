@@ -123,10 +123,6 @@ func Setup() {
 	}
 	log.SetOutput(file)
 	log.Println("Logging started")
-	
-
-
-
 
 	ti := time.Now()
 	fmt.Println(ti)
@@ -200,33 +196,35 @@ func Setup() {
 		fmt.Printf("%v this is GDistArtist2", v)
 	}
 	log.Println("GDistArtist2 is complete \n")
-	// var wg5 sync.WaitGroup
-	// var artpage int = 0
-	// for artIdx, DArtt := range DistArtist {
-	// 	if artIdx < OffSet {
-	// 		artpage = 1
-	// 	} else if artIdx % OffSet == 0 {
-	// 		artpage++
-	// 	} else {
-	// 		artpage = artpage + 0
-	// 	}
-	// 	wg5.Add(1)
-	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
-	// 		GAI := GArtInfo2(DArtt)
-	// 		for _, g := range GAI {
-	// 			fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
-	// 		}
+
+	log.Println("starting GArtInfo2")
+	var wg5 sync.WaitGroup
+	var artpage int = 0
+	for artIdx, DArtt := range DistArtist {
+		if artIdx < OffSet {
+			artpage = 1
+		} else if artIdx % OffSet == 0 {
+			artpage++
+		} else {
+			artpage = artpage + 0
+		}
+		wg5.Add(1)
+		go func(DArtt map[string]string, artIdx int, artpage int) {
+			GAI := GArtInfo2(DArtt)
+			for _, g := range GAI {
+				fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
+			}
 	// // // 		APL := ArtPipeline(DArtt)
 	// // // 		AlbID := AddAlbumID(APL)
 	// // // 		// aartIdX := strconv.Itoa(artIdx)
 	// // // 		// aartpage := strconv.Itoa(artpage)
 	// // // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-	// 		wg5.Done()
-	// 	}(DArtt, artIdx, artpage)
-	// 	wg5.Wait()
-	// }
-	// fmt.Println("AggArtists is complete")
-
+			wg5.Done()
+		}(DArtt, artIdx, artpage)
+		wg5.Wait()
+	}
+	fmt.Println("AggArtists is complete")
+	log.Println("AggArtists is complete")
 	// // ArtistOffset()w11
 	// // fmt.Println("ArtistOffset is complete")
 
