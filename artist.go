@@ -81,7 +81,7 @@ func GDistArtist2() (DArtAll []map[string]string) {
 
 // //GArtInfo2 exported
 func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {
-	filter := bson.M{"album": Dart}
+	filter := bson.M{"album": Dart["album"]}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
