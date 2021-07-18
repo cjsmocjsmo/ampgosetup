@@ -103,11 +103,11 @@ func CheckError(err error, msg string) {
 // 	// MAINc.Find(nil).All(&Main2SL)
 // 	return
 // }
-
+var titlepage int = 0
+var i int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
 	// println("this is path from visit \n")
-	var titlepage int = 0
-	var i int = 0
+	
 	if i < OffSet {
 		i++
 		titlepage = 1
