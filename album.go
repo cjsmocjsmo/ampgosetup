@@ -50,8 +50,6 @@ func GDistAlbum3() (DAlbAll []map[string]string) {
 		zoo := fmt.Sprintf("%s", DA)
 		DAlbum = append(DAlbum, zoo)
 	}
-
-
 	fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
 	for _, alb := range DAlbum {
 		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", alb)

@@ -157,50 +157,52 @@ func Setup() {
 		wg3.Wait()
 	}
 
-	fmt.Println("creating and inserting thumbnails is complete")
-	fmt.Println("Inserting album and artists ids is complete")
+	// fmt.Println("creating and inserting thumbnails is complete")
+	// fmt.Println("Inserting album and artists ids is complete")
 
 	// //AggArtist
 	DistArtist := GDistArtist2()
-	for _, v := range DistArtist {
-		fmt.Printf("%v this is GDistArtist2", v)
-	}
-	// var wg5 sync.WaitGroup
-	// var artpage int
-	// for artIdx, DArtt := range DistArtist {
-	// 	if artIdx < OffSet {
-	// 		artpage = 1
-	// 	} else if artIdx % OffSet == 0 {
-	// 		artpage++
-	// 	} else {
-	// 		artpage = artpage + 0
-	// 	}
-	// 	wg5.Add(1)
-	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
-	// 		GAI := GArtInfo2(DArtt)
-	// 		for _, g := range GAI {
-	// 			fmt.Println(g)
-	// 		}
+	// for _, v := range DistArtist {
+	// 	fmt.Printf("%v this is GDistArtist2", v)
+	// }
+	var wg5 sync.WaitGroup
+	var artpage int = 0
+	for artIdx, DArtt := range DistArtist {
+		if artIdx < OffSet {
+			artpage = 1
+		} else if artIdx % OffSet == 0 {
+			artpage++
+		} else {
+			artpage = artpage + 0
+		}
+		wg5.Add(1)
+		go func(DArtt map[string]string, artIdx int, artpage int) {
+			GAI := GArtInfo2(DArtt)
+			for _, g := range GAI {
+				fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
+			}
 	// // 		APL := ArtPipeline(DArtt)
 	// // 		AlbID := AddAlbumID(APL)
 	// // 		// aartIdX := strconv.Itoa(artIdx)
 	// // 		// aartpage := strconv.Itoa(artpage)
 	// // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-	// 		wg5.Done()
-	// 	}(DArtt, artIdx, artpage)
-	// 	wg5.Wait()
-	// }
-	// fmt.Println("AggArtists is complete")
+			wg5.Done()
+		}(DArtt, artIdx, artpage)
+		wg5.Wait()
+	}
+	fmt.Println("AggArtists is complete")
 
 	// // ArtistOffset()
 	// // fmt.Println("ArtistOffset is complete")
 
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
-	DistAlbum3 := GDistAlbum3()
-	for _, v := range DistAlbum3 {
-		fmt.Printf("%v this is DistAlbum3", v)
-	}
+
+
+	// DistAlbum3 := GDistAlbum3()
+	// for _, v := range DistAlbum3 {
+	// 	fmt.Printf("%v this is DistAlbum3", v)
+	// }
 
 	// var wg6 sync.WaitGroup
 	// var albpage int
