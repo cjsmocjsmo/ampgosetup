@@ -221,7 +221,8 @@ func InsArtistID(art string) {
 }
 
 //GMAll exported
-func GMAll() (Main2SL []map[string]string) {
+// GetTitleOffsetAll
+func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	filter := bson.D{}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)

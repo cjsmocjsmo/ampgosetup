@@ -104,46 +104,4 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	return
 }
 
-// //TitleOffset exported
-// //Tagmap
-// func TitleOffset() (Tmap Tagmap) {
-// 	fmt.Println("n\n\n STARTING TITLEOFFSET")
-// 	var IPS []map[string]string
-// 	sesCopy := DBcon()
-// 	defer sesCopy.Close()
-// 	MAINc := sesCopy.DB("tempdb1").C("meta1")
-// 	MAINc.Find(nil).All(&IPS)
-// 	var count int = 1
-// 	var Pa int = 1
-// 	for _, A := range IPS {
-// 		count++
-// 		if count <= OffSet {
-// 			PPage := strconv.Itoa(Pa)
-// 			Tmap.TitlePage = PPage
-// 		} else {
-// 			count = 1
-// 			Pa++
-// 			PPage := strconv.Itoa(Pa)
-// 			Tmap.TitlePage = PPage
-// 		}
-// 		var idx string = strconv.Itoa(count)
-// 		Tmap.Filename = A["filename"]
-// 		Tmap.Extension = A["extension"]
-// 		Tmap.FileID = A["fileID"]
-// 		Tmap.Filesize = A["filesize"]
-// 		Tmap.Artist = A["artist"]
-// 		Tmap.ArtistID = A["artistID"]
-// 		Tmap.Album = A["album"]
-// 		Tmap.AlbumID = A["albumID"]
-// 		Tmap.Title = A["title"]
-// 		Tmap.Genre = A["genre"]
-// 		Tmap.PicID = A["picID"]
-// 		Tmap.PicPath = A["picPath"]
-// 		Tmap.Dirpath = A["dirpath"]
-// 		Tmap.PicDB = A["picDB"]
-// 		Tmap.Idx = idx
-// 		TmpDBc := sesCopy.DB("tempdb2").C("titleoffset")
-// 		TmpDBc.Insert(Tmap)
-// 	}
-// 	return
-// }
+

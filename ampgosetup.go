@@ -145,31 +145,26 @@ func Setup() {
 		wg2.Wait()
 	}
 
-	// // TitleOffset()
+	AllObj := GetTitleOffsetAll()
 
-	// AllObj := GetTitleOffsetAll()
-	// // for _, a := range AllObj {
-	// // 	fmt.Println(a)
-	// // }
+	var wg3 sync.WaitGroup
+	for _, blob := range AllObj {
+		wg3.Add(1)
+		go func(blob map[string]string) {
+			UpdateMainDB(blob)
+			wg3.Done()
+		}(blob)
+		wg3.Wait()
+	}
 
-	// var wg3 sync.WaitGroup
-	// for _, blob := range AllObj {
-	// 	wg3.Add(1)
-	// 	go func(blob map[string]string) {
-	// 		UpdateMainDB(blob)
-	// 		wg3.Done()
-	// 	}(blob)
-	// 	wg3.Wait()
-	// }
+	fmt.Println("creating and inserting thumbnails is complete")
+	fmt.Println("Inserting album and artists ids is complete")
 
-	// fmt.Println("creating and inserting thumbnails is complete")
-	// fmt.Println("Inserting album and artists ids is complete")
-
-	// // //AggArtist
-	// DistArtist := GDistArtist2()
-	// // for _, v := range DistArtist {
-	// // 	fmt.Println(v)
-	// // }
+	// //AggArtist
+	DistArtist := GDistArtist2()
+	for _, v := range DistArtist {
+		fmt.Println(v)
+	}
 	// var wg5 sync.WaitGroup
 	// var artpage int
 	// for artIdx, DArtt := range DistArtist {

@@ -144,13 +144,8 @@ func InsAlbViewID(artist string, artistID string, album string, albumID string, 
     defer Close(client, ctx, cancel)
 
 	insertOneResult, err := InsertOne(client, ctx, "tempdb2", "titleoffset", &MyAlbview)
-	CheckError(err, "titleoffset insertion has fucked up")
+	CheckError(err, "titleoffsetdb insertion has fucked up")
 	fmt.Println(insertOneResult)
-
-// 	// sess := DBcon()
-// 	// defer sess.Close()
-// 	// AVc := sess.DB("albview").C("albview")
-// 	// AVc.Insert(MyAlbview)
 	return
 }
 
