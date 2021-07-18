@@ -115,14 +115,36 @@ func SetUpCheck() {
 
 //SetUp is exported to main
 func Setup() {
+	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
+	// If the file doesn't exist, create it or append to the file
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	log.Println("Logging started")
+	
+
+
+
+
 	ti := time.Now()
 	fmt.Println(ti)
+	log.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
+	log.Println("starting walk \n")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
+	log.Println("walk is complete \n")
 
+	log.Println("starting GetDistAlbumMeta1 \n")
 	dalb := GetDistAlbumMeta1()
 	fmt.Println(dalb)
+	log.Println(dalb)
+	log.Println("GetDistAlbumMeta1 is complete \n")
+
+
+	log.Println("starting InsAlbumID \n")
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
@@ -132,9 +154,15 @@ func Setup() {
 		}(alb)
 		wg1.Wait()
 	}
+	log.Println("InsAlbumID is complete \n")
 
+	log.Println("starting GDistArtist")
 	dart := GDistArtist()
 	fmt.Println(dart)
+	log.Println(dart)
+	log.Println("GDistArtist is complete \n")
+
+	log.Println("starting InsArtistID")
 	var wg2 sync.WaitGroup
 	for _, art := range dart {
 		wg2.Add(1)
@@ -144,9 +172,13 @@ func Setup() {
 		}(art)
 		wg2.Wait()
 	}
+	log.Println("InsArtistID is complete \n")
 
+	log.Println("starting GetTitleOffsetAll")
 	AllObj := GetTitleOffsetAll()
+	log.Println("GetTitleOffsetAll is complete \n")
 
+	log.Println("starting UpdateMainDB")
 	var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
 		wg3.Add(1)
@@ -156,43 +188,46 @@ func Setup() {
 		}(blob)
 		wg3.Wait()
 	}
+	log.Println("UpdateMainDB is complete \n")
 
 	// fmt.Println("creating and inserting thumbnails is complete")
 	// fmt.Println("Inserting album and artists ids is complete")
 
 	// //AggArtist
+	log.Println("starting UpdateMainDB")
 	DistArtist := GDistArtist2()
-	// for _, v := range DistArtist {
-	// 	fmt.Printf("%v this is GDistArtist2", v)
-	// }
-	var wg5 sync.WaitGroup
-	var artpage int = 0
-	for artIdx, DArtt := range DistArtist {
-		if artIdx < OffSet {
-			artpage = 1
-		} else if artIdx % OffSet == 0 {
-			artpage++
-		} else {
-			artpage = artpage + 0
-		}
-		wg5.Add(1)
-		go func(DArtt map[string]string, artIdx int, artpage int) {
-			GAI := GArtInfo2(DArtt)
-			for _, g := range GAI {
-				fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
-			}
-	// // 		APL := ArtPipeline(DArtt)
-	// // 		AlbID := AddAlbumID(APL)
-	// // 		// aartIdX := strconv.Itoa(artIdx)
-	// // 		// aartpage := strconv.Itoa(artpage)
-	// // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
-			wg5.Done()
-		}(DArtt, artIdx, artpage)
-		wg5.Wait()
+	for _, v := range DistArtist {
+		fmt.Printf("%v this is GDistArtist2", v)
 	}
-	fmt.Println("AggArtists is complete")
+	log.Println("GDistArtist2 is complete \n")
+	// var wg5 sync.WaitGroup
+	// var artpage int = 0
+	// for artIdx, DArtt := range DistArtist {
+	// 	if artIdx < OffSet {
+	// 		artpage = 1
+	// 	} else if artIdx % OffSet == 0 {
+	// 		artpage++
+	// 	} else {
+	// 		artpage = artpage + 0
+	// 	}
+	// 	wg5.Add(1)
+	// 	go func(DArtt map[string]string, artIdx int, artpage int) {
+	// 		GAI := GArtInfo2(DArtt)
+	// 		for _, g := range GAI {
+	// 			fmt.Println("%v THIS IS GGGGGGGGG\n\n\n", g)
+	// 		}
+	// // // 		APL := ArtPipeline(DArtt)
+	// // // 		AlbID := AddAlbumID(APL)
+	// // // 		// aartIdX := strconv.Itoa(artIdx)
+	// // // 		// aartpage := strconv.Itoa(artpage)
+	// // // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)
+	// 		wg5.Done()
+	// 	}(DArtt, artIdx, artpage)
+	// 	wg5.Wait()
+	// }
+	// fmt.Println("AggArtists is complete")
 
-	// // ArtistOffset()
+	// // ArtistOffset()w11
 	// // fmt.Println("ArtistOffset is complete")
 
 	// //AggAlbum
