@@ -128,13 +128,6 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	for _, ag := range AP2 {
 		fmt.Println(ag)
 	}
-	// for _, ag1 := range agg {
-	// 	fmt.Println(ag1)
-	// }
-	
-
-
-
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	AMPc := sesC.DB("maindb").C("maindb")
@@ -151,67 +144,70 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 }
 // 
 // //AddAlbumID exported
-func AddAlbumID(PL2 []Ap2) (AAID []map[string]string) {
+// func AddAlbumID(PL2 []Ap2) (AAID []map[string]string) {
 	
-	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	// defer Close(client, ctx, cancel)
-	// CheckError(err, "MongoDB connection has failed")
-	// collection := client.Database("maindb").Collection("maindb")
+// 	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	// defer Close(client, ctx, cancel)
+// 	// CheckError(err, "MongoDB connection has failed")
+// 	// collection := client.Database("maindb").Collection("maindb")
 
-	for _, aaid := range PL2 {
-		fmt.Printf("\n %v This aaid from PL2 \n\n\n", aaid)
+// 	for _, aaid := range PL2 {
+// 		fmt.Printf("\n %v This aaid from PL2 \n\n\n", aaid)
 		
 	
 
-		// cur, err := collection.Find(context.Background(), filter)
-		// if err != nil { log.Fatal(err) }
-		// filter := bson.D{}
-		// var AAID []map[string]string
-		// if err = cur.All(context.Background(), &AAID); err != nil {
-		// 	log.Fatal(err)
-		// }
-	}
-	
-	return
-
-
-
-
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	AMP2c := sesC.DB("maindb").C("maindb")
-// 	var AAID []map[string]string
-// 	for _, boo := range PL2 {
-// 		for _, boo2 := range boo.Albumz {
-// 			var AAid map[string]string = make(map[string]string)
-// 			b1 := bson.M{"album": boo2}
-// 			b2 := bson.M{}
-// 			AMP2c.Find(b1).Select(b2).One(&AAid)
-// 			AAID = append(AAID, AAid)
-// 		}
+// 		// cur, err := collection.Find(context.Background(), filter)
+// 		// if err != nil { log.Fatal(err) }
+// 		// filter := bson.D{}
+// 		// var AAID []map[string]string
+// 		// if err = cur.All(context.Background(), &AAID); err != nil {
+// 		// 	log.Fatal(err)
+// 		// }
 // 	}
-	return AAID
-}
+	
+// 	return
 
-// //ArtVIEW exported
-// type ArtVIEW struct {
-// 	Artist   string              `bson:"artist"`
-// 	ArtistID string              `bson:"artistID"`
-// 	Albums   []map[string]string `bson:"albums"`
-// 	Page     string              `bson:"page"`
-// 	Idx      string              `bson:"idx"`
+
+
+
+// // 	sesC := DBcon()
+// // 	defer sesC.Close()
+// // 	AMP2c := sesC.DB("maindb").C("maindb")
+// // 	var AAID []map[string]string
+// // 	for _, boo := range PL2 {
+// // 		for _, boo2 := range boo.Albumz {
+// // 			var AAid map[string]string = make(map[string]string)
+// // 			b1 := bson.M{"album": boo2}
+// // 			b2 := bson.M{}
+// // 			AMP2c.Find(b1).Select(b2).One(&AAid)
+// // 			AAID = append(AAID, AAid)
+// // 		}
+// // 	}
+// 	return AAID
 // }
 
+// //ArtVIEW exported
+type ArtVIEW struct {
+	Artist   string              `bson:"artist"`
+	ArtistID string              `bson:"artistID"`
+	Albums   []Ap2               `bson:"albums"`
+	Page     string              `bson:"page"`
+	Idx      string              `bson:"idx"`
+}
+
 // //InsArtIPipe2 exported
-// func InsArtIPipe2(AI2 map[string]string, aAID []map[string]string, idxx int, page int) {
-// 	// page, _ := strconv.Atoi(AI2["page"])
-// 	var AV1 ArtVIEW
-// 	AV1.Artist = AI2["artist"]
-// 	AV1.ArtistID = AI2["artistID"]
-// 	AV1.Albums = aAID
-// 	// AV1.Page = strconv.Itoa(page)
-// 	AV1.Page = strconv.Itoa(page)
-// 	AV1.Idx = strconv.Itoa(idxx)
+func InsArtIPipe2(artist string, artistID string, albums []Ap2, page string, idx string) {
+	var AV1 ArtVIEW
+	AV1.Artist = artist
+	AV1.ArtistID = artistID
+	AV1.Albums = albums
+	AV1.Page = page
+	AV1.Idx = idx
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
+	CheckError(err2, "artistview insertion has failed")
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	ARTV3c := sesC.DB("artistview").C("artistviews")
@@ -219,7 +215,7 @@ func AddAlbumID(PL2 []Ap2) (AAID []map[string]string) {
 // 	if err != nil {
 // 		fmt.Printf("this is ARTV3c Insert err %v", err)
 // 	}
-// }
+}
 
 // //GAVAll exported
 // func GAVAll() (Artview []ArtVIEW) {
