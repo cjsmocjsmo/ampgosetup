@@ -72,38 +72,38 @@ func gAlbumInfo(Alb string) map[string]string {
 }
 
 // //UpdateMainDB exported
-func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
-	artID := gArtistInfo(m2["artist"])
-	albID := gAlbumInfo(m2["album"])
-	Doko.Dirpath = m2["dirpath"]
-	Doko.Filename = m2["filename"]
-	Doko.Extension = m2["extension"]
-	Doko.FileID = m2["fileID"]
-	Doko.Filesize = m2["filesize"]
-	Doko.Artist = m2["artist"]
-	Doko.ArtistID = artID["artistID"]
-	Doko.Album = m2["album"]
-	Doko.AlbumID = albID["albumID"]
-	Doko.Title = m2["title"]
-	Doko.Genre = m2["genre"]
-	Doko.PicID = m2["picID"]
-	Doko.PicDB = "thumbnails"
-	Doko.TitlePage = m2["titlepage"]
-	Doko.Idx = m2["idx"]
-	Doko.PicPath = m2["picPath"]
+// func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
+// 	artID := gArtistInfo(m2["artist"])
+// 	albID := gAlbumInfo(m2["album"])
+// 	Doko.Dirpath = m2["dirpath"]
+// 	Doko.Filename = m2["filename"]
+// 	Doko.Extension = m2["extension"]
+// 	Doko.FileID = m2["fileID"]
+// 	Doko.Filesize = m2["filesize"]
+// 	Doko.Artist = m2["artist"]
+// 	Doko.ArtistID = artID["artistID"]
+// 	Doko.Album = m2["album"]
+// 	Doko.AlbumID = albID["albumID"]
+// 	Doko.Title = m2["title"]
+// 	Doko.Genre = m2["genre"]
+// 	Doko.PicID = m2["picID"]
+// 	Doko.PicDB = "thumbnails"
+// 	Doko.TitlePage = m2["titlepage"]
+// 	Doko.Idx = m2["idx"]
+// 	Doko.PicPath = m2["picPath"]
 
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
-	CheckError(err2, "maindb insertion has failed")
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	CheckError(err, "Connections has failed")
+// 	defer Close(client, ctx, cancel)
+// 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
+// 	CheckError(err2, "maindb insertion has failed")
 
 
-	// sesC := DBcon()
-	// defer sesC.Close()
-	// DOKOc := sesC.DB("maindb").C("maindb")
-	// DOKOc.Insert(Doko)
-	return
-}
+// 	// sesC := DBcon()
+// 	// defer sesC.Close()
+// 	// DOKOc := sesC.DB("maindb").C("maindb")
+// 	// DOKOc.Insert(Doko)
+// 	return
+// }
 
 

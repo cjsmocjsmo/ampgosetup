@@ -20,65 +20,42 @@
 
 package ampgosetup
 
-import (
-	"os"
-	"fmt"
-	"log"
-	"time"
-	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	// "strconv"
-)
+// import (
+// 	"os"
+// 	"fmt"
+// 	"log"
+// 	"time"
+// 	"context"
+// 	"go.mongodb.org/mongo-driver/bson"
+// 	"go.mongodb.org/mongo-driver/mongo"
+// 	"go.mongodb.org/mongo-driver/mongo/options"
+// 	// "strconv"
+// )
 
 
 
 // //GDistArtist2 exported
-func GDistArtist2() (DArtAll []map[string]string) {
-	filter := bson.D{}
-	opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("maindb").Collection("maindb")
-	DA1, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
-	CheckError(err2, "MongoDB distinct album has failed")
-	var DArtist []string
-	for _, DA := range DA1 {
-		zoo := fmt.Sprintf("%s", DA)
-		DArtist = append(DArtist, zoo)
-	}
+// func GDistArtist2() (DArtAll []map[string]string) {
+// 	DArtist := GetDistinct("maindb", "maindb", "artist")
 
-
-	// fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
-	for _, art := range DArtist {
-		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
-		filter := bson.M{"artist": art}
-		// opts := options.Distinct().SetMaxTime(2 * time.Second)
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		defer Close(client, ctx, cancel)
-		CheckError(err, "MongoDB connection has failed")
-		collection := client.Database("maindb").Collection("maindb")
-		var DArtA map[string]string = make(map[string]string)
-		err = collection.FindOne(context.Background(), filter).Decode(&DArtA)
-		if err != nil { log.Fatal(err) }
-		// fmt.Println("\n\n\n This is DArtA")
-		// fmt.Println(DArtA)
-		DArtAll = append(DArtAll, DArtA)
-	
-
-
-
-
-// 		MAINc := sesC.DB("maindb").C("maindb")
-// 		b1 := bson.M{"artist": art}
+// 	// fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
+// 	for _, art := range DArtist {
+// 		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
+// 		filter := bson.M{"artist": art}
+// 		// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 		defer Close(client, ctx, cancel)
+// 		CheckError(err, "MongoDB connection has failed")
+// 		collection := client.Database("maindb").Collection("maindb")
 // 		var DArtA map[string]string = make(map[string]string)
-// 		MAINc.Find(b1).One(&DArtA)
+// 		err = collection.FindOne(context.Background(), filter).Decode(&DArtA)
+// 		if err != nil { log.Fatal(err) }
+// 		// fmt.Println("\n\n\n This is DArtA")
+// 		// fmt.Println(DArtA)
 // 		DArtAll = append(DArtAll, DArtA)
-	}
-	return
-}
+// 	}
+// 	return
+// }
 
 // //GArtInfo2 exported
 // func GArtInfo2(Dart map[string]string) (string, string) {
@@ -103,61 +80,65 @@ func GDistArtist2() (DArtAll []map[string]string) {
 // }
 
 // //Ap2 exported
-type Ap2 struct {
-	Albumz []string
-}
+// type Ap2 struct {
+// 	Albumz []string
+// }
 
-// //ArtPipeline exported
-func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
-	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
-	// If the file doesn't exist, create it or append to the file
-	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
+// // //ArtPipeline exported
+// func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+// 	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
+// 	// If the file doesn't exist, create it or append to the file
+// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	log.SetOutput(file)
 
-	pipeline := mongo.Pipeline{
-		{{"$match", bson.D{{"artist", dart["artist"]}}}},
-		// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-		{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
-		{{"$project", bson.D{{"albumz", 1}}}},
+// 	// pipeline := mongo.Pipeline{bson.D{
+// 	// 	{"$match": bson.M{"album": dart["album"]}},
+// 	// 	{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// 	// 	{"$project": bson.M{"albumz": 1}},
+// 	// }}
 
-	}
-	// filter := bson.M{"album": Dart["album"]}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	db := client.Database("maindb").Collection("maindb")
-	// var AP2 []Ap2
-	cur, err := db.Aggregate(context.TODO(), pipeline)
-	log.Println(cur)
-	cur.Decode(&AP2)
+// 	pipeline := mongo.Pipeline{
+// 		{{"$match", bson.D{{"artist", dart["artist"]}}}},
+// 		// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// 		{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
+// 		{{"$project", bson.D{{"albumz", 1}}}},
+
+// 	}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	db := client.Database("maindb").Collection("maindb")
+// 	// var AP2 []Ap2
+// 	cur, err := db.Aggregate(context.TODO(), pipeline)
+// 	log.Println(cur)
+// 	cur.Decode(&AP2)
 	
 
-	log.Println(AP2)
-	log.Printf("%T This is AP2 type", AP2)
-	for _, ag := range AP2 {
-		fmt.Printf("%v this is ag from AP2", ag)
-		fmt.Printf("%T this is ag type", ag)
-		log.Printf("%T this is ag type", ag)
-		log.Printf("%v this is ag from AP2", ag)
-	}
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	AMPc := sesC.DB("maindb").C("maindb")
-// 	pipeline2 := AMPc.Pipe([]bson.M{
-// 		{"$match": bson.M{"artist": dart["artist"]}},
-// 		{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-// 		{"$project": bson.M{"albumz": 1}},
-// 	}).Iter()
-// 	err := pipeline2.All(&AP2)
-// 	if err != nil {
-// 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
+// 	log.Println(AP2)
+// 	log.Printf("%T This is AP2 type", AP2)
+// 	for _, ag := range AP2 {
+// 		fmt.Printf("%v this is ag from AP2", ag)
+// 		fmt.Printf("%T this is ag type", ag)
+// 		log.Printf("%T this is ag type", ag)
+// 		log.Printf("%v this is ag from AP2", ag)
 // 	}
-	return
-}
+// // 	sesC := DBcon()
+// // 	defer sesC.Close()
+// // 	AMPc := sesC.DB("maindb").C("maindb")
+// // 	pipeline2 := AMPc.Pipe([]bson.M{
+// // 		{"$match": bson.M{"artist": dart["artist"]}},
+// // 		{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// // 		{"$project": bson.M{"albumz": 1}},
+// // 	}).Iter()
+// // 	err := pipeline2.All(&AP2)
+// // 	if err != nil {
+// // 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
+// // 	}
+// 	return
+// }
 // 
 // //AddAlbumID exported
 // func AddAlbumID(PL2 []Ap2) (AAID []map[string]string) {
@@ -203,29 +184,29 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 // }
 
 // //ArtVIEW exported
-type ArtVIEW struct {
-	Artist   string              `bson:"artist"`
-	ArtistID string              `bson:"artistID"`
-	Albums   []Ap2               `bson:"albums"`
-	Page     string              `bson:"page"`
-	Idx      string              `bson:"idx"`
-}
+// type ArtVIEW struct {
+// 	Artist   string              `bson:"artist"`
+// 	ArtistID string              `bson:"artistID"`
+// 	Albums   []Ap2               `bson:"albums"`
+// 	Page     string              `bson:"page"`
+// 	Idx      string              `bson:"idx"`
+// }
 
-// //InsArtIPipe2 exported
-func InsArtIPipe2(AV1 ArtVIEW) {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
-	CheckError(err2, "artistview insertion has failed")
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	ARTV3c := sesC.DB("artistview").C("artistviews")
-// 	err := ARTV3c.Insert(&AV1)
-// 	if err != nil {
-// 		fmt.Printf("this is ARTV3c Insert err %v", err)
-// 	}
-}
+// // //InsArtIPipe2 exported
+// func InsArtIPipe2(AV1 ArtVIEW) {
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	CheckError(err, "Connections has failed")
+// 	defer Close(client, ctx, cancel)
+// 	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
+// 	CheckError(err2, "artistview insertion has failed")
+// // 	sesC := DBcon()
+// // 	defer sesC.Close()
+// // 	ARTV3c := sesC.DB("artistview").C("artistviews")
+// // 	err := ARTV3c.Insert(&AV1)
+// // 	if err != nil {
+// // 		fmt.Printf("this is ARTV3c Insert err %v", err)
+// // 	}
+// }
 
 // //GAVAll exported
 // func GAVAll() (Artview []ArtVIEW) {

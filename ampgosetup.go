@@ -28,12 +28,12 @@ import (
 	"sync"
 	"time"
 	"runtime"
-	"context"
+	// "context"
 	"strconv"
 	"path/filepath"
 	// "go.mongodb.org/mongo-driver/bson"
-    "go.mongodb.org/mongo-driver/mongo"
-    "go.mongodb.org/mongo-driver/mongo/options"
+    // "go.mongodb.org/mongo-driver/mongo"
+    // "go.mongodb.org/mongo-driver/mongo/options"
 	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
@@ -42,32 +42,32 @@ const (
 	OffSet = 35
 )
 
-func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
-	defer cancel()
-	defer func() {
-		if err := client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-}
-
-func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
-    client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
-    return client, ctx, cancel, err
-}
-
-func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
-    collection := client.Database(dataBase).Collection(col)
-    result, err := collection.InsertOne(ctx, doc)
-    return result, err
-}
-
-// func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
-// 	collection := client.Database(dataBase).Collection(col)
-// 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
-// 	return
+// func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
+// 	defer cancel()
+// 	defer func() {
+// 		if err := client.Disconnect(ctx); err != nil {
+// 			panic(err)
+// 		}
+// 	}()
 // }
+
+// func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
+// 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
+//     client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+//     return client, ctx, cancel, err
+// }
+
+// func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
+//     collection := client.Database(dataBase).Collection(col)
+//     result, err := collection.InsertOne(ctx, doc)
+//     return result, err
+// }
+
+// // func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
+// // 	collection := client.Database(dataBase).Collection(col)
+// // 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
+// // 	return
+// // }
 
 
 //CheckError exported
@@ -135,7 +135,7 @@ func Setup() {
 	log.Println("walk is complete \n")
 
 	log.Println("starting GetDistAlbumMeta1 \n")
-	dalb := GetDistAlbumMeta1()
+	dalb := AmpgoDistinct("tempdb1", "meta1", "album")
 	fmt.Println(dalb)
 	log.Println(dalb)
 	log.Println("GetDistAlbumMeta1 is complete \n")
@@ -154,7 +154,7 @@ func Setup() {
 	log.Println("InsAlbumID is complete \n")
 
 	log.Println("starting GDistArtist")
-	dart := GDistArtist()
+	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
 	fmt.Println(dart)
 	log.Println(dart)
 	log.Println("GDistArtist is complete \n")
@@ -208,17 +208,12 @@ func Setup() {
 			artpage = artpage + 0
 		}
 		
-		// artist, artistID := GArtInfo2(DArtt) //map[string]string
-		artist := DArtt["artist"]
-		artistID := DArtt["artistID"]
-
-		
 		APL := ArtPipeline(DArtt)
 		log.Println(APL)
 		fmt.Println(APL)
 		var AV1 ArtVIEW
-		AV1.Artist = artist
-		AV1.ArtistID = artistID
+		AV1.Artist = DArtt["artist"]
+		AV1.ArtistID = DArtt["artistID"]
 		AV1.Albums = APL
 		AV1.Page = strconv.Itoa(artpage)
 		AV1.Idx = strconv.Itoa(artIdx)
@@ -229,7 +224,7 @@ func Setup() {
 		
 		wg5.Add(1)
 		go func(AV1 ArtVIEW) {
-			InsArtIPipe2(AV1)
+			InsArtPipeline(AV1)
 			wg5.Done()
 		}(AV1)
 		wg5.Wait()
@@ -243,28 +238,43 @@ func Setup() {
 	// fmt.Println("AggAlbum has started")
 
 
-	// DistAlbum3 := GDistAlbum3()
-	// for _, v := range DistAlbum3 {
-	// 	fmt.Printf("%v this is DistAlbum3", v)
-	// }
+	DistAlbum3 := GDistAlbum3()
+	for _, v := range DistAlbum3 {
+		fmt.Printf("%v this is DistAlbum3", v)
+	}
 
-	// var wg6 sync.WaitGroup
-	// var albpage int
-	// for albIdx, DAlb := range DistAlbum3 {
-	// 	wg6.Add(1)
-	// 	if albIdx < OffSet {
-	// 		albpage = 1
-	// 	} else if albIdx % OffSet == 0 {
-	// 		albpage++
-	// 	} else {
-	// 		albpage = albpage + 0
-	// 	}
-	// 	fmt.Println("\n THIS IS ALBPAGE")
-	// 	fmt.Println(albpage)
-	// 	fmt.Println("\n THIS IS ALBIDX")
-	// 	fmt.Println(albIdx)
+	var wg6 sync.WaitGroup
+	var albpage int = 0
+	for albIdx, DAlb := range DistAlbum3 {
+		wg6.Add(1)
+		if albIdx < OffSet {
+			albpage = 1
+		} else if albIdx % OffSet == 0 {
+			albpage++
+		} else {
+			albpage = albpage + 0
+		}
+		fmt.Println("\n THIS IS ALBPAGE")
+		fmt.Println(albpage)
+		fmt.Println("\n THIS IS ALBIDX")
+		fmt.Println(albIdx)
 
-	// 	go func(DAlb map[string]string, albIdx int, albpage int) {
+		log.Println(DAlb)
+
+		// APLX := AlbPipeline(DAlb)
+
+		// var AlbInfo map[string]string
+		// AlbInfo["artist"] = DAlb["artist"]
+		// AlbInfo["artistID"] = DAlb["artistID"]
+		// AlbInfo["album"] = DAlb["album"]
+		// AlbInfo["albumID"] = DAlb["albumID"]
+		// AlbInfo["picpath"] = DAlb["picpath"]
+		// AlbInfo["songcount"] = strconv.Itoa(len(APLX))
+		// AlbInfo["aalbIdx"] = strconv.Itoa(albIdx)
+		// AlbInfo["aalbpage"] = strconv.Itoa(albpage)
+
+		// go func(AlbInfo map[string]string, APLX []string) {
+			
 			
 	// 		APL := AlbPipeline(DAlb)
 	// 		songcount := len(APL)
@@ -273,10 +283,11 @@ func Setup() {
 	// 		// aidx, _ := strconv.Atoi(idx)
 	// 		artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
 	// 		InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
-	// 		wg6.Done()
-	// 	}(DAlb, albIdx, albpage)
-	// 	wg6.Wait()
-	// }
+			// InsAlbViewID(AlbInfo, APLX)
+		// 	wg6.Done()
+		// }(AlbInfo, APLX)
+		// wg6.Wait()
+	}
 
 	// // AlbumOffset()
 

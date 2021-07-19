@@ -24,8 +24,8 @@ import (
 	"os"
 	"log"
 	"fmt"
-	"time"
-	"context"
+	// "time"
+	// "context"
 	"strings"
 	"strconv"
 	"crypto/rand"
@@ -33,8 +33,8 @@ import (
 	"path/filepath"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	// "go.mongodb.org/mongo-driver/bson"
+	// "go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func getFileInfo(apath string) (filename string, size string) {
@@ -154,86 +154,86 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	return
 }
 
-func GetDistAlbumMeta1() []string {
-	filter := bson.D{}
-	opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb1").Collection("meta1")
-	DD1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
-	CheckError(err2, "MongoDB distinct album has failed")
-	var DAlbum1 []string
-	for _, DD := range DD1 {
-		zoo := fmt.Sprintf("%s", DD)
-		DAlbum1 = append(DAlbum1, zoo)
-	}
-	return DAlbum1
-}
+// func GetDistAlbumMeta1() []string {
+// 	filter := bson.D{}
+// 	opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb1").Collection("meta1")
+// 	DD1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
+// 	CheckError(err2, "MongoDB distinct album has failed")
+// 	var DAlbum1 []string
+// 	for _, DD := range DD1 {
+// 		zoo := fmt.Sprintf("%s", DD)
+// 		DAlbum1 = append(DAlbum1, zoo)
+// 	}
+// 	return DAlbum1
+// }
 
 // InsAlbumID exported
-func InsAlbumID(alb string) {
-	uuid, _ := UUID()
-	var Albid interface{}
-	Albid = bson.D{
-		{"album", alb},
-		{"albumID", uuid},
-	}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "tempdb2", "albumid", Albid)
-	CheckError(err2, "albumID insertion has failed")
-	return
-}
+// func InsAlbumID(alb string) {
+// 	uuid, _ := UUID()
+// 	var Albid interface{}
+// 	Albid = bson.D{
+// 		{"album", alb},
+// 		{"albumID", uuid},
+// 	}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	CheckError(err, "Connections has failed")
+// 	defer Close(client, ctx, cancel)
+// 	_, err2 := InsertOne(client, ctx, "tempdb2", "albumid", Albid)
+// 	CheckError(err2, "albumID insertion has failed")
+// 	return
+// }
 
-func GDistArtist() []string {
-	filter := bson.D{{}}
-	opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb1").Collection("meta1")
-	DArtist, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
-	CheckError(err2, "MongoDB distinct album has failed")
-	var DArtist1 []string
-	for _, DA := range DArtist {
-		zooo := fmt.Sprintf("%s", DA)
-		DArtist1 = append(DArtist1, zooo)
-	}
-	return DArtist1
-}
+// func GDistArtist() []string {
+// 	filter := bson.D{{}}
+// 	opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb1").Collection("meta1")
+// 	DArtist, err2 := collection.Distinct(context.TODO(), "artist", filter, opts)
+// 	CheckError(err2, "MongoDB distinct album has failed")
+// 	var DArtist1 []string
+// 	for _, DA := range DArtist {
+// 		zooo := fmt.Sprintf("%s", DA)
+// 		DArtist1 = append(DArtist1, zooo)
+// 	}
+// 	return DArtist1
+// }
 
 //InsArtistID exported
-func InsArtistID(art string) {
-	uuid, _ := UUID()
-	var Artid interface{}
-	Artid = bson.D{
-		{"artist", art},
-		{"artistID", uuid},
-	}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "tempdb2", "artistid", Artid)
-	CheckError(err2, "artistID insertion has failed")
-	return
-}
+// func InsArtistID(art string) {
+// 	uuid, _ := UUID()
+// 	var Artid interface{}
+// 	Artid = bson.D{
+// 		{"artist", art},
+// 		{"artistID", uuid},
+// 	}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	CheckError(err, "Connections has failed")
+// 	defer Close(client, ctx, cancel)
+// 	_, err2 := InsertOne(client, ctx, "tempdb2", "artistid", Artid)
+// 	CheckError(err2, "artistID insertion has failed")
+// 	return
+// }
 
 //GMAll exported
 // GetTitleOffsetAll
-func GetTitleOffsetAll() (Main2SL []map[string]string) {
-	filter := bson.D{}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb1").Collection("meta1")
-	cur, err := collection.Find(context.Background(), filter)
-	if err != nil { log.Fatal(err) }
-	if err = cur.All(context.Background(), &Main2SL); err != nil {
-		log.Fatal(err)
-	}
-	// fmt.Println("\n\n\n This is Main2SL \n")
-	// fmt.Println(Main2SL)
-	return
-}
+// func GetTitleOffsetAll() (Main2SL []map[string]string) {
+// 	filter := bson.D{}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb1").Collection("meta1")
+// 	cur, err := collection.Find(context.Background(), filter)
+// 	if err != nil { log.Fatal(err) }
+// 	if err = cur.All(context.Background(), &Main2SL); err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	// fmt.Println("\n\n\n This is Main2SL \n")
+// 	// fmt.Println(Main2SL)
+// 	return
+// }

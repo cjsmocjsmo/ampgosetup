@@ -24,7 +24,7 @@ import (
 	"context"
 	"log"
 	"strconv"
-	// "go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 // 	"github.com/globalsign/mgo/bson"
@@ -36,38 +36,27 @@ import (
 // )
 
 // // GDistAlbum3 exported
-func GDistAlbum3() (DAlbAll []map[string]string) {
-	filter := bson.D{}
-	opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("maindb").Collection("maindb")
-	DA1, err2 := collection.Distinct(context.TODO(), "album", filter, opts)
-	CheckError(err2, "MongoDB distinct album has failed")
-	var DAlbum []string
-	for _, DA := range DA1 {
-		zoo := fmt.Sprintf("%s", DA)
-		DAlbum = append(DAlbum, zoo)
-	}
-	// fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
-	for _, alb := range DAlbum {
-		// fmt.Printf("\n\n\n THIS IS alb %s \n\n\n", alb)
-		filter := bson.M{"artist": alb}
-		// opts := options.Distinct().SetMaxTime(2 * time.Second)
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		defer Close(client, ctx, cancel)
-		CheckError(err, "MongoDB connection has failed")
-		collection := client.Database("maindb").Collection("maindb")
-		var DAlbA map[string]string = make(map[string]string)
-		err = collection.FindOne(context.Background(), filter).Decode(&DAlbA)
-		if err != nil { log.Fatal(err) }
-		// fmt.Println("\n\n\n This is DAlbA")
-		// fmt.Println(DAlbA)
-		DAlbAll = append(DAlbAll, DAlbA)
-	}
-	return
-}
+// func GDistAlbum3() (DAlbAll []map[string]string) {
+// 	DAlbum := GetDistinct("maindb", "maindb", "album")
+
+// 	// fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
+// 	for _, alb := range DAlbum {
+// 		// fmt.Printf("\n\n\n THIS IS alb %s \n\n\n", alb)
+// 		filter := bson.M{"artist": alb}
+// 		// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 		defer Close(client, ctx, cancel)
+// 		CheckError(err, "MongoDB connection has failed")
+// 		collection := client.Database("maindb").Collection("maindb")
+// 		var DAlbA map[string]string = make(map[string]string)
+// 		err = collection.FindOne(context.Background(), filter).Decode(&DAlbA)
+// 		if err != nil { log.Fatal(err) }
+// 		// fmt.Println("\n\n\n This is DAlbA")
+// 		// fmt.Println(DAlbA)
+// 		DAlbAll = append(DAlbAll, DAlbA)
+// 	}
+// 	return
+// }
 // 	sess := DBcon()
 // 	defer sess.Close()
 // 	MAINc := sess.DB("maindb").C("maindb")
@@ -95,12 +84,25 @@ func GDistAlbum3() (DAlbAll []map[string]string) {
 // }
 
 // //  exported
-// type p2 struct {
-// 	Titlez []string
-// }
+type p2 struct {
+	Titlez []string
+}
 
 // // AlbPipeline exported
-// func AlbPipeline(DAlb map[string]string) []string {
+func AlbPipeline(DAlb map[string]string) []string {
+	pipeline := mongo.Pipeline{
+		{{"$match", bson.M{"album": DAlb["album"]}}},
+		{{"$group", bson.M{"_id": "title", "titlez": bson.M{"$addToSet": "$title"}}}},
+		{{"$project", bson.M{"titlez": 1}}},
+	}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	db := client.Database("maindb").Collection("maindb")
+	var P2 []p2
+	cur, err := db.Aggregate(context.TODO(), pipeline)
+	log.Println(cur)
+	cur.Decode(&P2)
 // 	var P2 []p2
 // 	sess := DBcon()
 // 	defer sess.Close()
@@ -113,8 +115,8 @@ func GDistAlbum3() (DAlbAll []map[string]string) {
 // 	err := pipeline2.All(&P2)
 // 	CheckError(err, "\n AlbPipeline: Agg Album pipeline2 fucked up")
 // 	// fmt.Printf("this is P2 %s", P2)
-// 	return P2[0].Titlez
-// }
+	return P2[0].Titlez
+}
 
 // // AddTitleID exported
 // func AddTitleID(titlez []string) []map[string]string {
