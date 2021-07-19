@@ -209,16 +209,16 @@ func Setup() {
 		}
 		
 		APL := ArtPipeline(DArtt)
-		log.Println(APL)
-		fmt.Println(APL)
+		log.Printf("%s this is apl", APL)
+		fmt.Printf("%s this is apl", APL)
 		var AV1 ArtVIEW
 		AV1.Artist = DArtt["artist"]
 		AV1.ArtistID = DArtt["artistID"]
 		AV1.Albums = APL
 		AV1.Page = strconv.Itoa(artpage)
 		AV1.Idx = strconv.Itoa(artIdx)
-		log.Println(AV1)
-		fmt.Println(AV1)
+		log.Printf("%s This is AV1", AV1)
+		fmt.Printf("%s This is AV1", AV1)
 
 		
 		
@@ -241,6 +241,7 @@ func Setup() {
 	DistAlbum3 := GDistAlbum3()
 	for _, v := range DistAlbum3 {
 		fmt.Printf("%v this is DistAlbum3", v)
+		log.Printf("%v this is DistAlbum3", v)
 	}
 
 	var wg6 sync.WaitGroup
@@ -254,12 +255,10 @@ func Setup() {
 		} else {
 			albpage = albpage + 0
 		}
-		fmt.Println("\n THIS IS ALBPAGE")
-		fmt.Println(albpage)
-		fmt.Println("\n THIS IS ALBIDX")
-		fmt.Println(albIdx)
+		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
+		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
 
-		log.Println(DAlb)
+		log.Printf("%s this is dalb", DAlb)
 
 		// APLX := AlbPipeline(DAlb)
 
