@@ -81,17 +81,17 @@ func GDistArtist2() (DArtAll []map[string]string) {
 }
 
 // //GArtInfo2 exported
-func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {
+func GArtInfo2(Dart map[string]string) (string, string) {
 	filter := bson.M{"album": Dart["album"]}
 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("maindb").Collection("maindb")
-	// var ArtInfo2 map[string]string = make(map[string]string)
+	var ArtInfo2 map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo2)
 	if err != nil { log.Fatal(err) }
-	return
+	return ArtInfo2["artist"], ArtInfo2["artistID"]
 
 
 // 	sesC := DBcon()
@@ -99,7 +99,7 @@ func GArtInfo2(Dart map[string]string) (ArtInfo2 map[string]string) {
 // 	MAINc := sesC.DB("maindb").C("maindb")
 // 	b1 := bson.M{"artist": Dart["artist"]}
 // 	MAINc.Find(b1).One(&ArtInfo2)
-	return
+	// return
 }
 
 // //Ap2 exported
@@ -196,13 +196,7 @@ type ArtVIEW struct {
 }
 
 // //InsArtIPipe2 exported
-func InsArtIPipe2(artist string, artistID string, albums []Ap2, page string, idx string) {
-	var AV1 ArtVIEW
-	AV1.Artist = artist
-	AV1.ArtistID = artistID
-	AV1.Albums = albums
-	AV1.Page = page
-	AV1.Idx = idx
+func InsArtIPipe2(AV1 ArtVIEW) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)

@@ -210,24 +210,22 @@ func Setup() {
 			artpage = artpage + 0
 		}
 		
-		GAI := GArtInfo2(DArtt) //map[string]string
+		artist, artistID := GArtInfo2(DArtt) //map[string]string
 		APL := ArtPipeline(DArtt)
+		var AV1 ArtVIEW
+		AV1.Artist = artist
+		AV1.ArtistID = artistID
+		AV1.Albums = APL
+		AV1.Page = strconv.Itoa(artpage)
+		AV1.Idx = strconv.Itoa(artIdx)
 		
 		
 		wg5.Add(1)
-		go func(GAI map[string]string, artIdx int, artpage int, APL []Ap2) {
+		go func(AV1 ArtVIEW) {
 			
-			artist := GAI["artist"]
-			artistID := GAI["artistID"]
-			albums := APL
-			page := strconv.Itoa(artIdx)
-			idx := strconv.Itoa(artIdx)
-		
-			// AlbID := AddAlbumID(APL)
-			// fmt.Println(AlbID)
-			InsArtIPipe2(artist, artistID, albums, page, idx)
+			InsArtIPipe2(AV1)
 			wg5.Done()
-		}(GAI, artIdx, artpage, APL)
+		}(AV1)
 		wg5.Wait()
 	}
 	fmt.Println("AggArtists is complete")
