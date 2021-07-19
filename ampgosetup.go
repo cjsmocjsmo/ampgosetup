@@ -193,9 +193,6 @@ func Setup() {
 	// //AggArtist
 	log.Println("starting UpdateMainDB")
 	DistArtist := GDistArtist2()
-	for _, v := range DistArtist {
-		fmt.Printf("%v this is GDistArtist2", v)
-	}
 	log.Println("GDistArtist2 is complete \n")
 
 	log.Println("starting GArtInfo2")
@@ -212,12 +209,17 @@ func Setup() {
 		
 		artist, artistID := GArtInfo2(DArtt) //map[string]string
 		APL := ArtPipeline(DArtt)
+		log.Println(APL)
+		fmt.Println(APL)
 		var AV1 ArtVIEW
 		AV1.Artist = artist
 		AV1.ArtistID = artistID
 		AV1.Albums = APL
 		AV1.Page = strconv.Itoa(artpage)
 		AV1.Idx = strconv.Itoa(artIdx)
+		log.Println(AV1)
+		fmt.Println(AV1)
+
 		
 		
 		wg5.Add(1)
