@@ -199,6 +199,7 @@ func Setup() {
 	var wg5 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
+		log.Printf("%v This is DArtt")
 		if artIdx < OffSet {
 			artpage = 1
 		} else if artIdx % OffSet == 0 {

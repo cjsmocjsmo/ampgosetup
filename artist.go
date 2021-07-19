@@ -125,6 +125,7 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	// var AP2 []Ap2
 	cur, err := db.Aggregate(context.TODO(), pipeline)
 	cur.Decode(&AP2)
+	log.Println(AP2)
 	for _, ag := range AP2 {
 		fmt.Println(ag)
 	}
