@@ -225,7 +225,6 @@ func Setup() {
 		
 		wg5.Add(1)
 		go func(AV1 ArtVIEW) {
-			
 			InsArtIPipe2(AV1)
 			wg5.Done()
 		}(AV1)

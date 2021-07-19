@@ -21,7 +21,7 @@
 package ampgosetup
 
 import (
-	// "os"
+	"os"
 	"fmt"
 	"log"
 	"time"
@@ -51,7 +51,7 @@ func GDistArtist2() (DArtAll []map[string]string) {
 	}
 
 
-	fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
+	// fmt.Printf("\n\n\n THIS IS DARTIST %s \n\n\n", DArtist)
 	for _, art := range DArtist {
 		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", art)
 		filter := bson.M{"artist": art}
@@ -63,8 +63,8 @@ func GDistArtist2() (DArtAll []map[string]string) {
 		var DArtA map[string]string = make(map[string]string)
 		err = collection.FindOne(context.Background(), filter).Decode(&DArtA)
 		if err != nil { log.Fatal(err) }
-		fmt.Println("\n\n\n This is DArtA")
-		fmt.Println(DArtA)
+		// fmt.Println("\n\n\n This is DArtA")
+		// fmt.Println(DArtA)
 		DArtAll = append(DArtAll, DArtA)
 	
 
@@ -109,6 +109,14 @@ type Ap2 struct {
 
 // //ArtPipeline exported
 func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
+	// If the file doesn't exist, create it or append to the file
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+
 	pipeline := mongo.Pipeline{
 		{{"$match", bson.D{{"artist", dart["artist"]}}}},
 		// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
@@ -127,10 +135,11 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	cur.Decode(&AP2)
 
 	log.Println(AP2)
+	log.Printf("%T This is AP2 type", AP2)
 	for _, ag := range AP2 {
 		fmt.Printf("%v this is ag from AP2", ag)
-		fmt.Printf("%T this is ag type")
-		log.Printf("%T this is ag type")
+		fmt.Printf("%T this is ag type", ag)
+		log.Printf("%T this is ag type", ag)
 		log.Printf("%v this is ag from AP2", ag)
 	}
 // 	sesC := DBcon()

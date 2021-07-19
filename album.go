@@ -50,9 +50,9 @@ func GDistAlbum3() (DAlbAll []map[string]string) {
 		zoo := fmt.Sprintf("%s", DA)
 		DAlbum = append(DAlbum, zoo)
 	}
-	fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
+	// fmt.Printf("\n\n\n THIS IS DAlbum %s \n\n\n", DAlbum)
 	for _, alb := range DAlbum {
-		fmt.Printf("\n\n\n THIS IS ART %s \n\n\n", alb)
+		// fmt.Printf("\n\n\n THIS IS alb %s \n\n\n", alb)
 		filter := bson.M{"artist": alb}
 		// opts := options.Distinct().SetMaxTime(2 * time.Second)
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -62,8 +62,8 @@ func GDistAlbum3() (DAlbAll []map[string]string) {
 		var DAlbA map[string]string = make(map[string]string)
 		err = collection.FindOne(context.Background(), filter).Decode(&DAlbA)
 		if err != nil { log.Fatal(err) }
-		fmt.Println("\n\n\n This is DAlbA")
-		fmt.Println(DAlbA)
+		// fmt.Println("\n\n\n This is DAlbA")
+		// fmt.Println(DAlbA)
 		DAlbAll = append(DAlbAll, DAlbA)
 	}
 	return
