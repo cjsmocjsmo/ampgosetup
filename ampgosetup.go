@@ -211,14 +211,35 @@ func Setup() {
 		wg5.Add(1)
 		go func(DArtt map[string]string, artIdx int, artpage int) {
 			
-			GAI := GArtInfo2(DArtt)
+			GAI := GArtInfo2(DArtt) //map[string]string
 			log.Println(GAI)
 			log.Println("starting APL")
 			APL := ArtPipeline(DArtt)
 			for _, apl := range APL {
 				fmt.Println(apl)
 			}
-	// // // 		AlbID := AddAlbumID(APL)
+			// 2021/07/18 20:27:26 starting APL
+			// 2021/07/18 20:27:26 map[
+			// 	_id:60f48ea0f9cf0316850fe8f6 
+			// 	album:Afterburner 
+			// 	albumID:c5be870540a3299d8069f09ff929b8e9 
+			// 	artist:ZZ Top 
+			// 	artistID:2be2c1e1404739658013d0b0ce853293 
+			// 	dirpath:/root/fsData extension:.mp3 
+			// 	fileID:062b527940b4119a800fd6c30a3a2f8c 
+			// 	filename:01_-_Zz_Top_-_Afterburner_-_Sleeping_Bag.mp3 
+			// 	filesize:5952794 
+			// 	genre:Rock / Rock 
+			// 	idx:23 
+			// 	picDB:thumbnails 
+			// 	picID:062b527940b4119a800fd6c30a3a2f8c 
+			// 	picPath:/root/static/ZZ_Top_-_Afterburner_thumb.jpg 
+			// 	title:Sleeping Bag 
+			// 	titlepage:1
+			// ]
+			
+			AlbID := AddAlbumID(APL)
+			fmt.Println(AlbID)
 	// // // 		// aartIdX := strconv.Itoa(artIdx)
 	// // // 		// aartpage := strconv.Itoa(artpage)
 	// // // 		InsArtIPipe2(GAI, AlbID, artIdx, artpage)

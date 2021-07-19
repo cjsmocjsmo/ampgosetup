@@ -151,7 +151,32 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 }
 // 
 // //AddAlbumID exported
-// func AddAlbumID(PL2 []Ap2) []map[string]string {
+func AddAlbumID(PL2 []Ap2) (AAID []map[string]string) {
+	
+	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	// defer Close(client, ctx, cancel)
+	// CheckError(err, "MongoDB connection has failed")
+	// collection := client.Database("maindb").Collection("maindb")
+
+	for _, aaid := range PL2 {
+		fmt.Printf("\n %v This aaid from PL2 \n\n\n", aaid)
+		
+	
+
+		// cur, err := collection.Find(context.Background(), filter)
+		// if err != nil { log.Fatal(err) }
+		// filter := bson.D{}
+		// var AAID []map[string]string
+		// if err = cur.All(context.Background(), &AAID); err != nil {
+		// 	log.Fatal(err)
+		// }
+	}
+	
+	return
+
+
+
+
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	AMP2c := sesC.DB("maindb").C("maindb")
@@ -165,8 +190,8 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 // 			AAID = append(AAID, AAid)
 // 		}
 // 	}
-// 	return AAID
-// }
+	return AAID
+}
 
 // //ArtVIEW exported
 // type ArtVIEW struct {
