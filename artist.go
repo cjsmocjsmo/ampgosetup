@@ -81,26 +81,26 @@ func GDistArtist2() (DArtAll []map[string]string) {
 }
 
 // //GArtInfo2 exported
-func GArtInfo2(Dart map[string]string) (string, string) {
-	filter := bson.M{"album": Dart["album"]}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("maindb").Collection("maindb")
-	var ArtInfo2 map[string]string = make(map[string]string)
-	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo2)
-	if err != nil { log.Fatal(err) }
-	return ArtInfo2["artist"], ArtInfo2["artistID"]
+// func GArtInfo2(Dart map[string]string) (string, string) {
+// 	filter := bson.M{"album": Dart["album"]}
+// 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("maindb").Collection("maindb")
+// 	var ArtInfo2 map[string]string = make(map[string]string)
+// 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo2)
+// 	if err != nil { log.Fatal(err) }
+// 	return ArtInfo2["artist"], ArtInfo2["artistID"]
 
 
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	MAINc := sesC.DB("maindb").C("maindb")
-// 	b1 := bson.M{"artist": Dart["artist"]}
-// 	MAINc.Find(b1).One(&ArtInfo2)
-	// return
-}
+// // 	sesC := DBcon()
+// // 	defer sesC.Close()
+// // 	MAINc := sesC.DB("maindb").C("maindb")
+// // 	b1 := bson.M{"artist": Dart["artist"]}
+// // 	MAINc.Find(b1).One(&ArtInfo2)
+// 	// return
+// }
 
 // //Ap2 exported
 type Ap2 struct {
@@ -132,7 +132,9 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	db := client.Database("maindb").Collection("maindb")
 	// var AP2 []Ap2
 	cur, err := db.Aggregate(context.TODO(), pipeline)
+	log.Println(cur)
 	cur.Decode(&AP2)
+	
 
 	log.Println(AP2)
 	log.Printf("%T This is AP2 type", AP2)

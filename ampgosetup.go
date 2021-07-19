@@ -208,7 +208,11 @@ func Setup() {
 			artpage = artpage + 0
 		}
 		
-		artist, artistID := GArtInfo2(DArtt) //map[string]string
+		// artist, artistID := GArtInfo2(DArtt) //map[string]string
+		artist := DArtt["artist"]
+		artistID := DArtt["artistID"]
+
+		
 		APL := ArtPipeline(DArtt)
 		log.Println(APL)
 		fmt.Println(APL)
