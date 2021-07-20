@@ -345,6 +345,7 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	// 	fmt.Println(AP2)
 	// }
 	log.Println(AP2)
+	fmt.Println("This is AP2")
 	
 
 	// log.Printf("%s This is AP2", AP2)
