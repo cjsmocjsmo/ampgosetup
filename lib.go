@@ -330,30 +330,32 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	// 	{{"$project", bson.D{{"albumz", 1}}}},
 
 	// }
-	// opts := options.Aggregate()
+	opts := options.Aggregate()
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	db := client.Database("maindb").Collection("maindb")
 	// var AP2 []Ap2
 	
-	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline))
-	for cur.Next(context.Background()) {
-		cur.Decode(&AP2)
-		log.Println(AP2)
-		fmt.Println(AP2)
-	}
+	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
+	cur.Decode(&AP2)
+	// for cur.Next(context.Background()) {
+		
+	// 	log.Println(AP2)
+	// 	fmt.Println(AP2)
+	// }
 	log.Println(AP2)
 	
 
-	log.Printf("%s This is AP2", AP2)
-	log.Printf("%T This is AP2 type", AP2)
-	for _, ag := range AP2 {
-		fmt.Printf("%v this is ag from AP2", ag)
-		fmt.Printf("%T this is ag type", ag)
-		log.Printf("%T this is ag type", ag)
-		log.Printf("%v this is ag from AP2", ag)
-	}
+	// log.Printf("%s This is AP2", AP2)
+	// log.Printf("%T This is AP2 type", AP2)
+	// for _, ag := range AP2 {
+	// 	fmt.Printf("%v this is ag from AP2", ag)
+	// 	fmt.Printf("%T this is ag type", ag)
+	// 	log.Printf("%T this is ag type", ag)
+	// 	log.Printf("%v this is ag from AP2", ag)
+	// }
+
 // 	sesC := DBcon()
 // 	defer sesC.Close()
 // 	AMPc := sesC.DB("maindb").C("maindb")
