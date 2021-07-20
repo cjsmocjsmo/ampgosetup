@@ -163,7 +163,7 @@ func Setup() {
 	log.Println("GDistArtist2 is complete \n")
 
 	log.Println("starting GArtInfo2")
-	// var wg5 sync.WaitGroup
+	var wg5 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
 		log.Printf("%v This is DArtt", DArtt)
@@ -176,26 +176,15 @@ func Setup() {
 		}
 		
 		APL := NewArtPipline(DArtt, artpage, artIdx)
-		// APL := ArtPipeline(DArtt)
 		log.Printf("%s this is apl", APL)
 		fmt.Printf("\n\n %s this is apl", APL)
-		// var AV1 ArtVIEW
-		// AV1.Artist = DArtt["artist"]
-		// AV1.ArtistID = DArtt["artistID"]
-		// AV1.Albums = APL
-		// AV1.Page = strconv.Itoa(artpage)
-		// AV1.Idx = strconv.Itoa(artIdx)
-		// log.Printf("%s This is AV1", AV1)
-		// fmt.Printf("%s This is AV1", AV1)
-
 		
-		
-		// wg5.Add(1)
-		// go func(AV1 ArtVIEW) {
-		// 	InsArtPipeline(AV1)
-		// 	wg5.Done()
-		// }(AV1)
-		// wg5.Wait()
+		wg5.Add(1)
+		go func(APL ArtVieW2) {
+			InsArtPipeline(APL)
+			wg5.Done()
+		}(APL)
+		wg5.Wait()
 	}
 	fmt.Println("AggArtists is complete")
 	log.Println("AggArtists is complete")
@@ -206,11 +195,11 @@ func Setup() {
 	// fmt.Println("AggAlbum has started")
 
 	// log.Println("Starting GDistAlbum3")
-	// DistAlbum3 := GDistAlbum3()
-	// for _, v := range DistAlbum3 {
-	// 	fmt.Printf("%v this is DistAlbum3", v)
-	// 	log.Printf("%v this is DistAlbum3", v)
-	// }
+	DistAlbum3 := GDistAlbum3()
+	for _, v := range DistAlbum3 {
+		fmt.Printf("%v this is DistAlbum3", v)
+		log.Printf("%v this is DistAlbum3", v)
+	}
 
 	// var wg6 sync.WaitGroup
 	// var albpage int = 0

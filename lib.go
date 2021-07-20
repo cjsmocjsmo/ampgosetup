@@ -318,33 +318,22 @@ func GDistArtist2() (dArtAll []map[string]string) {
 
 
 func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
-	
-
 	filter := bson.D{{"artist", artmap["artist"]}}
-	// opts := options.Find().SetSort(bson.D{{"album", 1}})
-	
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	coll := client.Database("maindb").Collection("maindb")
-	// var results map[string]string = make(map[string]string)
 	cur, err := coll.Find(context.TODO(), filter)
 	CheckError(err, "ArtPipeline find has failed")
-
 	var results []map[string]string
 	if err = cur.All(context.TODO(), &results); err != nil {
 		log.Fatal(err)
 	}
-	// for _, result := range results {
-	// 	fmt.Printf("\n %s this is results \n", result)
-	// }
-	// var MyArView ArtVieW2
 	MyArView.Artist = artmap["artist"]
 	MyArView.ArtistID = artmap["artistID"]
 	MyArView.Albums = results
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
-	fmt.Printf("%s This is myartview", MyArView)
 
 	return
 }
@@ -426,7 +415,7 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVie
 // 	return
 // }
 
-func InsArtPipeline(AV1 ArtVIEW) {
+func InsArtPipeline(AV1 ArtVieW2) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
