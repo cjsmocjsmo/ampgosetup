@@ -155,8 +155,6 @@ func Setup() {
 
 	log.Println("starting GDistArtist")
 	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
-	fmt.Println(dart)
-	log.Println(dart)
 	log.Println("GDistArtist is complete \n")
 
 	log.Println("starting InsArtistID")
@@ -186,9 +184,6 @@ func Setup() {
 		wg3.Wait()
 	}
 	log.Println("UpdateMainDB is complete \n")
-
-	// fmt.Println("creating and inserting thumbnails is complete")
-	// fmt.Println("Inserting album and artists ids is complete")
 
 	// //AggArtist
 	log.Println("starting UpdateMainDB")
@@ -237,7 +232,7 @@ func Setup() {
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
 
-
+	log.Println("Starting GDistAlbum3")
 	DistAlbum3 := GDistAlbum3()
 	for _, v := range DistAlbum3 {
 		fmt.Printf("%v this is DistAlbum3", v)

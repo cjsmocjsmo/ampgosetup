@@ -6,17 +6,49 @@ import (
 	"fmt"
 	"time"
 	"context"
-	// "strings"
-	// "strconv"
-	// "crypto/rand"
-	// "encoding/hex"
-	// "path/filepath"
-	// "github.com/bogem/id3v2"
-	// "github.com/disintegration/imaging"
+	"strings"
+	"strconv"
+	"crypto/rand"
+	"encoding/hex"
+	"path/filepath"
+	"github.com/bogem/id3v2"
+	"github.com/disintegration/imaging"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+// Tagmap exported
+type Tagmap struct {
+	Dirpath    string `bson:"dirpath"`
+	Filename   string `bson:"filename"` 
+	Extension  string `bson:"extension"`
+	FileID     string `bson:"fileID"`
+	Filesize   string `bson:"filesize"`
+	Artist     string `bson:"artist"`
+	ArtistID   string `bson:"artistID"`
+	Album      string `bson:"album"`
+	AlbumID    string `bson:"albumID"`
+	Title      string `bson:"title"`
+	Genre      string `bson:"genre"`
+	TitlePage  string `bson:"titlepage"`
+	PicID      string `bson:"picID"`
+	PicDB      string `bson:"picDB"` 
+	PicPath    string `bson:"picPath"`
+	Idx        string    `bson:"idx"`
+}
+
+type Ap2 struct {
+	Albumz []string
+}
+
+type ArtVIEW struct {
+	Artist   string              `bson:"artist"`
+	ArtistID string              `bson:"artistID"`
+	Albums   []Ap2               `bson:"albums"`
+	Page     string              `bson:"page"`
+	Idx      string              `bson:"idx"`
+}
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
@@ -39,11 +71,11 @@ func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, 
     return result, err
 }
 
-// func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
-// 	collection := client.Database(dataBase).Collection(col)
-// 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
-// 	return
-// }
+func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
+	collection := client.Database(dataBase).Collection(col)
+	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
+	return
+}
 
 func AmpgoDistinct(db string, coll string, fieldd string) []string {
 	filter := bson.D{}
@@ -86,6 +118,107 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 	CheckError(err2, "albumID insertion has failed")
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+func getFileInfo(apath string) (filename string, size string) {
+	ltn, err := os.Open(apath)
+	CheckError(err, "getFileInfo: file open has fucked up")
+	defer ltn.Close()
+	ltnInfo, _ := ltn.Stat()
+	filename = ltnInfo.Name()
+	size = strconv.FormatInt(ltnInfo.Size(), 10)
+	return
+}
+
+// UUID exported
+func UUID() (string, error) {
+	uuid := make([]byte, 16)
+	n, err := rand.Read(uuid)
+	if n != len(uuid) || err != nil {
+		return "", err
+	}
+	uuid[8] = 0x80
+	uuid[4] = 0x40
+	boo := hex.EncodeToString(uuid)
+	return boo, nil
+}
+
+func resizeImage(infile string, outfile string) string {
+	pic, err := imaging.Open(infile)
+	if err != nil {
+		return os.Getenv("AMPGO_NO_ART_PIC_PATH")
+	}
+	sjImage := imaging.Resize(pic, 200, 0, imaging.Lanczos)
+	err = imaging.Save(sjImage, outfile)
+	CheckError(err, "resizeImage: image save has fucked up")
+	return outfile
+}
+
+// //DumpArtToFile is exported
+func DumpArtToFile(apath string) (string, string, string, string, string) {
+	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
+	artist := tag.Artist()
+	album := tag.Album()
+	title := tag.Title()
+	genre := tag.Genre()
+	CheckError(err, "Error while opening mp3 file")
+	defer tag.Close()
+	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
+	newdumpOutFile2 := ""
+	newdumpOutFileThumb := ""
+	for _, f := range pictures {
+		pic, ok := f.(id3v2.PictureFrame)
+		if !ok {
+			log.Fatal("Couldn't assert picture frame")
+		}
+		dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+		newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
+		dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
+		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
+		g, err := os.Create(newdumpOutFile2)
+		defer g.Close()
+		CheckError(err, "Unable to create newdumpOutFile2")
+		n3, err := g.Write(pic.Picture)
+		CheckError(err, "newdumpOutfile2 Write has fucked up")
+		fmt.Println(n3, "bytes written successfully")
+	}
+	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
+	return artist, album, title, genre, outfile22
+}
+
+// TAgMap exported
+func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
+	page := strconv.Itoa(apage)
+	index := strconv.Itoa(idx)
+	uuid, _ := UUID()
+	artist, album, title, genre, picpath := DumpArtToFile(apath)
+	fname, size := getFileInfo(apath)
+	TaGmaP.Dirpath = filepath.Dir(apath)
+	TaGmaP.Filename = fname
+	TaGmaP.Extension = filepath.Ext(apath)
+	TaGmaP.FileID = uuid
+	TaGmaP.Filesize = size
+	TaGmaP.Artist = artist
+	TaGmaP.ArtistID = "None"
+	TaGmaP.Album = album
+	TaGmaP.AlbumID = "None"
+	TaGmaP.Title = title
+	TaGmaP.Genre = genre
+	TaGmaP.TitlePage = page
+	TaGmaP.PicID = uuid
+	TaGmaP.PicDB = "None"
+	TaGmaP.PicPath = picpath
+	TaGmaP.Idx = index
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", &TaGmaP)
+	CheckError(err2, "Tempdb1 insertion has failed")
+	return
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
 func InsAlbumID(alb string) {
 	uuid, _ := UUID()
 	Albid := map[string]string{"album" : alb, "albumID": uuid}
@@ -112,6 +245,32 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 		log.Fatal(err)
 	}
 	return
+}
+
+func gArtistInfo(Art string) map[string]string {
+	filter := bson.M{"artist": Art}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb2").Collection("artistid")
+	var ArtInfo map[string]string = make(map[string]string)
+	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
+	if err != nil { log.Fatal(err) }
+	fmt.Printf("%v THIS IS ArtInfo", ArtInfo)
+	return ArtInfo
+}
+
+func gAlbumInfo(Alb string) map[string]string {
+	filter := bson.M{"album": Alb}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("tempdb2").Collection("albumid")
+	var AlbInfo map[string]string = make(map[string]string)
+	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
+	if err != nil { log.Fatal(err) }
+	fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
+	return AlbInfo
 }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
@@ -150,10 +309,6 @@ func GDistArtist2() (dArtAll []map[string]string) {
 		dArtAll = append(dArtAll, dArt)
 	}
 	return dArtAll
-}
-
-type Ap2 struct {
-	Albumz []string
 }
 
 // //ArtPipeline exported
@@ -212,17 +367,8 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	return
 }
 
-type ArtVIEW struct {
-	Artist   string              `bson:"artist"`
-	ArtistID string              `bson:"artistID"`
-	Albums   []Ap2               `bson:"albums"`
-	Page     string              `bson:"page"`
-	Idx      string              `bson:"idx"`
-}
-
 // //InsArtIPipe2 exported
 func InsArtPipeline(AV1 ArtVIEW) {
-	// AmpgoInsertOne("artistview", "artistview", AV1)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)

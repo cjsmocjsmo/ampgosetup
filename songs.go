@@ -20,56 +20,56 @@
 
 package ampgosetup
 
-import (
-	"fmt"
-	"log"
-	"context"
-	// "strconv"
-	"go.mongodb.org/mongo-driver/bson"
-)
+// import (
+// 	"fmt"
+// 	"log"
+// 	"context"
+// 	// "strconv"
+// 	"go.mongodb.org/mongo-driver/bson"
+// )
 
 //GArtistInfo exported
-func gArtistInfo(Art string) map[string]string {
-	filter := bson.M{"artist": Art}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb2").Collection("artistid")
-	var ArtInfo map[string]string = make(map[string]string)
-	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
-	if err != nil { log.Fatal(err) }
-	fmt.Printf("%v THIS IS ArtInfo", ArtInfo)
-	return ArtInfo
+// func gArtistInfo(Art string) map[string]string {
+// 	filter := bson.M{"artist": Art}
+// 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb2").Collection("artistid")
+// 	var ArtInfo map[string]string = make(map[string]string)
+// 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
+// 	if err != nil { log.Fatal(err) }
+// 	fmt.Printf("%v THIS IS ArtInfo", ArtInfo)
+// 	return ArtInfo
 
-	// sesCopy := DBcon()
-	// defer sesCopy.Close()
-	// DARTc := sesCopy.DB("tempdb2").C("artistid")
-	// var ArtInfo map[string]string = make(map[string]string)
-	// DARTc.Find(bson.M{"artist": Art}).One(&ArtInfo)
-	// return ArtInfo["artistID"]
-}
+// 	// sesCopy := DBcon()
+// 	// defer sesCopy.Close()
+// 	// DARTc := sesCopy.DB("tempdb2").C("artistid")
+// 	// var ArtInfo map[string]string = make(map[string]string)
+// 	// DARTc.Find(bson.M{"artist": Art}).One(&ArtInfo)
+// 	// return ArtInfo["artistID"]
+// }
 
 // //GAlbumInfo exported
-func gAlbumInfo(Alb string) map[string]string {
-	filter := bson.M{"album": Alb}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("tempdb2").Collection("albumid")
-	var AlbInfo map[string]string = make(map[string]string)
-	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
-	if err != nil { log.Fatal(err) }
-	fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
-	return AlbInfo
-// 	sesCopy := DBcon()
-// 	defer sesCopy.Close()
-// 	DALBc := sesCopy.DB("tempdb2").C("albumid")
+// func gAlbumInfo(Alb string) map[string]string {
+// 	filter := bson.M{"album": Alb}
+// 	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("tempdb2").Collection("albumid")
 // 	var AlbInfo map[string]string = make(map[string]string)
-// 	DALBc.Find(bson.M{"album": Alb}).One(&AlbInfo)
-// 	return AlbInfo["albumID"]
-}
+// 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
+// 	if err != nil { log.Fatal(err) }
+// 	fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
+// 	return AlbInfo
+// // 	sesCopy := DBcon()
+// // 	defer sesCopy.Close()
+// // 	DALBc := sesCopy.DB("tempdb2").C("albumid")
+// // 	var AlbInfo map[string]string = make(map[string]string)
+// // 	DALBc.Find(bson.M{"album": Alb}).One(&AlbInfo)
+// // 	return AlbInfo["albumID"]
+// }
 
 // //UpdateMainDB exported
 // func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
