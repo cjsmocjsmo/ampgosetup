@@ -195,11 +195,12 @@ func Setup() {
 	// fmt.Println("AggAlbum has started")
 
 	// log.Println("Starting GDistAlbum3")
-	DistAlbum3 := GDistAlbum3()
-	for _, v := range DistAlbum3 {
-		fmt.Printf("%v this is DistAlbum3", v)
-		log.Printf("%v this is DistAlbum3", v)
-	}
+	// DistAlbum3 := GDistAlbum3()
+	GDistAlbum3()
+	// for _, v := range DistAlbum3 {
+	// 	fmt.Printf("%v this is DistAlbum3", v)
+	// 	log.Printf("%v this is DistAlbum3", v)
+	// }
 
 	// var wg6 sync.WaitGroup
 	// var albpage int = 0
