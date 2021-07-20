@@ -239,35 +239,35 @@ func Setup() {
 		log.Printf("%v this is DistAlbum3", v)
 	}
 
-	var wg6 sync.WaitGroup
-	var albpage int = 0
-	for albIdx, DAlb := range DistAlbum3 {
-		wg6.Add(1)
-		if albIdx < OffSet {
-			albpage = 1
-		} else if albIdx % OffSet == 0 {
-			albpage++
-		} else {
-			albpage = albpage + 0
-		}
-		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
-		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
+	// var wg6 sync.WaitGroup
+	// var albpage int = 0
+	// for albIdx, DAlb := range DistAlbum3 {
+	// 	wg6.Add(1)
+	// 	if albIdx < OffSet {
+	// 		albpage = 1
+	// 	} else if albIdx % OffSet == 0 {
+	// 		albpage++
+	// 	} else {
+	// 		albpage = albpage + 0
+	// 	}
+	// 	fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
+	// 	fmt.Println("\n %s THIS IS ALBIDX", albIdx)
 
-		log.Printf("%s this is dalb", DAlb)
+	// 	log.Printf("%s this is dalb", DAlb)
 
-		// APLX := AlbPipeline(DAlb)
+	// 	APLX := AlbPipeline(DAlb)
 
-		// var AlbInfo map[string]string
-		// AlbInfo["artist"] = DAlb["artist"]
-		// AlbInfo["artistID"] = DAlb["artistID"]
-		// AlbInfo["album"] = DAlb["album"]
-		// AlbInfo["albumID"] = DAlb["albumID"]
-		// AlbInfo["picpath"] = DAlb["picpath"]
-		// AlbInfo["songcount"] = strconv.Itoa(len(APLX))
-		// AlbInfo["aalbIdx"] = strconv.Itoa(albIdx)
-		// AlbInfo["aalbpage"] = strconv.Itoa(albpage)
+	// 	var AlbInfo map[string]string
+	// 	AlbInfo["artist"] = DAlb["artist"]
+	// 	AlbInfo["artistID"] = DAlb["artistID"]
+	// 	AlbInfo["album"] = DAlb["album"]
+	// 	AlbInfo["albumID"] = DAlb["albumID"]
+	// 	AlbInfo["picpath"] = DAlb["picpath"]
+	// 	AlbInfo["songcount"] = strconv.Itoa(len(APLX))
+	// 	AlbInfo["aalbIdx"] = strconv.Itoa(albIdx)
+	// 	AlbInfo["aalbpage"] = strconv.Itoa(albpage)
 
-		// go func(AlbInfo map[string]string, APLX []string) {
+	// 	go func(AlbInfo map[string]string, APLX []string) {
 			
 			
 	// 		APL := AlbPipeline(DAlb)
@@ -278,10 +278,10 @@ func Setup() {
 	// 		artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
 	// 		InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
 			// InsAlbViewID(AlbInfo, APLX)
-		// 	wg6.Done()
-		// }(AlbInfo, APLX)
-		// wg6.Wait()
-	}
+	// 		wg6.Done()
+	// 	}(AlbInfo, APLX)
+	// 	wg6.Wait()
+	// }
 
 	// // AlbumOffset()
 

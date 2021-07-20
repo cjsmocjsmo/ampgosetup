@@ -130,7 +130,6 @@ func getFileInfo(apath string) (filename string, size string) {
 	return
 }
 
-// UUID exported
 func UUID() (string, error) {
 	uuid := make([]byte, 16)
 	n, err := rand.Read(uuid)
@@ -154,7 +153,6 @@ func resizeImage(infile string, outfile string) string {
 	return outfile
 }
 
-// //DumpArtToFile is exported
 func DumpArtToFile(apath string) (string, string, string, string, string) {
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
 	artist := tag.Artist()
@@ -186,7 +184,6 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	return artist, album, title, genre, outfile22
 }
 
-// TAgMap exported
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	page := strconv.Itoa(apage)
 	index := strconv.Itoa(idx)
@@ -269,7 +266,7 @@ func gAlbumInfo(Alb string) map[string]string {
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
 	if err != nil { log.Fatal(err) }
-	fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
+	// fmt.Printf("%v THIS IS ALBINFO", AlbInfo)
 	return AlbInfo
 }
 
@@ -367,7 +364,6 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	return
 }
 
-// //InsArtIPipe2 exported
 func InsArtPipeline(AV1 ArtVIEW) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
