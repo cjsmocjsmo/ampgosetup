@@ -423,12 +423,14 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum3() (DAlbAll []map[string]string) {
+func GDistAlbum3() {
+	// (DAlbAll []map[string]string)
 	DAlbum := AmpgoDistinct("maindb", "maindb", "album")
 
 	for _, alb := range DAlbum {
-		DAlb := AmpgoFindOne("maindb", "maindb", alb)
-		DAlbAll = append(DAlbAll, DAlb)
+		fmt.Printf("\n\n %s This is alb", alb)
+		// DAlb := AmpgoFindOne("maindb", "maindb", alb)
+		// DAlbAll = append(DAlbAll, DAlb)
 	}
-	return DAlbAll
+	return
 }
