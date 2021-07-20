@@ -317,7 +317,7 @@ func GDistArtist2() (dArtAll []map[string]string) {
 }
 
 
-func NewArtPipline(artmap map[string]string, page int, idx int) (MyArtView ArtVieW2) {
+func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
 	
 
 	filter := bson.D{{"artist", artmap["artist"]}}
@@ -335,16 +335,16 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArtView ArtVi
 	if err = cur.All(context.TODO(), &results); err != nil {
 		log.Fatal(err)
 	}
-	for _, result := range results {
-		fmt.Printf("\n %s this is results \n", result)
-	}
-	var MyArView ArtVieW2
+	// for _, result := range results {
+	// 	fmt.Printf("\n %s this is results \n", result)
+	// }
+	// var MyArView ArtVieW2
 	MyArView.Artist = artmap["artist"]
 	MyArView.ArtistID = artmap["artistID"]
 	MyArView.Albums = results
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
-	fmt.Println(MyArtView)
+	fmt.Printf("%s This is myartview", MyArView)
 
 	return
 }
