@@ -318,25 +318,35 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	}
 	log.SetOutput(file)
 
+	albpipeline := mongo.Pipeline{
+		{{"$match", bson.D{{"album", dart["album"]}}}},
+		{{"$group", bson.D{{"_id", "album"}, {"albumz", bson.D{{"$addToSet", "$album"}}}}}},
+		{{"$project", bson.D{{"albumz", 1}}}},
+	}
+
+
+
+
 	// pipeline := mongo.Pipeline{bson.D{
 	// 	{"$match": bson.M{"album": dart["album"]}},
 	// 	{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
 	// 	{"$project": bson.M{"albumz": 1}},
 	// }}
 
-	pipeline := mongo.Pipeline{
-		{{"$match", bson.D{{"artist", dart["artist"]}}}},
-		// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-		{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
-		{{"$project", bson.D{{"albumz", 1}}}},
+	// pipeline := mongo.Pipeline{
+	// 	{{"$match", bson.D{{"artist", dart["artist"]}}}},
+	// 	// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+	// 	{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
+	// 	{{"$project", bson.D{{"albumz", 1}}}},
 
-	}
+	// }
+	opts := options.Aggregate()
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	db := client.Database("maindb").Collection("maindb")
 	// var AP2 []Ap2
-	cur, err := db.Aggregate(context.TODO(), pipeline)
+	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
 	log.Println(cur)
 	cur.Decode(&AP2)
 	
