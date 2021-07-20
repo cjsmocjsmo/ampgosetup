@@ -320,18 +320,15 @@ func GDistArtist2() (dArtAll []map[string]string) {
 func NewArtPipline(artmap map[string]string, page int, idx int) (MyArtView ArtVieW2) {
 	
 
-	filter := bson.D{
-		{"artist", artmap["artist"]},
-		{"_id", 0}, {"album", 1}, {"albumID", 1}, {"picpath", 1},
-	}
-	opts := options.Find().SetSort(bson.D{{"album", 1}})
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
+	filter := bson.D{{"artist", artmap["artist"]}}
+	// opts := options.Find().SetSort(bson.D{{"album", 1}})
+	
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	coll := client.Database("maindb").Collection("maindb")
 	// var results map[string]string = make(map[string]string)
-	cur, err := coll.Find(context.TODO(), filter, opts)
+	cur, err := coll.Find(context.TODO(), filter)
 	CheckError(err, "ArtPipeline find has failed")
 
 	var results []map[string]string
@@ -339,7 +336,7 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArtView ArtVi
 		log.Fatal(err)
 	}
 	for _, result := range results {
-		fmt.Println(result)
+		fmt.Printf("\n %s this is results \n", result)
 	}
 	var MyArView ArtVieW2
 	MyArView.Artist = artmap["artist"]
@@ -354,11 +351,25 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArtView ArtVi
 // //ArtPipeline exported
 // func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 
-// 	albpipeline := mongo.Pipeline{
-// 		{{"$match", bson.D{{"album", dart["album"]}}}},
-// 		{{"$group", bson.D{{"_id", "album"}, {"albumz", bson.D{{"$addToSet", "$album"}}}}}},
-// 		{{"$project", bson.D{{"albumz", 1}}}},
-// 	}
+	// albpipeline := mongo.Pipeline{bson.D{
+	// 	{"$match", bson.D{
+	// 		{"album", dart["album"]},
+	// 		}
+	// 	},
+	// 	bson.D{
+	// 		{"$group", bson.D{
+	// 			{"_id", "album"},
+	// 			{"albumz", bson.D{
+	// 				{"$addToSet", "$album"},
+	// 			},
+	// 		}}
+	// 	}},
+	// 	bson.D{
+	// 		{"$project", bson.D{
+	// 			{"albumz", 1},
+	// 		},
+	// 	}},
+	// }}
 
 // 	// pipeline := mongo.Pipeline{bson.D{
 // 	// 	{"$match": bson.M{"album": dart["album"]}},
