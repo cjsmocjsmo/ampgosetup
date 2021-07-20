@@ -50,6 +50,14 @@ type ArtVIEW struct {
 	Idx      string              `bson:"idx"`
 }
 
+type ArtVieW2 struct {
+	Artist   string              `bson:"artist"`
+	ArtistID string              `bson:"artistID"`
+	Albums   []map[string]string `bson:"albums"`
+	Page     string              `bson:"page"`
+	Index    string              `bson:"idx"`
+}
+
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
 	defer func() {
@@ -308,69 +316,104 @@ func GDistArtist2() (dArtAll []map[string]string) {
 	return dArtAll
 }
 
-// //ArtPipeline exported
-func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 
-	albpipeline := mongo.Pipeline{
-		{{"$match", bson.D{{"album", dart["album"]}}}},
-		{{"$group", bson.D{{"_id", "album"}, {"albumz", bson.D{{"$addToSet", "$album"}}}}}},
-		{{"$project", bson.D{{"albumz", 1}}}},
+func NewArtPipline(artmap map[string]string, page string, idx string) (MyArtView ArtVieW2) {
+	
+
+	filter := bson.D{
+		{"artist", artmap["artist"]},
+		{"_id", 0}, {"album", 1}, {"albumID", 1}, {"picpath", 1},
 	}
-
-	// pipeline := mongo.Pipeline{bson.D{
-	// 	{"$match": bson.M{"album": dart["album"]}},
-	// 	{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-	// 	{"$project": bson.M{"albumz": 1}},
-	// }}
-
-	// pipeline := mongo.Pipeline{
-	// 	{{"$match", bson.D{{"artist", dart["artist"]}}}},
-	// 	// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-	// 	{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
-	// 	{{"$project", bson.D{{"albumz", 1}}}},
-
-	// }
-	opts := options.Aggregate()
+	opts := options.Find().SetSort(bson.D{{"album", 1}})
+	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
-	db := client.Database("maindb").Collection("maindb")
-	// var AP2 []Ap2
-	
-	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
-	cur.Decode(&AP2)
-	// for cur.Next(context.Background()) {
-		
-	// 	log.Println(AP2)
-	// 	fmt.Println(AP2)
-	// }
-	log.Println(AP2)
-	fmt.Println("This is AP2")
-	
+	coll := client.Database("maindb").Collection("maindb")
+	// var results map[string]string = make(map[string]string)
+	cur, err := coll.Find(context.TODO(), filter, opts)
+	CheckError(err, "ArtPipeline find has failed")
 
-	// log.Printf("%s This is AP2", AP2)
-	// log.Printf("%T This is AP2 type", AP2)
-	// for _, ag := range AP2 {
-	// 	fmt.Printf("%v this is ag from AP2", ag)
-	// 	fmt.Printf("%T this is ag type", ag)
-	// 	log.Printf("%T this is ag type", ag)
-	// 	log.Printf("%v this is ag from AP2", ag)
-	// }
+	var results []map[string]string
+	if err = cur.All(context.TODO(), &results); err != nil {
+		log.Fatal(err)
+	}
+	for _, result := range results {
+		fmt.Println(result)
+	}
+	var MyArView ArtVieW2
+	MyArView.Artist = artmap["artist"]
+	MyArView.ArtistID = artmap["artistID"]
+	MyArView.Albums = results
+	MyArView.Page = page
+	MyArView.Index = idx
+	fmt.Println(MyArtView)
 
-// 	sesC := DBcon()
-// 	defer sesC.Close()
-// 	AMPc := sesC.DB("maindb").C("maindb")
-// 	pipeline2 := AMPc.Pipe([]bson.M{
-// 		{"$match": bson.M{"artist": dart["artist"]}},
-// 		{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-// 		{"$project": bson.M{"albumz": 1}},
-// 	}).Iter()
-// 	err := pipeline2.All(&AP2)
-// 	if err != nil {
-// 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
-// 	}
 	return
 }
+// //ArtPipeline exported
+// func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
+
+// 	albpipeline := mongo.Pipeline{
+// 		{{"$match", bson.D{{"album", dart["album"]}}}},
+// 		{{"$group", bson.D{{"_id", "album"}, {"albumz", bson.D{{"$addToSet", "$album"}}}}}},
+// 		{{"$project", bson.D{{"albumz", 1}}}},
+// 	}
+
+// 	// pipeline := mongo.Pipeline{bson.D{
+// 	// 	{"$match": bson.M{"album": dart["album"]}},
+// 	// 	{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// 	// 	{"$project": bson.M{"albumz": 1}},
+// 	// }}
+
+// 	// pipeline := mongo.Pipeline{
+// 	// 	{{"$match", bson.D{{"artist", dart["artist"]}}}},
+// 	// 	// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// 	// 	{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
+// 	// 	{{"$project", bson.D{{"albumz", 1}}}},
+
+// 	// }
+// 	opts := options.Aggregate()
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	db := client.Database("maindb").Collection("maindb")
+// 	// var AP2 []Ap2
+	
+// 	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
+// 	cur.Decode(&AP2)
+// 	// for cur.Next(context.Background()) {
+		
+// 	// 	log.Println(AP2)
+// 	// 	fmt.Println(AP2)
+// 	// }
+// 	log.Println(AP2)
+// 	fmt.Println("This is AP2")
+	
+
+// 	// log.Printf("%s This is AP2", AP2)
+// 	// log.Printf("%T This is AP2 type", AP2)
+// 	// for _, ag := range AP2 {
+// 	// 	fmt.Printf("%v this is ag from AP2", ag)
+// 	// 	fmt.Printf("%T this is ag type", ag)
+// 	// 	log.Printf("%T this is ag type", ag)
+// 	// 	log.Printf("%v this is ag from AP2", ag)
+// 	// }
+
+// // 	sesC := DBcon()
+// // 	defer sesC.Close()
+// // 	AMPc := sesC.DB("maindb").C("maindb")
+// // 	pipeline2 := AMPc.Pipe([]bson.M{
+// // 		{"$match": bson.M{"artist": dart["artist"]}},
+// // 		{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
+// // 		{"$project": bson.M{"albumz": 1}},
+// // 	}).Iter()
+// // 	err := pipeline2.All(&AP2)
+// // 	if err != nil {
+// // 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
+// // 	}
+// 	return
+// }
 
 func InsArtPipeline(AV1 ArtVIEW) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")

@@ -175,9 +175,9 @@ func Setup() {
 			artpage = artpage + 0
 		}
 		
-		APL := ArtPipeline(DArtt)
-		log.Printf("%s this is apl", APL)
-		fmt.Printf("\n\n %s this is apl", APL)
+		// APL := ArtPipeline(DArtt)
+		// log.Printf("%s this is apl", APL)
+		// fmt.Printf("\n\n %s this is apl", APL)
 		// var AV1 ArtVIEW
 		// AV1.Artist = DArtt["artist"]
 		// AV1.ArtistID = DArtt["artistID"]
