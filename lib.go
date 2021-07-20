@@ -307,8 +307,6 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 
 func GDistArtist2() (dArtAll []map[string]string) {
 	dArtist := AmpgoDistinct("maindb", "maindb", "artist")
-	
-	
 	for _, art := range dArtist {
 		dArt := AmpgoFindOne("maindb", "maindb", art)
 		dArtAll = append(dArtAll, dArt)
@@ -329,9 +327,24 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVie
 	if err = cur.All(context.TODO(), &results); err != nil {
 		log.Fatal(err)
 	}
+
+	var results2 []map[string]string
+	for _, res := range results {
+		_album := res["album"]
+		_albumID := res["albumID"]
+		_picpath := res["picPath"]
+		
+		boo := map[string]string{
+			"album": _album,
+			"albumID": _albumID,
+			"picPath": _picpath,
+		}
+		results2 = append(results2, boo)
+	}
+
 	MyArView.Artist = artmap["artist"]
 	MyArView.ArtistID = artmap["artistID"]
-	MyArView.Albums = results
+	MyArView.Albums = results2
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
 
