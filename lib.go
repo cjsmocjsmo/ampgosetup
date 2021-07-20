@@ -310,22 +310,12 @@ func GDistArtist2() (dArtAll []map[string]string) {
 
 // //ArtPipeline exported
 func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
-	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
-	// If the file doesn't exist, create it or append to the file
-	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
 
 	albpipeline := mongo.Pipeline{
 		{{"$match", bson.D{{"album", dart["album"]}}}},
 		{{"$group", bson.D{{"_id", "album"}, {"albumz", bson.D{{"$addToSet", "$album"}}}}}},
 		{{"$project", bson.D{{"albumz", 1}}}},
 	}
-
-
-
 
 	// pipeline := mongo.Pipeline{bson.D{
 	// 	{"$match": bson.M{"album": dart["album"]}},
@@ -340,18 +330,23 @@ func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
 	// 	{{"$project", bson.D{{"albumz", 1}}}},
 
 	// }
-	opts := options.Aggregate()
+	// opts := options.Aggregate()
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	db := client.Database("maindb").Collection("maindb")
 	// var AP2 []Ap2
-	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
-	log.Println(cur)
-	cur.Decode(&AP2)
+	
+	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline))
+	for cur.Next(context.Background()) {
+		cur.Decode(&AP2)
+		log.Println(AP2)
+		fmt.Println(AP2)
+	}
+	log.Println(AP2)
 	
 
-	log.Println(AP2)
+	log.Printf("%s This is AP2", AP2)
 	log.Printf("%T This is AP2 type", AP2)
 	for _, ag := range AP2 {
 		fmt.Printf("%v this is ag from AP2", ag)

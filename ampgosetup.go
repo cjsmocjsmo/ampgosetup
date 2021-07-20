@@ -29,7 +29,7 @@ import (
 	"time"
 	"runtime"
 	// "context"
-	"strconv"
+	// "strconv"
 	"path/filepath"
 	// "go.mongodb.org/mongo-driver/bson"
     // "go.mongodb.org/mongo-driver/mongo"
@@ -41,34 +41,6 @@ import (
 const (
 	OffSet = 35
 )
-
-// func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
-// 	defer cancel()
-// 	defer func() {
-// 		if err := client.Disconnect(ctx); err != nil {
-// 			panic(err)
-// 		}
-// 	}()
-// }
-
-// func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
-// 	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
-//     client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
-//     return client, ctx, cancel, err
-// }
-
-// func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
-//     collection := client.Database(dataBase).Collection(col)
-//     result, err := collection.InsertOne(ctx, doc)
-//     return result, err
-// }
-
-// // func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
-// // 	collection := client.Database(dataBase).Collection(col)
-// // 	result, err = collection.Find(ctx, query, options.Find().SetProjection(field))
-// // 	return
-// // }
-
 
 //CheckError exported
 func CheckError(err error, msg string) {
@@ -191,7 +163,7 @@ func Setup() {
 	log.Println("GDistArtist2 is complete \n")
 
 	log.Println("starting GArtInfo2")
-	var wg5 sync.WaitGroup
+	// var wg5 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
 		log.Printf("%v This is DArtt", DArtt)
@@ -205,24 +177,24 @@ func Setup() {
 		
 		APL := ArtPipeline(DArtt)
 		log.Printf("%s this is apl", APL)
-		fmt.Printf("%s this is apl", APL)
-		var AV1 ArtVIEW
-		AV1.Artist = DArtt["artist"]
-		AV1.ArtistID = DArtt["artistID"]
-		AV1.Albums = APL
-		AV1.Page = strconv.Itoa(artpage)
-		AV1.Idx = strconv.Itoa(artIdx)
-		log.Printf("%s This is AV1", AV1)
-		fmt.Printf("%s This is AV1", AV1)
+		fmt.Printf("\n\n %s this is apl", APL)
+		// var AV1 ArtVIEW
+		// AV1.Artist = DArtt["artist"]
+		// AV1.ArtistID = DArtt["artistID"]
+		// AV1.Albums = APL
+		// AV1.Page = strconv.Itoa(artpage)
+		// AV1.Idx = strconv.Itoa(artIdx)
+		// log.Printf("%s This is AV1", AV1)
+		// fmt.Printf("%s This is AV1", AV1)
 
 		
 		
-		wg5.Add(1)
-		go func(AV1 ArtVIEW) {
-			InsArtPipeline(AV1)
-			wg5.Done()
-		}(AV1)
-		wg5.Wait()
+		// wg5.Add(1)
+		// go func(AV1 ArtVIEW) {
+		// 	InsArtPipeline(AV1)
+		// 	wg5.Done()
+		// }(AV1)
+		// wg5.Wait()
 	}
 	fmt.Println("AggArtists is complete")
 	log.Println("AggArtists is complete")
@@ -232,12 +204,12 @@ func Setup() {
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
 
-	log.Println("Starting GDistAlbum3")
-	DistAlbum3 := GDistAlbum3()
-	for _, v := range DistAlbum3 {
-		fmt.Printf("%v this is DistAlbum3", v)
-		log.Printf("%v this is DistAlbum3", v)
-	}
+	// log.Println("Starting GDistAlbum3")
+	// DistAlbum3 := GDistAlbum3()
+	// for _, v := range DistAlbum3 {
+	// 	fmt.Printf("%v this is DistAlbum3", v)
+	// 	log.Printf("%v this is DistAlbum3", v)
+	// }
 
 	// var wg6 sync.WaitGroup
 	// var albpage int = 0
