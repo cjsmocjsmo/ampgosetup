@@ -5,6 +5,7 @@ import (
 	"log"
 	"fmt"
 	"time"
+	// "sort"
 	"context"
 	"strings"
 	"strconv"
@@ -115,6 +116,21 @@ func AmpgoFindOne(db string, coll string, fil string) map[string]string {
 	if err != nil { log.Fatal(err) }
 	// var resultall []map[string]string
 	// resultall = append(resultall, results)
+	return results
+}
+
+func AmpgoFind(dbb string, collb string, field string) []map[string]string {
+	filter := bson.D{{"artist", field}}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	coll := client.Database(dbb).Collection(collb)
+	cur, err := coll.Find(context.TODO(), filter)
+	CheckError(err, "ArtPipeline find has failed")
+	var results []map[string]string //all albums for artist to include double entries
+	if err = cur.All(context.TODO(), &results); err != nil {
+		log.Fatal(err)
+	}
 	return results
 }
 
@@ -314,36 +330,53 @@ func GDistArtist2() (dArtAll []map[string]string) {
 	return dArtAll
 }
 
+func unique(arr []string) []string {
+    occured := map[string]bool{}
+    result := []string{}
+    for e := range arr {
+      
+        // check if already the mapped
+        // variable is set to true or not
+        if occured[arr[e]] != true {
+            occured[arr[e]] = true
+              
+            // Append to result slice.
+            result = append(result, arr[e])
+        }
+    }
+  
+    return result
+}
+
+
+func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
+	//a list of just albumid's
+	var just_albumID_list []string
+	for _, alb := range fullalblist {
+		albumID := alb["artisID"]
+		just_albumID_list = append(just_albumID_list, albumID)
+	}
+	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
+
+	//remove double albumid entries
+	unique_items := unique(just_albumID_list)
+	for _, uitem := range unique_items {
+		albINFO := AmpgoFindOne("maindb", "maindb", uitem)
+		final_alblist = append(final_alblist, albINFO)
+	}
+	return final_alblist
+
+
+}
+
 
 func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
-	filter := bson.D{{"artist", artmap["artist"]}}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	coll := client.Database("maindb").Collection("maindb")
-	cur, err := coll.Find(context.TODO(), filter)
-	CheckError(err, "ArtPipeline find has failed")
-	var results []map[string]string
-	if err = cur.All(context.TODO(), &results); err != nil {
-		log.Fatal(err)
-	}
-
-	var results2 []map[string]string
-	for _, res := range results {
-		_album := res["album"]
-		_albumID := res["albumID"]
-		_picpath := res["picPath"]
-		
-		boo := map[string]string{
-			"album": _album,
-			"albumID": _albumID,
-			"picPath": _picpath,
-		}
-		results2 = append(results2, boo)
-	}
-
-	MyArView.Artist = artmap["artist"]
-	MyArView.ArtistID = artmap["artistID"]
+	_artist := artmap["artist"]
+	_artistID := artmap["artistID"]
+	dirtyalblist := AmpgoFind("maindb","maindb", _artistID) //[]map[string]string
+	results2 := get_albums_for_artist(dirtyalblist)
+	MyArView.Artist = _artist
+	MyArView.ArtistID = _artistID
 	MyArView.Albums = results2
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
@@ -436,7 +469,7 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum3() {
+func GDistAlbum3() string {
 	// (DAlbAll []map[string]string)
 	DAlbum := AmpgoDistinct("maindb", "maindb", "album")
 
@@ -445,5 +478,5 @@ func GDistAlbum3() {
 		// DAlb := AmpgoFindOne("maindb", "maindb", alb)
 		// DAlbAll = append(DAlbAll, DAlb)
 	}
-	return
+	return "boo"
 }
