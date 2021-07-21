@@ -195,27 +195,26 @@ func Setup() {
 	// fmt.Println("AggAlbum has started")
 
 	// log.Println("Starting GDistAlbum3")
-	DistAlbum3 := GDistAlbum3()
-	for _, v := range DistAlbum3 {
-		fmt.Printf("%v this is DistAlbum3", v)
-		log.Printf("%v this is DistAlbum3", v)
+	DistAlbum := GDistAlbum()
+	for _, d := range DistAlbum {
+		fmt.Printf("%s this is distalbum", d)
 	}
 
-	var wg6 sync.WaitGroup
-	var albpage int = 0
-	for albIdx, DAlb := range DistAlbum3 {
-		wg6.Add(1)
-		if albIdx < OffSet {
-			albpage = 1
-		} else if albIdx % OffSet == 0 {
-			albpage++
-		} else {
-			albpage = albpage + 0
-		}
-		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
-		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
+	// var wg6 sync.WaitGroup
+	// var albpage int = 0
+	// for albIdx, DAlb := range DistAlbum {
+	// 	wg6.Add(1)
+	// 	if albIdx < OffSet {
+	// 		albpage = 1
+	// 	} else if albIdx % OffSet == 0 {
+	// 		albpage++
+	// 	} else {
+	// 		albpage = albpage + 0
+	// 	}
+	// 	fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
+	// 	fmt.Println("\n %s THIS IS ALBIDX", albIdx)
 
-		log.Printf("%s this is dalb", DAlb)
+	// 	log.Printf("%s this is dalb", DAlb)
 
 	// 	APLX := AlbPipeline(DAlb)
 
@@ -243,7 +242,7 @@ func Setup() {
 		// 	wg6.Done()
 		// }(AlbInfo, APLX)
 		// wg6.Wait()
-	}
+	// }
 
 	// // AlbumOffset()
 
