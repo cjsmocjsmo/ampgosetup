@@ -338,20 +338,20 @@ func unique(arr []string) []string {
     return result
 }
 
-func create_just_albumID_list(alist []map[string]string) (just_albumID_list []string) {
+func create_just_album_list(alist []map[string]string) (just_album_list []string) {
 	for _, alb := range alist {
-		albumID := alb["albumID"]
-		just_albumID_list = append(just_albumID_list, albumID)
+		album := alb["album"]
+		just_album_list = append(just_album_list, album)
 	}
-	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
+	fmt.Printf("\n\n %s this is just_album_list", just_album_list)
 	return
 }
 
 func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
-	just_albumID_list := create_just_albumID_list(fullalblist)
-	log.Printf("%s this is just_albumID_list", just_albumID_list)
+	just_album_list := create_just_album_list(fullalblist)
+	log.Printf("%s this is just_album_list", just_album_list)
 	//remove double albumid entries
-	unique_items := unique(just_albumID_list)
+	unique_items := unique(just_album_list)
 	for _, uitem := range unique_items {
 		albINFO := AmpgoFindOne("maindb", "maindb", uitem)
 		final_alblist = append(final_alblist, albINFO)
@@ -360,12 +360,10 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 }
 
 func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
-	_artist := artmap["artist"]
-	_artistID := artmap["artistID"]
-	dirtyalblist := AmpgoFind("maindb","maindb", _artistID) //[]map[string]string
+	dirtyalblist := AmpgoFind("maindb","maindb", artmap["artistID"]) //[]map[string]string
 	results2 := get_albums_for_artist(dirtyalblist)
-	MyArView.Artist = _artist
-	MyArView.ArtistID = _artistID
+	MyArView.Artist = artmap["artist"]
+	MyArView.ArtistID = artmap["artistID"]
 	MyArView.Albums = results2
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
