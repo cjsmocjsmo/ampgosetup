@@ -342,7 +342,7 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 	//a list of just albumid's
 	var just_albumID_list []string
 	for _, alb := range fullalblist {
-		albumID := alb["artisID"]
+		albumID := alb["albumID"]
 		just_albumID_list = append(just_albumID_list, albumID)
 	}
 	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
@@ -377,15 +377,15 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum() (DAlbum []string) {
-	DAlbum = AmpgoDistinct("maindb", "maindb", "albumID")
+func GDistAlbum() (DAlbumID []string) {
+	DAlbumID = AmpgoDistinct("maindb", "maindb", "albumID")
 	// var DAlbAll []map[string]string
-	// for _, alb := range DAlbum {
-	// 	fmt.Printf("\n\n %s This is albID", alb)
-	// 	DAlb := AmpgoFindOne("maindb", "maindb", alb)
+	for _, albID := range DAlbumID {
+		fmt.Printf("\n\n %s This is albID", albID)
+	// 	DAlb := AmpgoFindOne("maindb", "maindb", albID)
 	// 	fmt.Printf("%s this is DAlb", DAlb)
 	// 	DAlbAll = append(DAlbAll, DAlb)
-	// }
+	}
 	return
 }
 
