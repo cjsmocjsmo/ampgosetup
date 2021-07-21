@@ -339,9 +339,12 @@ func unique(arr []string) []string {
 }
 
 func create_just_albumID_list(alist []map[string]string) (just_albumID_list []string) {
-	for _, alb := range alist {
-		just_albumID_list = append(just_albumID_list, alb["albumID"])
+	log.Printf("%s This is alist", alist)
+	for _, albID := range alist {
+		log.Printf("%s This is alb", albID)
+		just_albumID_list = append(just_albumID_list, albID["albumID"])
 	}
+	log.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
 	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
 	return
 }
