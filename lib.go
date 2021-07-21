@@ -103,8 +103,8 @@ func AmpgoDistinct(db string, coll string, fieldd string) []string {
 	return DAlbum1
 }
 
-func AmpgoFindOne(db string, coll string, fil string) map[string]string {
-	filter := bson.M{"artist": fil}
+func AmpgoFindOne(db string, coll string, filtertype string, filterstring string) map[string]string {
+	filter := bson.M{filtertype: filterstring}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
@@ -320,7 +320,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 func GDistArtist2() (dArtAll []map[string]string) {
 	dArtist := AmpgoDistinct("maindb", "maindb", "artist")
 	for _, art := range dArtist {
-		dArt := AmpgoFindOne("maindb", "maindb", art)
+		dArt := AmpgoFindOne("maindb", "maindb", "artist", art)
 		dArtAll = append(dArtAll, dArt)
 	}
 	return dArtAll
@@ -338,22 +338,21 @@ func unique(arr []string) []string {
     return result
 }
 
-func create_just_album_list(alist []map[string]string) (just_album_list []string) {
+func create_just_albumID_list(alist []map[string]string) (just_albumID_list []string) {
 	for _, alb := range alist {
-		album := alb["album"]
-		just_album_list = append(just_album_list, album)
+		just_albumID_list = append(just_albumID_list, alb["albumID"])
 	}
-	fmt.Printf("\n\n %s this is just_album_list", just_album_list)
+	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
 	return
 }
 
 func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
-	just_album_list := create_just_album_list(fullalblist)
-	log.Printf("%s this is just_album_list", just_album_list)
+	just_albumID_list := create_just_albumID_list(fullalblist)
+	log.Printf("%s this is just_album_list", just_albumID_list)
 	//remove double albumid entries
-	unique_items := unique(just_album_list)
+	unique_items := unique(just_albumID_list)
 	for _, uitem := range unique_items {
-		albINFO := AmpgoFindOne("maindb", "maindb", uitem)
+		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
 		final_alblist = append(final_alblist, albINFO)
 	}
 	return 
@@ -381,7 +380,7 @@ func InsArtPipeline(AV1 ArtVieW2) {
 func GDistAlbum() (DAlbAll []map[string]string) {
 	DAlbumID := AmpgoDistinct("maindb", "maindb", "albumID")
 	for _, albID := range DAlbumID {
-		DAlb := AmpgoFindOne("maindb", "maindb", albID)
+		DAlb := AmpgoFindOne("maindb", "maindb", "albumID", albID)
 		DAlbAll = append(DAlbAll, DAlb)
 	}
 	fmt.Printf("%s this is DAlb", DAlbAll)
