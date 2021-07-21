@@ -104,9 +104,7 @@ func AmpgoDistinct(db string, coll string, fieldd string) []string {
 }
 
 func AmpgoFindOne(db string, coll string, fil string) map[string]string {
-	// fmt.Printf("\n\n\n THIS IS alb %s \n\n\n", alb)
 	filter := bson.M{"artist": fil}
-	// opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
@@ -114,8 +112,6 @@ func AmpgoFindOne(db string, coll string, fil string) map[string]string {
 	var results map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&results)
 	if err != nil { log.Fatal(err) }
-	// var resultall []map[string]string
-	// resultall = append(resultall, results)
 	return results
 }
 
@@ -381,80 +377,80 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum() []map[string]string {
-	DAlbum := AmpgoDistinct("maindb", "maindb", "album")
-	var DAlbAll []map[string]string
-	for _, alb := range DAlbum {
-		fmt.Printf("\n\n %s This is albID", alb)
-		DAlb := AmpgoFindOne("maindb", "maindb", alb)
-		fmt.Printf("%s this is DAlb", DAlb)
-		DAlbAll = append(DAlbAll, DAlb)
-	}
-	return DAlbAll
-}
-
-
-func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map[string]string) {
-	//a list of just albumid's
-	var just_songID_list []string
-	for _, song := range fullsonglist {
-		songID := song["artisID"]
-		just_songID_list = append(just_songID_list, songID)
-	}
-	fmt.Printf("\n\n %s this is just_songID_list", just_songID_list)
-
-	//remove double songID entries
-	unique_items := unique(just_songID_list)
-	for _, uitem := range unique_items {
-		songINFO := AmpgoFindOne("maindb", "maindb", uitem)
-		final_songlist = append(final_songlist, songINFO)
-	}
-	return final_songlist
-}
-
-// // AlbPipeline exported
-func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
-	_artist := DAlb["artist"]
-	_artistID := DAlb["artistID"]
-	_album := DAlb["album"]
-	_albumID := DAlb["albumID"]
-	_picPath := DAlb["picpath"]
-	dirtysonglist := AmpgoFind("maindb","maindb", _albumID)
-	results := get_songs_for_album(dirtysonglist)
-	songcount := len(results)
-	MyAlbview.Artist = _artist
-	MyAlbview.ArtistID = _artistID
-	MyAlbview.Album = _album
-	MyAlbview.AlbumID = _albumID
-	MyAlbview.NumSongs = strconv.Itoa(songcount)
-	MyAlbview.PicPath = _picPath
-	MyAlbview.Songs = results
-	MyAlbview.AlbumPage = strconv.Itoa(page)
-	MyAlbview.Idx = strconv.Itoa(idx)
-
-
-// 	var P2 []p2
-// 	sess := DBcon()
-// 	defer sess.Close()
-// 	AMPc := sess.DB("maindb").C("maindb")
-// 	pipeline2 := AMPc.Pipe([]bson.M{
-// 		{"$match": bson.M{"album": DAlb["album"]}},
-// 		{"$group": bson.M{"_id": "title", "titlez": bson.M{"$addToSet": "$title"}}},
-// 		{"$project": bson.M{"titlez": 1}},
-// 	}).Iter()
-// 	err := pipeline2.All(&P2)
-// 	CheckError(err, "\n AlbPipeline: Agg Album pipeline2 fucked up")
-// 	// fmt.Printf("this is P2 %s", P2)
-	return 
-}
-
-// //InsAlbViewID exported
-func InsAlbViewID(MyAlbview AlbVieW2) {
-	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-	CheckError(err, "Connections has failed")
-    defer Close(client, ctx, cancel)
-	insertOneResult, err := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
-	CheckError(err, "albumview insertion has fucked up")
-	fmt.Println(insertOneResult)
+func GDistAlbum() (DAlbum []string) {
+	DAlbum = AmpgoDistinct("maindb", "maindb", "albumID")
+	// var DAlbAll []map[string]string
+	// for _, alb := range DAlbum {
+	// 	fmt.Printf("\n\n %s This is albID", alb)
+	// 	DAlb := AmpgoFindOne("maindb", "maindb", alb)
+	// 	fmt.Printf("%s this is DAlb", DAlb)
+	// 	DAlbAll = append(DAlbAll, DAlb)
+	// }
 	return
 }
+
+
+// func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map[string]string) {
+// 	//a list of just albumid's
+// 	var just_songID_list []string
+// 	for _, song := range fullsonglist {
+// 		songID := song["artisID"]
+// 		just_songID_list = append(just_songID_list, songID)
+// 	}
+// 	fmt.Printf("\n\n %s this is just_songID_list", just_songID_list)
+
+// 	//remove double songID entries
+// 	unique_items := unique(just_songID_list)
+// 	for _, uitem := range unique_items {
+// 		songINFO := AmpgoFindOne("maindb", "maindb", uitem)
+// 		final_songlist = append(final_songlist, songINFO)
+// 	}
+// 	return final_songlist
+// }
+
+// // // AlbPipeline exported
+// func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
+// 	_artist := DAlb["artist"]
+// 	_artistID := DAlb["artistID"]
+// 	_album := DAlb["album"]
+// 	_albumID := DAlb["albumID"]
+// 	_picPath := DAlb["picpath"]
+// 	dirtysonglist := AmpgoFind("maindb","maindb", _albumID)
+// 	results := get_songs_for_album(dirtysonglist)
+// 	songcount := len(results)
+// 	MyAlbview.Artist = _artist
+// 	MyAlbview.ArtistID = _artistID
+// 	MyAlbview.Album = _album
+// 	MyAlbview.AlbumID = _albumID
+// 	MyAlbview.NumSongs = strconv.Itoa(songcount)
+// 	MyAlbview.PicPath = _picPath
+// 	MyAlbview.Songs = results
+// 	MyAlbview.AlbumPage = strconv.Itoa(page)
+// 	MyAlbview.Idx = strconv.Itoa(idx)
+
+
+// // 	var P2 []p2
+// // 	sess := DBcon()
+// // 	defer sess.Close()
+// // 	AMPc := sess.DB("maindb").C("maindb")
+// // 	pipeline2 := AMPc.Pipe([]bson.M{
+// // 		{"$match": bson.M{"album": DAlb["album"]}},
+// // 		{"$group": bson.M{"_id": "title", "titlez": bson.M{"$addToSet": "$title"}}},
+// // 		{"$project": bson.M{"titlez": 1}},
+// // 	}).Iter()
+// // 	err := pipeline2.All(&P2)
+// // 	CheckError(err, "\n AlbPipeline: Agg Album pipeline2 fucked up")
+// // 	// fmt.Printf("this is P2 %s", P2)
+// 	return 
+// }
+
+// // //InsAlbViewID exported
+// func InsAlbViewID(MyAlbview AlbVieW2) {
+// 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+// 	CheckError(err, "Connections has failed")
+//     defer Close(client, ctx, cancel)
+// 	insertOneResult, err := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
+// 	CheckError(err, "albumview insertion has fucked up")
+// 	fmt.Println(insertOneResult)
+// 	return
+// }
