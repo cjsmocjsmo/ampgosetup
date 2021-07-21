@@ -39,24 +39,24 @@ type Tagmap struct {
 	Idx        string    `bson:"idx"`
 }
 
-type Ap2 struct {
-	Albumz []string
-}
-
-type ArtVIEW struct {
-	Artist   string              `bson:"artist"`
-	ArtistID string              `bson:"artistID"`
-	Albums   []Ap2               `bson:"albums"`
-	Page     string              `bson:"page"`
-	Idx      string              `bson:"idx"`
-}
-
 type ArtVieW2 struct {
 	Artist   string              `bson:"artist"`
 	ArtistID string              `bson:"artistID"`
 	Albums   []map[string]string `bson:"albums"`
 	Page     string              `bson:"page"`
 	Index    string              `bson:"idx"`
+}
+
+type AlbVieW2 struct {
+	Artist    string              `bson:"artist"`
+	ArtistID  string              `bson:"artistID"`
+	Album     string              `bson:"album"`
+	AlbumID   string              `bson:"albumID"`
+	Songs     []map[string]string `bson:"songs"`
+	AlbumPage string              `bson:"albumpage"`
+	NumSongs  string              `bson:"numsongs"`
+	PicPath   string              `bson:"picPath"`
+	Idx       string              `bson:"idx"`
 }
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
@@ -334,20 +334,13 @@ func unique(arr []string) []string {
     occured := map[string]bool{}
     result := []string{}
     for e := range arr {
-      
-        // check if already the mapped
-        // variable is set to true or not
         if occured[arr[e]] != true {
             occured[arr[e]] = true
-              
-            // Append to result slice.
             result = append(result, arr[e])
         }
     }
-  
     return result
 }
-
 
 func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
 	//a list of just albumid's
@@ -365,12 +358,9 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 		final_alblist = append(final_alblist, albINFO)
 	}
 	return final_alblist
-
-
 }
 
-
-func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
+func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
 	_artist := artmap["artist"]
 	_artistID := artmap["artistID"]
 	dirtyalblist := AmpgoFind("maindb","maindb", _artistID) //[]map[string]string
@@ -380,86 +370,8 @@ func NewArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVie
 	MyArView.Albums = results2
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
-
 	return
 }
-// //ArtPipeline exported
-// func ArtPipeline(dart map[string]string) (AP2 []Ap2) {
-
-	// albpipeline := mongo.Pipeline{bson.D{
-	// 	{"$match", bson.D{
-	// 		{"album", dart["album"]},
-	// 		}
-	// 	},
-	// 	bson.D{
-	// 		{"$group", bson.D{
-	// 			{"_id", "album"},
-	// 			{"albumz", bson.D{
-	// 				{"$addToSet", "$album"},
-	// 			},
-	// 		}}
-	// 	}},
-	// 	bson.D{
-	// 		{"$project", bson.D{
-	// 			{"albumz", 1},
-	// 		},
-	// 	}},
-	// }}
-
-// 	// pipeline := mongo.Pipeline{bson.D{
-// 	// 	{"$match": bson.M{"album": dart["album"]}},
-// 	// 	{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-// 	// 	{"$project": bson.M{"albumz": 1}},
-// 	// }}
-
-// 	// pipeline := mongo.Pipeline{
-// 	// 	{{"$match", bson.D{{"artist", dart["artist"]}}}},
-// 	// 	// {"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-// 	// 	{{"$group", bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}}},
-// 	// 	{{"$project", bson.D{{"albumz", 1}}}},
-
-// 	// }
-// 	opts := options.Aggregate()
-// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-// 	defer Close(client, ctx, cancel)
-// 	CheckError(err, "MongoDB connection has failed")
-// 	db := client.Database("maindb").Collection("maindb")
-// 	// var AP2 []Ap2
-	
-// 	cur, err := db.Aggregate(context.TODO(),  mongo.Pipeline(albpipeline), opts)
-// 	cur.Decode(&AP2)
-// 	// for cur.Next(context.Background()) {
-		
-// 	// 	log.Println(AP2)
-// 	// 	fmt.Println(AP2)
-// 	// }
-// 	log.Println(AP2)
-// 	fmt.Println("This is AP2")
-	
-
-// 	// log.Printf("%s This is AP2", AP2)
-// 	// log.Printf("%T This is AP2 type", AP2)
-// 	// for _, ag := range AP2 {
-// 	// 	fmt.Printf("%v this is ag from AP2", ag)
-// 	// 	fmt.Printf("%T this is ag type", ag)
-// 	// 	log.Printf("%T this is ag type", ag)
-// 	// 	log.Printf("%v this is ag from AP2", ag)
-// 	// }
-
-// // 	sesC := DBcon()
-// // 	defer sesC.Close()
-// // 	AMPc := sesC.DB("maindb").C("maindb")
-// // 	pipeline2 := AMPc.Pipe([]bson.M{
-// // 		{"$match": bson.M{"artist": dart["artist"]}},
-// // 		{"$group": bson.M{"_id": "album", "albumz": bson.M{"$addToSet": "$album"}}},
-// // 		{"$project": bson.M{"albumz": 1}},
-// // 	}).Iter()
-// // 	err := pipeline2.All(&AP2)
-// // 	if err != nil {
-// // 		fmt.Printf("\n this is Agg artist pipeline2 fucked up %v %v %T", dart, err, dart)
-// // 	}
-// 	return
-// }
 
 func InsArtPipeline(AV1 ArtVieW2) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
@@ -469,14 +381,79 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum3() string {
-	// (DAlbAll []map[string]string)
-	DAlbum := AmpgoDistinct("maindb", "maindb", "album")
+func GDistAlbum3() (DAlbAll []map[string]string) {
+	DAlbum := AmpgoDistinct("maindb", "maindb", "albumID")
 
-	for _, alb := range DAlbum {
-		fmt.Printf("\n\n %s This is alb", alb)
-		// DAlb := AmpgoFindOne("maindb", "maindb", alb)
-		// DAlbAll = append(DAlbAll, DAlb)
+	for _, albID := range DAlbum {
+		fmt.Printf("\n\n %s This is albID", albID)
+		DAlb := AmpgoFindOne("maindb", "maindb", albID)
+		DAlbAll = append(DAlbAll, DAlb)
 	}
-	return "boo"
+	return 
+}
+
+
+func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map[string]string) {
+	//a list of just albumid's
+	var just_songID_list []string
+	for _, song := range fullsonglist {
+		songID := song["artisID"]
+		just_songID_list = append(just_songID_list, songID)
+	}
+	fmt.Printf("\n\n %s this is just_songID_list", just_songID_list)
+
+	//remove double songID entries
+	unique_items := unique(just_songID_list)
+	for _, uitem := range unique_items {
+		songINFO := AmpgoFindOne("maindb", "maindb", uitem)
+		final_songlist = append(final_songlist, songINFO)
+	}
+	return final_songlist
+}
+
+// // AlbPipeline exported
+func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
+	_artist := DAlb["artist"]
+	_artistID := DAlb["artistID"]
+	_album := DAlb["album"]
+	_albumID := DAlb["albumID"]
+	_picPath := DAlb["picpath"]
+	dirtysonglist := AmpgoFind("maindb","maindb", _albumID)
+	results := get_songs_for_album(dirtysonglist)
+	songcount := len(results)
+	MyAlbview.Artist = _artist
+	MyAlbview.ArtistID = _artistID
+	MyAlbview.Album = _album
+	MyAlbview.AlbumID = _albumID
+	MyAlbview.NumSongs = strconv.Itoa(songcount)
+	MyAlbview.PicPath = _picPath
+	MyAlbview.Songs = results
+	MyAlbview.AlbumPage = strconv.Itoa(page)
+	MyAlbview.Idx = strconv.Itoa(idx)
+
+
+// 	var P2 []p2
+// 	sess := DBcon()
+// 	defer sess.Close()
+// 	AMPc := sess.DB("maindb").C("maindb")
+// 	pipeline2 := AMPc.Pipe([]bson.M{
+// 		{"$match": bson.M{"album": DAlb["album"]}},
+// 		{"$group": bson.M{"_id": "title", "titlez": bson.M{"$addToSet": "$title"}}},
+// 		{"$project": bson.M{"titlez": 1}},
+// 	}).Iter()
+// 	err := pipeline2.All(&P2)
+// 	CheckError(err, "\n AlbPipeline: Agg Album pipeline2 fucked up")
+// 	// fmt.Printf("this is P2 %s", P2)
+	return 
+}
+
+// //InsAlbViewID exported
+func InsAlbViewID(MyAlbview AlbVieW2) {
+	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	CheckError(err, "Connections has failed")
+    defer Close(client, ctx, cancel)
+	insertOneResult, err := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
+	CheckError(err, "albumview insertion has fucked up")
+	fmt.Println(insertOneResult)
+	return
 }

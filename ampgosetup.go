@@ -175,7 +175,7 @@ func Setup() {
 			artpage = artpage + 0
 		}
 		
-		APL := NewArtPipline(DArtt, artpage, artIdx)
+		APL := ArtPipline(DArtt, artpage, artIdx)
 		log.Printf("%s this is apl", APL)
 		fmt.Printf("\n\n %s this is apl", APL)
 		
@@ -201,21 +201,21 @@ func Setup() {
 		log.Printf("%v this is DistAlbum3", v)
 	}
 
-	// var wg6 sync.WaitGroup
-	// var albpage int = 0
-	// for albIdx, DAlb := range DistAlbum3 {
-	// 	wg6.Add(1)
-	// 	if albIdx < OffSet {
-	// 		albpage = 1
-	// 	} else if albIdx % OffSet == 0 {
-	// 		albpage++
-	// 	} else {
-	// 		albpage = albpage + 0
-	// 	}
-	// 	fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
-	// 	fmt.Println("\n %s THIS IS ALBIDX", albIdx)
+	var wg6 sync.WaitGroup
+	var albpage int = 0
+	for albIdx, DAlb := range DistAlbum3 {
+		wg6.Add(1)
+		if albIdx < OffSet {
+			albpage = 1
+		} else if albIdx % OffSet == 0 {
+			albpage++
+		} else {
+			albpage = albpage + 0
+		}
+		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
+		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
 
-	// 	log.Printf("%s this is dalb", DAlb)
+		log.Printf("%s this is dalb", DAlb)
 
 	// 	APLX := AlbPipeline(DAlb)
 
@@ -240,10 +240,10 @@ func Setup() {
 	// 		artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
 	// 		InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
 			// InsAlbViewID(AlbInfo, APLX)
-	// 		wg6.Done()
-	// 	}(AlbInfo, APLX)
-	// 	wg6.Wait()
-	// }
+		// 	wg6.Done()
+		// }(AlbInfo, APLX)
+		// wg6.Wait()
+	}
 
 	// // AlbumOffset()
 
