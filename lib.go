@@ -338,22 +338,25 @@ func unique(arr []string) []string {
     return result
 }
 
-func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
-	//a list of just albumid's
-	var just_albumID_list []string
-	for _, alb := range fullalblist {
+func create_just_albumID_list(alist []map[string]string) (just_albumID_list []string) {
+	for _, alb := range alist {
 		albumID := alb["albumID"]
 		just_albumID_list = append(just_albumID_list, albumID)
 	}
 	fmt.Printf("\n\n %s this is just_albumID_list", just_albumID_list)
+	return
+}
 
+func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
+	just_albumID_list := create_just_albumID_list(fullalblist)
+	log.Printf("%s this is just_albumID_list", just_albumID_list)
 	//remove double albumid entries
 	unique_items := unique(just_albumID_list)
 	for _, uitem := range unique_items {
 		albINFO := AmpgoFindOne("maindb", "maindb", uitem)
 		final_alblist = append(final_alblist, albINFO)
 	}
-	return final_alblist
+	return 
 }
 
 func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
@@ -377,15 +380,14 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "artistview insertion has failed")
 }
 
-func GDistAlbum() (DAlbumID []string) {
-	DAlbumID = AmpgoDistinct("maindb", "maindb", "albumID")
-	// var DAlbAll []map[string]string
+func GDistAlbum() (DAlbAll []map[string]string) {
+	DAlbumID := AmpgoDistinct("maindb", "maindb", "albumID")
 	for _, albID := range DAlbumID {
-		fmt.Printf("\n\n %s This is albID", albID)
-	// 	DAlb := AmpgoFindOne("maindb", "maindb", albID)
-	// 	fmt.Printf("%s this is DAlb", DAlb)
-	// 	DAlbAll = append(DAlbAll, DAlb)
+		DAlb := AmpgoFindOne("maindb", "maindb", albID)
+		DAlbAll = append(DAlbAll, DAlb)
 	}
+	fmt.Printf("%s this is DAlb", DAlbAll)
+	log.Printf("%s this is DAlb", DAlbAll)
 	return
 }
 
@@ -444,13 +446,13 @@ func GDistAlbum() (DAlbumID []string) {
 // 	return 
 // }
 
-// // //InsAlbViewID exported
-// func InsAlbViewID(MyAlbview AlbVieW2) {
-// 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
-// 	CheckError(err, "Connections has failed")
-//     defer Close(client, ctx, cancel)
-// 	insertOneResult, err := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
-// 	CheckError(err, "albumview insertion has fucked up")
-// 	fmt.Println(insertOneResult)
-// 	return
-// }
+// //InsAlbViewID exported
+func InsAlbViewID(MyAlbview AlbVieW2) {
+	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	CheckError(err, "Connections has failed")
+    defer Close(client, ctx, cancel)
+	insertOneResult, err := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
+	CheckError(err, "albumview insertion has fucked up")
+	fmt.Println(insertOneResult)
+	return
+}
