@@ -115,8 +115,8 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 	return results
 }
 
-func AmpgoFind(dbb string, collb string, field string) []map[string]string {
-	filter := bson.D{{"artist", field}}
+func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
+	filter := bson.D{{filtertype, filterstring}}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
@@ -362,7 +362,7 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 }
 
 func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
-	dirtyalblist := AmpgoFind("maindb","maindb", artmap["artistID"]) //[]map[string]string
+	dirtyalblist := AmpgoFind("maindb","maindb", "artistID", artmap["artistID"]) //[]map[string]string
 	results2 := get_albums_for_artist(dirtyalblist)
 	MyArView.Artist = artmap["artist"]
 	MyArView.ArtistID = artmap["artistID"]
