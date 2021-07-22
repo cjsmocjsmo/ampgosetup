@@ -386,43 +386,42 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 	//a list of just albumid's
 	var just_songID_list []string
 	for _, song := range fullsonglist {
-		songID := song["artisID"]
-		just_songID_list = append(just_songID_list, songID)
+		log.Printf("%s Th is song for album", song)
+		just_songID_list = append(just_songID_list, song["fileID"])
 	}
 
 	//remove double songID entries
 	unique_items := unique(just_songID_list)
 	for _, uitem := range unique_items {
-		songINFO := AmpgoFindOne("maindb", "maindb", "songID", uitem)
+		songINFO := AmpgoFindOne("maindb", "maindb", "fileID", uitem)
 		final_songlist = append(final_songlist, songINFO)
 	}
+	log.Printf("%s this is final_songlist", final_songlist)
 	return final_songlist
 }
 
 // // // AlbPipeline exported
 func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
-	_artist := DAlb["artist"]
-	_artistID := DAlb["artistID"]
-	_album := DAlb["album"]
-	_albumID := DAlb["albumID"]
-	_picPath := DAlb["picpath"]
-	dirtysonglist := AmpgoFind("maindb","maindb", "albumID", _albumID)
+	dirtysonglist := AmpgoFind("maindb","maindb", "albumID", DAlb["albumID"])
+	log.Printf("%s this is dirtysonglist", dirtysonglist)
 	results := get_songs_for_album(dirtysonglist)
 	songcount := len(results)
-	MyAlbview.Artist = _artist
-	MyAlbview.ArtistID = _artistID
-	MyAlbview.Album = _album
-	MyAlbview.AlbumID = _albumID
+	MyAlbview.Artist = DAlb["artist"]
+	MyAlbview.ArtistID = DAlb["artistID"]
+	MyAlbview.Album = DAlb["album"]
+	MyAlbview.AlbumID = DAlb["albumID"]
 	MyAlbview.NumSongs = strconv.Itoa(songcount)
-	MyAlbview.PicPath = _picPath
+	MyAlbview.PicPath = DAlb["picpath"]
 	MyAlbview.Songs = results
 	MyAlbview.AlbumPage = strconv.Itoa(page)
 	MyAlbview.Idx = strconv.Itoa(idx)
+	log.Printf("%s This is MyAlbview", MyAlbview)
 	return 
 }
 
 // //InsAlbViewID exported
 func InsAlbViewID(MyAlbview AlbVieW2) {
+	log.Printf("Insert alb view started")
 	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
 	CheckError(err, "Connections has failed")
     defer Close(client, ctx, cancel)
