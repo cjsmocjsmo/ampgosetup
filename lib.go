@@ -59,8 +59,6 @@ type AlbVieW2 struct {
 	Idx       string              `bson:"idx"`
 }
 
-"mongodb://db:27017/ampgodb" 
-
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
 	defer func() {
