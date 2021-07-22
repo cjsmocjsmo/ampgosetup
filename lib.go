@@ -59,6 +59,8 @@ type AlbVieW2 struct {
 	Idx       string              `bson:"idx"`
 }
 
+var MONGO_ADDR string = "mongodb://db:27017/ampgodb"
+
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
 	defer func() {
@@ -86,12 +88,10 @@ func Query(client *mongo.Client, ctx context.Context, dataBase, col string, quer
 	return
 }
 
-MONGO_ADDR := "mongodb://db:27017/ampgodb"
-
 func AmpgoDistinct(db string, coll string, fieldd string) []string {
 	filter := bson.D{}
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database(db).Collection(coll)
@@ -107,7 +107,7 @@ func AmpgoDistinct(db string, coll string, fieldd string) []string {
 
 func AmpgoFindOne(db string, coll string, filtertype string, filterstring string) map[string]string {
 	filter := bson.M{filtertype: filterstring}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database(db).Collection(coll)
@@ -119,7 +119,7 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 
 func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
 	filter := bson.D{{filtertype, filterstring}}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	coll := client.Database(dbb).Collection(collb)
@@ -133,7 +133,7 @@ func AmpgoFind(dbb string, collb string, filtertype string, filterstring string)
 }
 
 func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
@@ -228,7 +228,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	TaGmaP.PicDB = "None"
 	TaGmaP.PicPath = picpath
 	TaGmaP.Idx = index
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", &TaGmaP)
@@ -254,7 +254,7 @@ func InsArtistID(art string) {
 
 func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	filter := bson.D{}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
@@ -268,7 +268,7 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 
 func gArtistInfo(Art string) map[string]string {
 	filter := bson.M{"artist": Art}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb2").Collection("artistid")
@@ -280,7 +280,7 @@ func gArtistInfo(Art string) map[string]string {
 
 func gAlbumInfo(Alb string) map[string]string {
 	filter := bson.M{"album": Alb}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("tempdb2").Collection("albumid")
@@ -309,7 +309,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.TitlePage = m2["titlepage"]
 	Doko.Idx = m2["idx"]
 	Doko.PicPath = m2["picPath"]
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
@@ -368,7 +368,7 @@ func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2)
 }
 
 func InsArtPipeline(AV1 ArtVieW2) {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
@@ -424,7 +424,7 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 // //InsAlbViewID exported
 func InsAlbViewID(MyAlbview AlbVieW2) {
 	log.Printf("Insert alb view started")
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	client, ctx, cancel, err := Connect(MONGO_ADDR)
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
