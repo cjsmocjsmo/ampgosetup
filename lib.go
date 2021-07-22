@@ -135,7 +135,7 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
-	CheckError(err2, "albumID insertion has failed")
+	CheckError(err2, "AmpgoInsertOne has failed")
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -422,10 +422,10 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 // //InsAlbViewID exported
 func InsAlbViewID(MyAlbview AlbVieW2) {
 	log.Printf("Insert alb view started")
-	client, ctx, cancel, err := Connect("mongodb://localhost:27017")
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "Connections has failed")
-    defer Close(client, ctx, cancel)
-	_, err = InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
-	CheckError(err, "albumview insertion has fucked up")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
+	CheckError(err2, "AmpgoInsertOne has failed")
 	return
 }
