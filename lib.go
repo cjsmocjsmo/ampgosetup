@@ -59,7 +59,7 @@ type AlbVieW2 struct {
 	Idx       string              `bson:"idx"`
 }
 
-var MONGO_ADDR string = "mongodb://db:27017/ampgodb"
+var MONGO_ADDR string = os.Getenv("AMPGO_AMPDB_ADDR")
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
