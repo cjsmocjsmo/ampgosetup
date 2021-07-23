@@ -419,7 +419,7 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 	MyAlbview.Album = DAlb["album"]
 	MyAlbview.AlbumID = DAlb["albumID"]
 	MyAlbview.NumSongs = strconv.Itoa(songcount)
-	MyAlbview.PicPath = DAlb["picpath"]
+	MyAlbview.PicPath = DAlb["picPath"]
 	MyAlbview.Songs = results
 	MyAlbview.AlbumPage = strconv.Itoa(page)
 	MyAlbview.Idx = strconv.Itoa(idx)
