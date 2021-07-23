@@ -194,7 +194,7 @@ func Setup() {
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
 
-	// log.Println("Starting GDistAlbum3")
+	log.Println("Starting GDistAlbum3")
 	DistAlbum := GDistAlbum()
 	for _, d := range DistAlbum {
 		fmt.Printf("%s this is distalbum", d)
@@ -213,30 +213,8 @@ func Setup() {
 		}
 		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
 		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
-
-		log.Printf("%s this is dalb", DAlb)
-		// AlbPipeline(DAlb map[string]string, page int, idx int)
 		APLX := AlbPipeline(DAlb, albpage, albIdx)
-
-		// var AlbInfo map[string]string
-		// AlbInfo["artist"] = DAlb["artist"]
-		// AlbInfo["artistID"] = DAlb["artistID"]
-		// AlbInfo["album"] = DAlb["album"]
-		// AlbInfo["albumID"] = DAlb["albumID"]
-		// AlbInfo["picpath"] = DAlb["picpath"]
-		// AlbInfo["aalbIdx"] = strconv.Itoa(albIdx)
-		// AlbInfo["aalbpage"] = strconv.Itoa(albpage)
-
 		go func(APLX AlbVieW2) {
-			
-			
-			// APL := AlbPipeline(DAlb)
-	// 		songcount := len(APL)
-	// 		ATID := AddTitleID(APL)
-	// 		// songcount := strconv.Itoa(nss)
-	// 		// aidx, _ := strconv.Atoi(idx)
-	// 		artist, artistID, album, albumID, picPath, _ := GAlbInfo(DAlb)
-	// 		InsAlbViewID(artist, artistID, album, albumID, picPath, songcount, ATID, albpage, albIdx)
 			InsAlbViewID(APLX)
 			wg6.Done()
 		}(APLX)
@@ -245,34 +223,34 @@ func Setup() {
 
 	// // AlbumOffset()
 
-	// var bulklist []Imageinfomap = CreateRandomPicsDB()
-	// fmt.Println(bulklist)
+	var bulklist []Imageinfomap = CreateRandomPicsDB()
+	fmt.Println(bulklist)
 
-	// var lines = []string{
-	// 	"Go",
-	// 	"is",
-	// 	"the",
-	// 	"best",
-	// 	"programming",
-	// 	"language",
-	// 	"in",
-	// 	"the",
-	// 	"world",
-	// }
+	var lines = []string{
+		"Go",
+		"is",
+		"the",
+		"best",
+		"programming",
+		"language",
+		"in",
+		"the",
+		"world",
+	}
 
-	// f, err := os.Create("setup.txt")
-    // if err != nil {
-    //     log.Fatal(err)
-    // }
-    // // remember to close the file
-    // defer f.Close()
+	f, err := os.Create("setup.txt")
+    if err != nil {
+        log.Fatal(err)
+    }
+    // remember to close the file
+    defer f.Close()
 
-    // for _, line := range lines {
-    //     _, err := f.WriteString(line + "\n")
-    //     if err != nil {
-    //         log.Fatal(err)
-    //     }
-    // }
+    for _, line := range lines {
+        _, err := f.WriteString(line + "\n")
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
 
 	// fmt.Println("AlbumOffset is complete")
 	t2 := time.Now().Sub(ti)
