@@ -397,7 +397,6 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 	//a list of just albumid's
 	var just_songID_list []string
 	for _, song := range fullsonglist {
-		log.Printf("%s Th is song for album", song)
 		just_songID_list = append(just_songID_list, song["fileID"])
 	}
 
@@ -407,14 +406,12 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 		songINFO := AmpgoFindOne("maindb", "maindb", "fileID", uitem)
 		final_songlist = append(final_songlist, songINFO)
 	}
-	log.Printf("%s this is final_songlist", final_songlist)
 	return final_songlist
 }
 
 // // // AlbPipeline exported
 func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
 	dirtysonglist := AmpgoFind("maindb","maindb", "albumID", DAlb["albumID"])
-	log.Printf("%s this is dirtysonglist", dirtysonglist)
 	results := get_songs_for_album(dirtysonglist)
 	songcount := len(results)
 	MyAlbview.Artist = DAlb["artist"]
@@ -426,13 +423,11 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 	MyAlbview.Songs = results
 	MyAlbview.AlbumPage = strconv.Itoa(page)
 	MyAlbview.Idx = strconv.Itoa(idx)
-	log.Printf("%s This is MyAlbview", MyAlbview)
 	return 
 }
 
 // //InsAlbViewID exported
 func InsAlbViewID(MyAlbview AlbVieW2) {
-	log.Printf("Insert alb view started")
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)

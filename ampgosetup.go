@@ -166,7 +166,6 @@ func Setup() {
 	var wg5 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
-		log.Printf("%v This is DArtt", DArtt)
 		if artIdx < OffSet {
 			artpage = 1
 		} else if artIdx % OffSet == 0 {
@@ -176,8 +175,6 @@ func Setup() {
 		}
 		
 		APL := ArtPipline(DArtt, artpage, artIdx)
-		log.Printf("%s this is apl", APL)
-		fmt.Printf("\n\n %s this is apl", APL)
 		
 		wg5.Add(1)
 		go func(APL ArtVieW2) {
@@ -211,8 +208,6 @@ func Setup() {
 		} else {
 			albpage = albpage + 0
 		}
-		fmt.Printf("\n %s THIS IS ALBPAGE", albpage)
-		fmt.Println("\n %s THIS IS ALBIDX", albIdx)
 		APLX := AlbPipeline(DAlb, albpage, albIdx)
 		go func(APLX AlbVieW2) {
 			InsAlbViewID(APLX)
@@ -224,7 +219,6 @@ func Setup() {
 	// // AlbumOffset()
 
 	var bulklist []Imageinfomap = CreateRandomPicsDB()
-	fmt.Println(bulklist)
 
 	var lines = []string{
 		"Go",
