@@ -218,7 +218,8 @@ func Setup() {
 
 	// // AlbumOffset()
 
-	var bulklist []Imageinfomap = CreateRandomPicsDB()
+	// var bulklist []Imageinfomap = CreateRandomPicsDB()
+	CreateRandomPicsDB()
 
 	var lines = []string{
 		"Go",
