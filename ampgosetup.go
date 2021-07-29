@@ -125,25 +125,6 @@ func Setup() {
 		wg1.Wait()
 	}
 	log.Println("InsAlbumID is complete \n")
-	
-
-	log.Println("starting GetPicForAlbum \n")
-	var wg133 sync.WaitGroup
-	for _, alb := range dalb {
-		wg133.Add(1)
-		go func(alb string) {
-			// InsAlbumID(alb)
-			zoo := GetPicForAlbum(alb)
-			fmt.Println(zoo)
-			wg133.Done()
-		}(alb)
-		wg133.Wait()
-	}
-	log.Println("GetPicForAlbum is complete \n")
-
-
-
-
 
 	log.Println("starting GDistArtist")
 	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
@@ -177,6 +158,57 @@ func Setup() {
 		wg3.Wait()
 	}
 	log.Println("UpdateMainDB is complete \n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	log.Println("starting GetPicForAlbum \n")
+	var wg133 sync.WaitGroup
+	for _, alb := range dalb {
+		wg133.Add(1)
+		go func(alb string) {
+			// InsAlbumID(alb)
+			zoo := GetPicForAlbum(alb)
+			fmt.Println(zoo)
+			wg133.Done()
+		}(alb)
+		wg133.Wait()
+	}
+	log.Println("GetPicForAlbum is complete \n")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// //AggArtist
 	log.Println("starting UpdateMainDB")
