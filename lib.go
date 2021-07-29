@@ -21,22 +21,23 @@ import (
 
 // Tagmap exported
 type Tagmap struct {
-	Dirpath    string `bson:"dirpath"`
-	Filename   string `bson:"filename"` 
-	Extension  string `bson:"extension"`
-	FileID     string `bson:"fileID"`
-	Filesize   string `bson:"filesize"`
-	Artist     string `bson:"artist"`
-	ArtistID   string `bson:"artistID"`
-	Album      string `bson:"album"`
-	AlbumID    string `bson:"albumID"`
-	Title      string `bson:"title"`
-	Genre      string `bson:"genre"`
-	TitlePage  string `bson:"titlepage"`
-	PicID      string `bson:"picID"`
-	PicDB      string `bson:"picDB"` 
-	PicPath    string `bson:"picPath"`
-	Idx        string    `bson:"idx"`
+	Dirpath     string `bson:"dirpath"`
+	Filename    string `bson:"filename"` 
+	Extension   string `bson:"extension"`
+	FileID      string `bson:"fileID"`
+	Filesize    string `bson:"filesize"`
+	Artist      string `bson:"artist"`
+	ArtistID    string `bson:"artistID"`
+	Album       string `bson:"album"`
+	AlbumID     string `bson:"albumID"`
+	Title       string `bson:"title"`
+	Genre       string `bson:"genre"`
+	TitlePage   string `bson:"titlepage"`
+	PicID       string `bson:"picID"`
+	PicDB       string `bson:"picDB"` 
+	PicPath     string `bson:"picPath"`
+	PicHttpAddr string `bson:"picHttpAddr"`
+	Idx         string `bson:"idx"`
 }
 
 type ArtVieW2 struct {
@@ -226,6 +227,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	index := strconv.Itoa(idx)
 	uuid, _ := UUID()
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
+	pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + "/" + picpath[5:]
 	fname, size := getFileInfo(apath)
 	TaGmaP.Dirpath = filepath.Dir(apath)
 	TaGmaP.Filename = fname
@@ -242,6 +244,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	TaGmaP.PicID = uuid
 	TaGmaP.PicDB = "None"
 	TaGmaP.PicPath = picpath
+	TaGmaP.PicHttpAddr = pichttpaddr
 	TaGmaP.Idx = index
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
@@ -367,6 +370,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.TitlePage = m2["titlepage"]
 	Doko.Idx = m2["idx"]
 	Doko.PicPath = m2["picPath"]
+	Doko.PicHttpAddr = m2["picHttpAddr"]
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
