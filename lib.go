@@ -254,6 +254,32 @@ func InsAlbumID(alb string) {
 	return
 }
 
+
+
+
+
+func getPicForAlbum(albid string)   {
+	albidlist := AmpgoFind("tempdb2", "albumid", "albumID", albid)
+	var test []map[string]string
+	for _, alb := range albidlist {
+		albumpicpath := AmpgoFindOne("maindb", "maindb", "albumID", alb["albumID"])
+		var albinfo map[string]string = map[string]string{
+			"album": alb["album"],
+			"albumID": alb["albumID"],
+			"picPath": albumpicpath["picPath"],
+		}
+		test = append(test, albinfo)
+		AmpgoInsertOne("thumbdb2", "artidpic", albinfo)
+	}
+	fmt.Println(test)
+}
+
+
+
+
+
+
+
 func InsArtistID(art string) {
 	uuid, _ := UUID()
 	Artid := map[string]string{"artist" : art, "artistID" : uuid}
