@@ -119,12 +119,30 @@ func Setup() {
 		wg1.Add(1)
 		go func(alb string) {
 			InsAlbumID(alb)
-			GetPicForAlbum(alb)
+			
 			wg1.Done()
 		}(alb)
 		wg1.Wait()
 	}
 	log.Println("InsAlbumID is complete \n")
+	
+
+	log.Println("starting GetPicForAlbum \n")
+	var wg133 sync.WaitGroup
+	for _, alb := range dalb {
+		wg133.Add(1)
+		go func(alb string) {
+			// InsAlbumID(alb)
+			GetPicForAlbum(alb)
+			wg1.Done()
+		}(alb)
+		wg133.Wait()
+	}
+	log.Println("GetPicForAlbum is complete \n")
+
+
+
+
 
 	log.Println("starting GDistArtist")
 	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
@@ -136,6 +154,7 @@ func Setup() {
 		wg2.Add(1)
 		go func(art string) {
 			InsArtistID(art)
+			
 			wg2.Done()
 		}(art)
 		wg2.Wait()
@@ -221,7 +240,7 @@ func Setup() {
 
 	// var bulklist []Imageinfomap = CreateRandomPicsDB()
 	CreateRandomPicsDB()
-
+	
 	var lines = []string{
 		"Go",
 		"is",

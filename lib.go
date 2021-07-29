@@ -127,7 +127,13 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 }
 
 func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
-	filter := bson.D{{filtertype, filterstring}}
+	filter := bson.D{}
+	if (filtertype == "None" && filterstring == "None") {
+		filter = bson.D{{}}
+	} else {
+		filter = bson.D{{filtertype, filterstring}}
+	}
+	// filter := bson.D{{filtertype, filterstring}}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
@@ -254,14 +260,26 @@ func InsAlbumID(alb string) {
 	return
 }
 
+func initLibLogging() {
+	file, err := os.OpenFile("/root/logs/ampgo_log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+    if err != nil {
+        log.Fatal(err)
+    }
 
+    log.SetOutput(file)
+
+    log.Println("Logging has started")
+}
 
 
 
 func GetPicForAlbum(albid string)   {
 	albidlist := AmpgoFind("tempdb2", "albumid", "albumID", albid)
+	log.Println("this is albidlist")
+	log.Println(albidlist)
 	var test []map[string]string
 	for _, alb := range albidlist {
+		log.Printf("%s This is alb", alb)
 		albumpicpath := AmpgoFindOne("maindb", "maindb", "albumID", alb["albumID"])
 		var albinfo map[string]string = map[string]string{
 			"album": alb["album"],
