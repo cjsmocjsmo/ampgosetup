@@ -273,23 +273,23 @@ func initLibLogging() {
 
 
 
-func GetPicForAlbum(albid string)   {
-	albidlist := AmpgoFind("tempdb2", "albumid", "albumID", albid)
-	log.Println("this is albidlist")
-	log.Println(albidlist)
-	var test []map[string]string
-	for _, alb := range albidlist {
-		log.Printf("%s This is alb", alb)
-		albumpicpath := AmpgoFindOne("maindb", "maindb", "albumID", alb["albumID"])
-		var albinfo map[string]string = map[string]string{
-			"album": alb["album"],
-			"albumID": alb["albumID"],
-			"picPath": albumpicpath["picPath"],
-		}
-		test = append(test, albinfo)
-		AmpgoInsertOne("thumbdb2", "artidpic", albinfo)
+func GetPicForAlbum(alb string)   {
+	albuminfo := AmpgoFindOne("maindb", "maindb", "album", alb)
+	log.Println("%s this is albuminfo", albuminfo)
+
+	// var test []map[string]string
+	// for _, alb := range albidlist {
+	// 	log.Printf("%s This is alb", alb)
+	// 	albumpicpath := AmpgoFindOne("maindb", "maindb", "albumID", alb["albumID"])
+	var albinfo map[string]string = map[string]string{
+		"album": alb,
+		"albumID": albuminfo["albumID"],
+		"picPath": albuminfo["picPath"],
 	}
-	fmt.Println(test)
+	// test = append(test, albinfo)
+	AmpgoInsertOne("thumbdb2", "artidpic", albinfo)
+	// }
+	fmt.Println(albinfo)
 }
 
 
