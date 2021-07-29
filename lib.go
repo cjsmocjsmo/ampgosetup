@@ -287,13 +287,13 @@ func GetPicForAlbum(alb string) map[string]string {
 	err = collection.FindOne(context.Background(), filter).Decode(&albuminfo)
 	if err != nil { log.Fatal(err) }
 	log.Printf("%s this is album", alb)
-	log.Printf("%s this is albumID", albuminfo.AlbumID)
-	log.Printf("%s this is picPath", albuminfo.PicPath)
+	log.Printf("%s this is AlbumID", albuminfo.AlbumID)
+	log.Printf("%s this is PicHttpAddr", albuminfo.PicHttpAddr)
 
 	var albinfo map[string]string = make(map[string]string)
 	albinfo["Album"] = alb
 	albinfo["AlbumID"] = albuminfo.AlbumID
-	albinfo["PicPath"] = albuminfo.PicPath
+	albinfo["PicPath"] = albuminfo.PicHttpAddr
 	AmpgoInsertOne("tempdb2", "artidpic", albinfo)
 	fmt.Println(albinfo)
 	log.Println(albinfo)
