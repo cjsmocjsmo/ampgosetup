@@ -275,30 +275,14 @@ func startLibLogging() string {
 func GetPicForAlbum(alb string) map[string]string {
 	startLibLogging()
 	log.Printf("%s this is alb", alb)
-	// albuminfo := AmpgoFindOne("maindb", "maindb", , alb)
-	// log.Println("%s this is albuminfo", albuminfo)
-
-	// var test []map[string]string
-	// for _, alb := range albidlist {
-	// 	log.Printf("%s This is alb", alb)
-	// 	albumpicpath := AmpgoFindOne("maindb", "maindb", "albumID", alb["albumID"])
-
-
 	filter := bson.M{"album": alb}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("maindb").Collection("maindb")
 	var albuminfo Tagmap
-	//  = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&albuminfo)
 	if err != nil { log.Fatal(err) }
-
-
-
-
-
-
 	log.Printf("%s this is album", alb)
 	log.Printf("%s this is albumID", albuminfo.AlbumID)
 	log.Printf("%s this is picPath", albuminfo.PicPath)
@@ -307,7 +291,7 @@ func GetPicForAlbum(alb string) map[string]string {
 	albinfo["Album"] = alb
 	albinfo["AlbumID"] = albuminfo.AlbumID
 	albinfo["PicPath"] = albuminfo.PicPath
-	AmpgoInsertOne("thumbdb2", "artidpic", albinfo)
+	AmpgoInsertOne("tempdb2", "artidpic", albinfo)
 	fmt.Println(albinfo)
 	log.Println(albinfo)
 	return albinfo
