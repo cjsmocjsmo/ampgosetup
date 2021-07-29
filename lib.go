@@ -274,6 +274,7 @@ func startLibLogging() string {
 
 func GetPicForAlbum(alb string) map[string]string {
 	startLibLogging()
+	log.Printf("%s this is alb", alb)
 	albuminfo := AmpgoFindOne("maindb", "maindb", "album", alb)
 	log.Println("%s this is albuminfo", albuminfo)
 
