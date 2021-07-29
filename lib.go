@@ -258,7 +258,7 @@ func InsAlbumID(alb string) {
 
 
 
-func getPicForAlbum(albid string)   {
+func GetPicForAlbum(albid string)   {
 	albidlist := AmpgoFind("tempdb2", "albumid", "albumID", albid)
 	var test []map[string]string
 	for _, alb := range albidlist {
