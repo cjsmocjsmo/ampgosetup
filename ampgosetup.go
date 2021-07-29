@@ -134,7 +134,7 @@ func Setup() {
 		go func(alb string) {
 			// InsAlbumID(alb)
 			GetPicForAlbum(alb)
-			wg1.Done()
+			wg133.Done()
 		}(alb)
 		wg133.Wait()
 	}
