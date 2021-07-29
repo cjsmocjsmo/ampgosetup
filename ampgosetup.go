@@ -88,7 +88,7 @@ func SetUpCheck() {
 
 //SetUp is exported to main
 func Setup() {
-	logtxtfile := os.Getenv("AMPGO_LOG_PATH")
+	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
 	// If the file doesn't exist, create it or append to the file
 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {

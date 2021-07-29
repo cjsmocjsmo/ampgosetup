@@ -260,20 +260,20 @@ func InsAlbumID(alb string) {
 	return
 }
 
-func initLibLogging() {
-	file, err := os.OpenFile("/root/logs/ampgo_log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-    if err != nil {
-        log.Fatal(err)
-    }
-
-    log.SetOutput(file)
-
-    log.Println("Logging has started")
+func startLibLogging() string {
+	var logtxtfile string = os.Getenv("AMPGO_LIB_LOG_PATH")
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	return "Logging started"
 }
 
 
 
 func GetPicForAlbum(alb string) map[string]string {
+	startLibLogging()
 	albuminfo := AmpgoFindOne("maindb", "maindb", "album", alb)
 	log.Println("%s this is albuminfo", albuminfo)
 
