@@ -133,7 +133,8 @@ func Setup() {
 		wg133.Add(1)
 		go func(alb string) {
 			// InsAlbumID(alb)
-			GetPicForAlbum(alb)
+			zoo := GetPicForAlbum(alb)
+			fmt.Println(zoo)
 			wg133.Done()
 		}(alb)
 		wg133.Wait()

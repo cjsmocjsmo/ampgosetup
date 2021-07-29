@@ -273,7 +273,7 @@ func initLibLogging() {
 
 
 
-func GetPicForAlbum(alb string)   {
+func GetPicForAlbum(alb string) map[string]string {
 	albuminfo := AmpgoFindOne("maindb", "maindb", "album", alb)
 	log.Println("%s this is albuminfo", albuminfo)
 
@@ -290,6 +290,8 @@ func GetPicForAlbum(alb string)   {
 	AmpgoInsertOne("thumbdb2", "artidpic", albinfo)
 	// }
 	fmt.Println(albinfo)
+	log.Println(albinfo)
+	return albinfo
 }
 
 
