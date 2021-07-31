@@ -51,6 +51,18 @@ func CheckError(err error, msg string) {
 	}
 }
 
+// func unique(arr []string) []string {
+//     occured := map[string]bool{}
+//     result := []string{}
+//     for e := range arr {
+//         if occured[arr[e]] != true {
+//             occured[arr[e]] = true
+//             result = append(result, arr[e])
+//         }
+//     }
+//     return result
+// }
+
 var titlepage int = 0
 var i int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
@@ -246,9 +258,6 @@ func Setup() {
 
 	log.Println("Starting GDistAlbum3")
 	DistAlbum := GDistAlbum()
-	for _, d := range DistAlbum {
-		fmt.Printf("%s this is distalbum", d)
-	}
 
 	var wg6 sync.WaitGroup
 	var albpage int = 0
