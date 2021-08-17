@@ -44,6 +44,7 @@ type ArtVieW2 struct {
 	Artist   string              `bson:"artist"`
 	ArtistID string              `bson:"artistID"`
 	Albums   []map[string]string `bson:"albums"`
+	AlbCount string              `bson:"albcount"`
 	Page     string              `bson:"page"`
 	Index    string              `bson:"idx"`
 }
@@ -421,9 +422,12 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
 	dirtyalblist := AmpgoFind("maindb","maindb", "artistID", artmap["artistID"]) //[]map[string]string
 	results2 := get_albums_for_artist(dirtyalblist)
+	albc := len(results2)
+	albcount := strconv.Itoa(albc)
 	MyArView.Artist = artmap["artist"]
 	MyArView.ArtistID = artmap["artistID"]
 	MyArView.Albums = results2
+	MyArView.AlbCount = albcount
 	MyArView.Page = strconv.Itoa(page)
 	MyArView.Index = strconv.Itoa(idx)
 	return
