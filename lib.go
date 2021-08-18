@@ -59,7 +59,7 @@ type AlbVieW2 struct {
 	NumSongs    string              `bson:"numsongs"`
 	PicPath     string              `bson:"picPath"`
 	Idx         string              `bson:"idx"`
-	PicHttpAddr string              `bson:"pichttpaddr"`
+	PicHttpAddr string              `bson:"picHttpAddr"`
 }
 
 type Imageinfomap struct {
