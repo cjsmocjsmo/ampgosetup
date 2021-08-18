@@ -50,15 +50,16 @@ type ArtVieW2 struct {
 }
 
 type AlbVieW2 struct {
-	Artist    string              `bson:"artist"`
-	ArtistID  string              `bson:"artistID"`
-	Album     string              `bson:"album"`
-	AlbumID   string              `bson:"albumID"`
-	Songs     []map[string]string `bson:"songs"`
-	AlbumPage string              `bson:"albumpage"`
-	NumSongs  string              `bson:"numsongs"`
-	PicPath   string              `bson:"picPath"`
-	Idx       string              `bson:"idx"`
+	Artist      string              `bson:"artist"`
+	ArtistID    string              `bson:"artistID"`
+	Album       string              `bson:"album"`
+	AlbumID     string              `bson:"albumID"`
+	Songs       []map[string]string `bson:"songs"`
+	AlbumPage   string              `bson:"albumpage"`
+	NumSongs    string              `bson:"numsongs"`
+	PicPath     string              `bson:"picPath"`
+	Idx         string              `bson:"idx"`
+	PicHttpAddr string              `bson:"pichttpaddr"`
 }
 
 type Imageinfomap struct {
@@ -480,6 +481,7 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 	MyAlbview.Songs = results
 	MyAlbview.AlbumPage = strconv.Itoa(page)
 	MyAlbview.Idx = strconv.Itoa(idx)
+	MyAlbview.Idx = DAlb["pichttpaddr"]
 	return 
 }
 
