@@ -38,6 +38,7 @@ type Tagmap struct {
 	PicPath     string `bson:"picPath"`
 	PicHttpAddr string `bson:"picHttpAddr"`
 	Idx         string `bson:"idx"`
+	HttpAddr    string `bson:"httpaddr"`
 }
 
 type ArtVieW2 struct {
@@ -231,6 +232,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
 	fname, size := getFileInfo(apath)
+	httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + "/" + fname
 	TaGmaP.Dirpath = filepath.Dir(apath)
 	TaGmaP.Filename = fname
 	TaGmaP.Extension = filepath.Ext(apath)
@@ -248,6 +250,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	TaGmaP.PicPath = picpath
 	TaGmaP.PicHttpAddr = pichttpaddr
 	TaGmaP.Idx = index
+	TaGmaP.HttpAddr = httpaddr
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
@@ -373,6 +376,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.Idx = m2["idx"]
 	Doko.PicPath = m2["picPath"]
 	Doko.PicHttpAddr = m2["picHttpAddr"]
+	Doko.HttpAddr = m2["httpaddr"]
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
