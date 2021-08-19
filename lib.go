@@ -232,7 +232,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
 	fname, size := getFileInfo(apath)
-	httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + "/" + fname
+	httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + apath[5:]
 	TaGmaP.Dirpath = filepath.Dir(apath)
 	TaGmaP.Filename = fname
 	TaGmaP.Extension = filepath.Ext(apath)
