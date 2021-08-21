@@ -277,11 +277,9 @@ func Setup() {
 		}(APLX)
 		wg6.Wait()
 	}
-
-	// // AlbumOffset()
-
-	// var bulklist []Imageinfomap = CreateRandomPicsDB()
 	CreateRandomPicsDB()
+
+	CreateRandomPlaylistDB()
 	
 	var lines = []string{
 		"Go",

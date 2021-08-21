@@ -565,3 +565,27 @@ func get_image_size(apath string) string {
 func create_image_http_addr(aimage string) string {
 	return os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + aimage[5:]
 }
+
+
+
+type randDb struct {
+	PlayListName string `bson:"playlistname"`
+	PlayListID string `bson:"playlistID"`
+	Playlist []string `bson:"playlist"`
+}
+
+func CreateRandomPlaylistDB() string {
+	var ranDBInfo randDb
+	var emptylist []string
+	uuid, _ := UUID()
+	ranDBInfo.PlayListName = "EmptyRandomPlaylist"
+	ranDBInfo.PlayListID = uuid
+	ranDBInfo.Playlist = emptylist
+
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "randplaylists", "randplaylists", ranDBInfo)
+	CheckError(err2, "randplaylists insertion has failed")
+	return "Created"
+}
