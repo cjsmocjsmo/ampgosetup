@@ -81,8 +81,6 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
 		TaGmap(pAth, titlepage, i)
-	} else if ext == ".mp3info" {
-		InsertDurationInfo(pAth)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
