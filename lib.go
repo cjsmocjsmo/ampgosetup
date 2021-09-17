@@ -353,13 +353,13 @@ func gAlbumInfo(Alb string) map[string]string {
 	return AlbInfo
 }
 
-func gDurationInfo(filename string) (map[string]string) {
+func gDurationInfo(filename string) map[string]string {
 	filter := bson.M{"filename": filename}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
 	CheckError(err, "MongoDB connection has failed")
 	collection := client.Database("durdb").Collection("durdb")
-	var durinfo map[string]string
+	var durinfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
 	if err != nil { log.Fatal(err) }
 	return durinfo
