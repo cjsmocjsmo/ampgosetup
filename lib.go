@@ -370,7 +370,8 @@ func gDurationInfo(filename string) map[string]string {
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	artID := gArtistInfo(m2["artist"])
 	albID := gAlbumInfo(m2["album"])
-	duration := gDurationInfo(m2["filename"])
+	fullpath := m2["dirpath"] + "/" + m2["filename"]
+	duration := gDurationInfo(fullpath)
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
 	Doko.Extension = m2["extension"]
