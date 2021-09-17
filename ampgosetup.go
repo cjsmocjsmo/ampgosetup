@@ -51,17 +51,16 @@ func CheckError(err error, msg string) {
 	}
 }
 
-// func unique(arr []string) []string {
-//     occured := map[string]bool{}
-//     result := []string{}
-//     for e := range arr {
-//         if occured[arr[e]] != true {
-//             occured[arr[e]] = true
-//             result = append(result, arr[e])
-//         }
-//     }
-//     return result
-// }
+func durationVisit(pAth string, f os.FileInfo, err error) error {
+	ext := path.Ext(pAth)
+	if ext == ".mp3info" {
+		InsertDurationInfo(pAth)
+	} else {
+		fmt.Println("WTF are you? You must be a Dir")
+		fmt.Println(pAth)
+	}
+	return nil
+}
 
 var titlepage int = 0
 var i int = 0
@@ -115,6 +114,10 @@ func Setup() {
 	fmt.Println(ti)
 	log.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
+
+	log.Println("starting duration walk \n")
+	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
+	log.Println("duration walk is complete \n")
 
 	log.Println("starting walk \n")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
