@@ -82,6 +82,8 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
 		TaGmap(pAth, titlepage, i)
+	} else if ext == ".mp3info" {
+		InsertDurationInfo(pAth)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
@@ -170,25 +172,6 @@ func Setup() {
 		wg3.Wait()
 	}
 	log.Println("UpdateMainDB is complete \n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
 	log.Println("starting GetPicForAlbum \n")
 	var wg133 sync.WaitGroup
@@ -203,24 +186,6 @@ func Setup() {
 		wg133.Wait()
 	}
 	log.Println("GetPicForAlbum is complete \n")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	// //AggArtist
 	log.Println("starting UpdateMainDB")
@@ -312,5 +277,22 @@ func Setup() {
 	fmt.Println(t2)
 	fmt.Println("THE END")
 }
+
+// func Update() {
+// 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
+// 	// If the file doesn't exist, create it or append to the file
+// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	log.SetOutput(file)
+// 	log.Println("Logging started")
+
+// 	ti := time.Now()
+// 	fmt.Println(ti)
+// 	log.Println(ti)
+// 	runtime.GOMAXPROCS(runtime.NumCPU())
+
+// }
 
 

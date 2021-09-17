@@ -5,12 +5,13 @@ import (
 	"log"
 	"fmt"
 	"time"
-	// "sort"
 	"context"
 	"strings"
 	"strconv"
+	"io/ioutil"
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"path/filepath"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
@@ -39,6 +40,7 @@ type Tagmap struct {
 	PicHttpAddr string `bson:"picHttpAddr"`
 	Idx         string `bson:"idx"`
 	HttpAddr    string `bson:"httpaddr"`
+	Duration	string `bson:"duration"`
 }
 
 type ArtVieW2 struct {
@@ -251,6 +253,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	TaGmaP.PicHttpAddr = pichttpaddr
 	TaGmaP.Idx = index
 	TaGmaP.HttpAddr = httpaddr
+	TaGmaP.Duration = "None"
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
@@ -305,12 +308,6 @@ func GetPicForAlbum(alb string) map[string]string {
 	return albinfo
 }
 
-
-
-
-
-
-
 func InsArtistID(art string) {
 	uuid, _ := UUID()
 	Artid := map[string]string{"artist" : art, "artistID" : uuid}
@@ -356,9 +353,22 @@ func gAlbumInfo(Alb string) map[string]string {
 	return AlbInfo
 }
 
+func gDurationInfo(filename string) (map[string]string) {
+	filter := bson.M{"filename": filename}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	defer Close(client, ctx, cancel)
+	CheckError(err, "MongoDB connection has failed")
+	collection := client.Database("durdb").Collection("durdb")
+	var durinfo map[string]string
+	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
+	if err != nil { log.Fatal(err) }
+	return durinfo
+}
+
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	artID := gArtistInfo(m2["artist"])
 	albID := gAlbumInfo(m2["album"])
+	duration := gDurationInfo(m2["filename"])
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
 	Doko.Extension = m2["extension"]
@@ -377,6 +387,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.PicPath = m2["picPath"]
 	Doko.PicHttpAddr = m2["picHttpAddr"]
 	Doko.HttpAddr = m2["httpaddr"]
+	Doko.Duration = duration["duration"]
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
@@ -588,4 +599,28 @@ func CreateRandomPlaylistDB() string {
 	_, err2 := InsertOne(client, ctx, "randplaylists", "randplaylists", ranDBInfo)
 	CheckError(err2, "randplaylists insertion has failed")
 	return "Created"
+}
+
+func ReadDurationFile(apath string) map[string]string {
+
+	data, err := ioutil.ReadFile(apath)
+	CheckError(err, "mp3info read has failed")
+
+	var mp3info map[string]string
+
+	err2 := json.Unmarshal(data, &mp3info)
+	CheckError(err2, "json unmarshal has failed")
+
+	return mp3info
+}
+
+func InsertDurationInfo(apath string) (string) {
+	mp3 := ReadDurationFile(apath)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "durdb", "durdb", mp3)
+	CheckError(err2, "durdb insertion has failed")
+	return "durdb Created"
+	
 }
