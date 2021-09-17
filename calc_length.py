@@ -34,16 +34,28 @@ class FindDuration:
                 print("Processing:\n %s" % filename)
                 fnn = os.path.join(paths, filename)
                 fpath, ext = os.path.splitext(fnn)
+                outfile = fpath + ".mp3info"
+                newfn = fpath.replace("/media/pipi/FOO/music", "/root/fsData")
+                newfilename = newfn + ext
                 if ext == ".mp3":
-                    outfile = fpath + ".mp3info"
                     duration = self.mp3_info(fnn)
                     x = {}
-                    x['filename'] = fnn
+                    x['filename'] = newfilename
                     x['duration'] = str(duration)
                     jstring = self.convert_to_json(x)
                     self.write_to_file(jstring, outfile)
 
+    def remove_old(self, apath):
+        for (paths, dirs, files) in os.walk(apath):
+            for filename in files:
+                print("Processing:\n %s" % filename)
+                fnn = os.path.join(paths, filename)
+                ext = os.path.splitext(fnn)[1]
+                if ext == ".mp3info":
+                    os.remove(fnn)
+
     def main(self):
+        self.remove_old(self.mp3_path)
         mp3list = self.find_files(self.mp3_path)
 
 if __name__ == "__main__":
