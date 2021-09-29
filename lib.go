@@ -221,7 +221,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		CheckError(err, "Unable to create newdumpOutFile2")
 		n3, err := g.Write(pic.Picture)
 		CheckError(err, "newdumpOutfile2 Write has fucked up")
-		// fmt.Println(n3, "bytes written successfully")
+		fmt.Println(n3, "bytes written successfully")
 	}
 	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
 	return artist, album, title, genre, outfile22
