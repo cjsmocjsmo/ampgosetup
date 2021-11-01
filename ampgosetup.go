@@ -65,6 +65,7 @@ func durationVisit(pAth string, f os.FileInfo, err error) error {
 var titlepage int = 0
 var i int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
+	log.Println(pAth)
 	if i < OffSet {
 		i++
 		titlepage = 1
@@ -85,6 +86,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
 	}
+	log.Println(pAth)
 	return nil
 }
 
