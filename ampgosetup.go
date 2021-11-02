@@ -167,6 +167,7 @@ func Setup() {
 	log.Println("starting UpdateMainDB")
 	// var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
+		log.Println(blob)
 		// wg3.Add(1)
 		// go func(blob map[string]string) {
 			UpdateMainDB(blob)
@@ -176,110 +177,110 @@ func Setup() {
 	}
 	log.Println("UpdateMainDB is complete \n")
 	
-	log.Println("starting GetPicForAlbum \n")
-	// var wg133 sync.WaitGroup
-	for _, alb := range dalb {
-		// wg133.Add(1)
-		// go func(alb string) {
-			// InsAlbumID(alb)
-			zoo := GetPicForAlbum(alb)
-			fmt.Println(zoo)
-		// 	wg133.Done()
-		// }(alb)
-		// wg133.Wait()
-	}
-	log.Println("GetPicForAlbum is complete \n")
+// 	log.Println("starting GetPicForAlbum \n")
+// 	// var wg133 sync.WaitGroup
+// 	for _, alb := range dalb {
+// 		// wg133.Add(1)
+// 		// go func(alb string) {
+// 			// InsAlbumID(alb)
+// 			zoo := GetPicForAlbum(alb)
+// 			fmt.Println(zoo)
+// 		// 	wg133.Done()
+// 		// }(alb)
+// 		// wg133.Wait()
+// 	}
+// 	log.Println("GetPicForAlbum is complete \n")
 
-	// //AggArtist
-	log.Println("starting UpdateMainDB")
-	DistArtist := GDistArtist2()
-	log.Println("GDistArtist2 is complete \n")
+// 	// //AggArtist
+// 	log.Println("starting UpdateMainDB")
+// 	DistArtist := GDistArtist2()
+// 	log.Println("GDistArtist2 is complete \n")
 
-	log.Println("starting GArtInfo2")
-	var wg5 sync.WaitGroup
-	var artpage int = 0
-	for artIdx, DArtt := range DistArtist {
-		if artIdx < OffSet {
-			artpage = 1
-		} else if artIdx % OffSet == 0 {
-			artpage++
-		} else {
-			artpage = artpage + 0
-		}
+// 	log.Println("starting GArtInfo2")
+// 	var wg5 sync.WaitGroup
+// 	var artpage int = 0
+// 	for artIdx, DArtt := range DistArtist {
+// 		if artIdx < OffSet {
+// 			artpage = 1
+// 		} else if artIdx % OffSet == 0 {
+// 			artpage++
+// 		} else {
+// 			artpage = artpage + 0
+// 		}
 		
-		APL := ArtPipline(DArtt, artpage, artIdx)
+// 		APL := ArtPipline(DArtt, artpage, artIdx)
 		
-		wg5.Add(1)
-		go func(APL ArtVieW2) {
-			InsArtPipeline(APL)
-			wg5.Done()
-		}(APL)
-		wg5.Wait()
-	}
-	fmt.Println("AggArtists is complete")
-	log.Println("AggArtists is complete")
-	// // ArtistOffset()w11
-	// // fmt.Println("ArtistOffset is complete")
+// 		wg5.Add(1)
+// 		go func(APL ArtVieW2) {
+// 			InsArtPipeline(APL)
+// 			wg5.Done()
+// 		}(APL)
+// 		wg5.Wait()
+// 	}
+// 	fmt.Println("AggArtists is complete")
+// 	log.Println("AggArtists is complete")
+// 	// // ArtistOffset()w11
+// 	// // fmt.Println("ArtistOffset is complete")
 
-	// //AggAlbum
-	// fmt.Println("AggAlbum has started")
+// 	// //AggAlbum
+// 	// fmt.Println("AggAlbum has started")
 
-	log.Println("Starting GDistAlbum3")
-	DistAlbum := GDistAlbum()
+// 	log.Println("Starting GDistAlbum3")
+// 	DistAlbum := GDistAlbum()
 
-	var wg6 sync.WaitGroup
-	var albpage int = 0
-	for albIdx, DAlb := range DistAlbum {
-		wg6.Add(1)
-		if albIdx < OffSet {
-			albpage = 1
-		} else if albIdx % OffSet == 0 {
-			albpage++
-		} else {
-			albpage = albpage + 0
-		}
-		APLX := AlbPipeline(DAlb, albpage, albIdx)
-		go func(APLX AlbVieW2) {
-			InsAlbViewID(APLX)
-			wg6.Done()
-		}(APLX)
-		wg6.Wait()
-	}
-	CreateRandomPicsDB()
+// 	var wg6 sync.WaitGroup
+// 	var albpage int = 0
+// 	for albIdx, DAlb := range DistAlbum {
+// 		wg6.Add(1)
+// 		if albIdx < OffSet {
+// 			albpage = 1
+// 		} else if albIdx % OffSet == 0 {
+// 			albpage++
+// 		} else {
+// 			albpage = albpage + 0
+// 		}
+// 		APLX := AlbPipeline(DAlb, albpage, albIdx)
+// 		go func(APLX AlbVieW2) {
+// 			InsAlbViewID(APLX)
+// 			wg6.Done()
+// 		}(APLX)
+// 		wg6.Wait()
+// 	}
+// 	CreateRandomPicsDB()
 
-	CreateRandomPlaylistDB()
+// 	CreateRandomPlaylistDB()
 	
-	var lines = []string{
-		"Go",
-		"is",
-		"the",
-		"best",
-		"programming",
-		"language",
-		"in",
-		"the",
-		"world",
-	}
+// 	var lines = []string{
+// 		"Go",
+// 		"is",
+// 		"the",
+// 		"best",
+// 		"programming",
+// 		"language",
+// 		"in",
+// 		"the",
+// 		"world",
+// 	}
 
-	f, err := os.Create("setup.txt")
-    if err != nil {
-        log.Fatal(err)
-    }
-    // remember to close the file
-    defer f.Close()
+// 	f, err := os.Create("setup.txt")
+//     if err != nil {
+//         log.Fatal(err)
+//     }
+//     // remember to close the file
+//     defer f.Close()
 
-    for _, line := range lines {
-        _, err := f.WriteString(line + "\n")
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+//     for _, line := range lines {
+//         _, err := f.WriteString(line + "\n")
+//         if err != nil {
+//             log.Fatal(err)
+//         }
+//     }
 
-	// fmt.Println("AlbumOffset is complete")
-	t2 := time.Now().Sub(ti)
-	fmt.Println(t2)
-	fmt.Println("THE END")
-}
+// 	// fmt.Println("AlbumOffset is complete")
+// 	t2 := time.Now().Sub(ti)
+// 	fmt.Println(t2)
+// 	fmt.Println("THE END")
+// }
 
 // func Update() {
 // 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
