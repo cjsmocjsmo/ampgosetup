@@ -298,7 +298,7 @@ func startLibLogging() string {
 
 
 func GetPicForAlbum(alb string) map[string]string {
-	startLibLogging()
+	// startLibLogging()
 	log.Printf("%s this is alb", alb)
 	filter := bson.M{"album": alb}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")

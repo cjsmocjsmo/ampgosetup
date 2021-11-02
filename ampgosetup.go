@@ -176,13 +176,24 @@ func Setup() {
 		wg3.Wait()
 	}
 	log.Println("UpdateMainDB is complete \n")
+
+	log.Println("starting InsAlbumID \n")
+	var wg183 sync.WaitGroup
+	for _, alb := range dalb {
+		wg183.Add(1)
+		go func(alb string) {
+			InsAlbumID(alb)
+			wg183.Done()
+		}(alb)
+		wg183.Wait()
+	}
+	log.Println("InsAlbumID is complete \n")
 	
 	log.Println("starting GetPicForAlbum \n")
 	var wg133 sync.WaitGroup
 	for _, alb := range dalb {
 		wg133.Add(1)
 		go func(alb string) {
-			InsAlbumID(alb)
 			zoo := GetPicForAlbum(alb)
 			fmt.Println(zoo)
 			wg133.Done()
