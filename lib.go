@@ -367,19 +367,19 @@ func gAlbumInfo(Alb string) map[string]string {
 	return AlbInfo
 }
 
-func gDurationInfo(filename string) map[string]string {
-	log.Println(filename)
-	filter := bson.M{"filename": filename}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("durdb").Collection("durdb")
-	var durinfo map[string]string = make(map[string]string)
-	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
-	if err != nil { log.Fatal(err) }
-	log.Println(durinfo)
-	return durinfo
-}
+// func gDurationInfo(filename string) map[string]string {
+// 	log.Println(filename)
+// 	filter := bson.M{"filename": filename}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("durdb").Collection("durdb")
+// 	var durinfo map[string]string = make(map[string]string)
+// 	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
+// 	if err != nil { log.Fatal(err) }
+// 	log.Println(durinfo)
+// 	return durinfo
+// }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	log.Println(m2["filename"])
@@ -389,8 +389,8 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	log.Println(albID)
 	fullpath := m2["dirpath"] + "/" + m2["filename"]
 	log.Println(fullpath)
-	duration := gDurationInfo(fullpath)
-	log.Println(duration)
+	// duration := gDurationInfo(fullpath)
+	// log.Println(duration)
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
 	Doko.Extension = m2["extension"]
