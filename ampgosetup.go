@@ -131,15 +131,15 @@ func Setup() {
 
 
 	log.Println("starting InsAlbumID \n")
-	var wg1 sync.WaitGroup
+	// var wg1 sync.WaitGroup
 	for _, alb := range dalb {
-		wg1.Add(1)
-		go func(alb string) {
+		// wg1.Add(1)
+		// go func(alb string) {
 			InsAlbumID(alb)
 			
-			wg1.Done()
-		}(alb)
-		wg1.Wait()
+		// 	wg1.Done()
+		// }(alb)
+		// wg1.Wait()
 	}
 	log.Println("InsAlbumID is complete \n")
 
@@ -148,15 +148,15 @@ func Setup() {
 	log.Println("GDistArtist is complete \n")
 
 	log.Println("starting InsArtistID")
-	var wg2 sync.WaitGroup
+	// var wg2 sync.WaitGroup
 	for _, art := range dart {
-		wg2.Add(1)
-		go func(art string) {
+		// wg2.Add(1)
+		// go func(art string) {
 			InsArtistID(art)
 			
-			wg2.Done()
-		}(art)
-		wg2.Wait()
+		// 	wg2.Done()
+		// }(art)
+		// wg2.Wait()
 	}
 	log.Println("InsArtistID is complete \n")
 
@@ -165,28 +165,28 @@ func Setup() {
 	log.Println("GetTitleOffsetAll is complete \n")
 
 	log.Println("starting UpdateMainDB")
-	var wg3 sync.WaitGroup
+	// var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
-		wg3.Add(1)
-		go func(blob map[string]string) {
+		// wg3.Add(1)
+		// go func(blob map[string]string) {
 			UpdateMainDB(blob)
-			wg3.Done()
-		}(blob)
-		wg3.Wait()
+		// 	wg3.Done()
+		// }(blob)
+		// wg3.Wait()
 	}
 	log.Println("UpdateMainDB is complete \n")
 	
 	log.Println("starting GetPicForAlbum \n")
-	var wg133 sync.WaitGroup
+	// var wg133 sync.WaitGroup
 	for _, alb := range dalb {
-		wg133.Add(1)
-		go func(alb string) {
+		// wg133.Add(1)
+		// go func(alb string) {
 			// InsAlbumID(alb)
 			zoo := GetPicForAlbum(alb)
 			fmt.Println(zoo)
-			wg133.Done()
-		}(alb)
-		wg133.Wait()
+		// 	wg133.Done()
+		// }(alb)
+		// wg133.Wait()
 	}
 	log.Println("GetPicForAlbum is complete \n")
 
