@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"log"
 	"path"
-	// "sync"
+	"sync"
 	"time"
 	"runtime"
 	// "context"
@@ -280,7 +280,7 @@ func Setup() {
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
-}
+
 
 // func Update() {
 // 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
@@ -292,10 +292,10 @@ func Setup() {
 // 	log.SetOutput(file)
 // 	log.Println("Logging started")
 
-// 	ti := time.Now()
-// 	fmt.Println(ti)
-// 	log.Println(ti)
-// 	runtime.GOMAXPROCS(runtime.NumCPU())
+	// ti = time.Now()
+	// fmt.Println(ti)
+	// log.Println(ti)
+	// runtime.GOMAXPROCS(runtime.NumCPU())
 
 }
 
