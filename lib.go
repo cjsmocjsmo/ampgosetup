@@ -75,15 +75,19 @@ type Imageinfomap struct {
 	Page          string `bson:"page"`
 }
 
-logtxtfile := os.Getenv("AMPGO_LIB_LOG_PATH")
-// If the file doesn't exist, create it or append to the file
-file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-if err != nil {
-	log.Fatal(err)
+func startLogging() string {
+	logtxtfile := os.Getenv("AMPGO_LIB_LOG_PATH")
+	// If the file doesn't exist, create it or append to the file
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	log.Println("Logging started")
+	return "Logging started"
 }
-log.SetOutput(file)
-log.Println("Logging started")
 
+var lStart = startLogging()
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
