@@ -409,7 +409,8 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.PicPath = m2["picPath"]
 	Doko.PicHttpAddr = m2["picHttpAddr"]
 	Doko.HttpAddr = m2["httpaddr"]
-	Doko.Duration = duration["duration"]
+	// Doko.Duration = duration["duration"]
+	Doko.Duration = "None"
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "Connections has failed")
 	defer Close(client, ctx, cancel)
