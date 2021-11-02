@@ -241,6 +241,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 }
 
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
+	log.Println(apath)
 	page := strconv.Itoa(apage)
 	index := strconv.Itoa(idx)
 	uuid, _ := UUID()
