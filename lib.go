@@ -368,9 +368,11 @@ func gDurationInfo(filename string) map[string]string {
 }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
+	log.Println(m2["filename"])
 	artID := gArtistInfo(m2["artist"])
 	albID := gAlbumInfo(m2["album"])
 	fullpath := m2["dirpath"] + "/" + m2["filename"]
+	log.Println(fullpath)
 	duration := gDurationInfo(fullpath)
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
@@ -396,6 +398,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
 	CheckError(err2, "maindb insertion has failed")
+	
 	return
 }
 
