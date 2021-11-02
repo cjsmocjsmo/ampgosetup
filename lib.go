@@ -75,6 +75,15 @@ type Imageinfomap struct {
 	Page          string `bson:"page"`
 }
 
+logtxtfile := os.Getenv("AMPGO_LIB_LOG_PATH")
+// If the file doesn't exist, create it or append to the file
+file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+if err != nil {
+	log.Fatal(err)
+}
+log.SetOutput(file)
+log.Println("Logging started")
+
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
@@ -370,10 +379,13 @@ func gDurationInfo(filename string) map[string]string {
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	log.Println(m2["filename"])
 	artID := gArtistInfo(m2["artist"])
+	log.Println(artID)
 	albID := gAlbumInfo(m2["album"])
+	log.Println(albID)
 	fullpath := m2["dirpath"] + "/" + m2["filename"]
 	log.Println(fullpath)
 	duration := gDurationInfo(fullpath)
+	log.Println(duration)
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
 	Doko.Extension = m2["extension"]
