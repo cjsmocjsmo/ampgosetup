@@ -42,12 +42,12 @@ const (
 	OffSet = 35
 )
 
-
 //CheckError exported
 func CheckError(err error, msg string) {
 	if err != nil {
 		fmt.Println(msg)
 		log.Println(msg)
+		log.Println(err)
 		panic(err)
 	}
 }
