@@ -29,20 +29,18 @@ import (
 	"time"
 	"runtime"
 	// "context"
-	// "strconv"
+	"strconv"
 	"path/filepath"
-	// "go.mongodb.org/mongo-driver/bson"
-    // "go.mongodb.org/mongo-driver/mongo"
-    // "go.mongodb.org/mongo-driver/mongo/options"
-	// "go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-//Set Constants
-//const (
-//	OffSet = 35
-//)
-
 var OFFSET string = os.Getenv("AMPGO_OFFSET")
+var OffSet int = convertSTR(OFFSET)
+
+func convertSTR(astring string) int {
+	Ofset, err := strconv.Atoi(astring)
+	CheckError(err, "strconv has failed")
+	return Ofset
+}
 
 //CheckError exported
 func CheckError(err error, msg string) {
@@ -163,9 +161,9 @@ func Setup() {
 	}
 	log.Println("InsArtistID is complete \n")
 
-	log.Println("starting GetTitleOffsetAll")
+	log.Println("starting GetTitleOffSetAll")
 	AllObj := GetTitleOffsetAll()
-	log.Println("GetTitleOffsetAll is complete \n")
+	log.Println("GetTitleOffSetAll is complete \n")
 
 	log.Println("starting UpdateMainDB")
 	var wg3 sync.WaitGroup
@@ -233,8 +231,8 @@ func Setup() {
 	}
 	fmt.Println("AggArtists is complete")
 	log.Println("AggArtists is complete")
-	// // ArtistOffset()w11
-	// // fmt.Println("ArtistOffset is complete")
+	// // ArtistOffSet()w11
+	// // fmt.Println("ArtistOffSet is complete")
 
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
@@ -290,7 +288,7 @@ func Setup() {
         }
     }
 
-	// fmt.Println("AlbumOffset is complete")
+	// fmt.Println("AlbumOffSet is complete")
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
