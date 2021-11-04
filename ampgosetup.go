@@ -38,9 +38,11 @@ import (
 )
 
 //Set Constants
-const (
-	OffSet = 35
-)
+//const (
+//	OffSet = 35
+//)
+
+var OFFSET string = os.Getenv("AMPGO_OFFSET")
 
 //CheckError exported
 func CheckError(err error, msg string) {
