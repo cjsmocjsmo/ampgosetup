@@ -121,10 +121,10 @@ func AmpgoDistinct(db string, coll string, fieldd string) []string {
 	opts := options.Distinct().SetMaxTime(2 * time.Second)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "AmpgoDistinct: MongoDB connection has failed")
 	collection := client.Database(db).Collection(coll)
 	DD1, err2 := collection.Distinct(context.TODO(), fieldd, filter, opts)
-	CheckError(err2, "MongoDB distinct album has failed")
+	CheckError(err2, "AmpgoDistinct: MongoDB distinct album has failed")
 	var DAlbum1 []string
 	for _, DD := range DD1 {
 		zoo := fmt.Sprintf("%s", DD)
@@ -137,11 +137,14 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 	filter := bson.M{filtertype: filterstring}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "AmpgoFindOne: MongoDB connection has failed")
 	collection := client.Database(db).Collection(coll)
 	var results map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&results)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Println("AmpgoFindOne: find one has fucked up")
+		log.Fatal(err)
+	}
 	return results
 }
 
@@ -155,12 +158,13 @@ func AmpgoFind(dbb string, collb string, filtertype string, filterstring string)
 	// filter := bson.D{{filtertype, filterstring}}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "AmpgoFind: MongoDB connection has failed")
 	coll := client.Database(dbb).Collection(collb)
 	cur, err := coll.Find(context.TODO(), filter)
-	CheckError(err, "ArtPipeline find has failed")
+	CheckError(err, "AmpgoFind: ArtPipeline find has failed")
 	var results []map[string]string //all albums for artist to include double entries
 	if err = cur.All(context.TODO(), &results); err != nil {
+		log.Println("AmpgoFind: cur.All has fucked up")
 		log.Fatal(err)
 	}
 	return results
@@ -168,7 +172,7 @@ func AmpgoFind(dbb string, collb string, filtertype string, filterstring string)
 
 func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "AmpgoInsertOne: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
 	CheckError(err2, "AmpgoInsertOne has failed")
@@ -179,9 +183,13 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 func getFileInfo(apath string) (filename string, size string) {
 	ltn, err := os.Open(apath)
 	if err != nil {
+		log.Println("getFileInfo: file open has fucked up")
 		os.Remove(apath)
+		filename = "BadFile"
+		size = 0
+		return
 	}
-	CheckError(err, "getFileInfo: file open has fucked up")
+	// CheckError(err, "getFileInfo: file open has fucked up")
 	defer ltn.Close()
 	ltnInfo, _ := ltn.Stat()
 	filename = ltnInfo.Name()
@@ -242,7 +250,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	for _, f := range pictures {
 		pic, ok := f.(id3v2.PictureFrame)
 		if !ok {
-			log.Fatal("Couldn't assert picture frame")
+			log.Fatal("DumpArtToFile: Couldn't assert picture frame")
 		}
 		dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
 		newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
@@ -250,49 +258,55 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
 		g, err := os.Create(newdumpOutFile2)
 		defer g.Close()
-		CheckError(err, "Unable to create newdumpOutFile2")
+		CheckError(err, "DumpArtToFile: Unable to create newdumpOutFile2")
 		n3, err := g.Write(pic.Picture)
-		CheckError(err, "newdumpOutfile2 Write has fucked up")
-		fmt.Println(n3, "bytes written successfully")
+		CheckError(err, "DumpArtToFile: newdumpOutfile2 Write has fucked up")
+		fmt.Println(n3, "DumpArtToFile: bytes written successfully")
 	}
 	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
 	return artist, album, title, genre, outfile22
 }
 
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
-	log.Println(apath)
-	page := strconv.Itoa(apage)
-	index := strconv.Itoa(idx)
-	uuid, _ := UUID()
-	artist, album, title, genre, picpath := DumpArtToFile(apath)
-	pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
 	fname, size := getFileInfo(apath)
-	httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + apath[5:]
-	TaGmaP.Dirpath = filepath.Dir(apath)
-	TaGmaP.Filename = fname
-	TaGmaP.Extension = filepath.Ext(apath)
-	TaGmaP.FileID = uuid
-	TaGmaP.Filesize = size
-	TaGmaP.Artist = artist
-	TaGmaP.ArtistID = "None"
-	TaGmaP.Album = album
-	TaGmaP.AlbumID = "None"
-	TaGmaP.Title = title
-	TaGmaP.Genre = genre
-	TaGmaP.TitlePage = page
-	TaGmaP.PicID = uuid
-	TaGmaP.PicDB = "None"
-	TaGmaP.PicPath = picpath
-	TaGmaP.PicHttpAddr = pichttpaddr
-	TaGmaP.Idx = index
-	TaGmaP.HttpAddr = httpaddr
-	TaGmaP.Duration = "None"
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", &TaGmaP)
-	CheckError(err2, "Tempdb1 insertion has failed")
-	return
+	if fname != "BadFile" {
+
+		log.Println(apath)
+		page := strconv.Itoa(apage)
+		index := strconv.Itoa(idx)
+		uuid, _ := UUID()
+		artist, album, title, genre, picpath := DumpArtToFile(apath)
+		pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
+		
+		httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + apath[5:]
+		TaGmaP.Dirpath = filepath.Dir(apath)
+		TaGmaP.Filename = fname
+		TaGmaP.Extension = filepath.Ext(apath)
+		TaGmaP.FileID = uuid
+		TaGmaP.Filesize = size
+		TaGmaP.Artist = artist
+		TaGmaP.ArtistID = "None"
+		TaGmaP.Album = album
+		TaGmaP.AlbumID = "None"
+		TaGmaP.Title = title
+		TaGmaP.Genre = genre
+		TaGmaP.TitlePage = page
+		TaGmaP.PicID = uuid
+		TaGmaP.PicDB = "None"
+		TaGmaP.PicPath = picpath
+		TaGmaP.PicHttpAddr = pichttpaddr
+		TaGmaP.Idx = index
+		TaGmaP.HttpAddr = httpaddr
+		TaGmaP.Duration = "None"
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+		CheckError(err, "TaGmap: Connections has failed")
+		defer Close(client, ctx, cancel)
+		_, err2 := InsertOne(client, ctx, "tempdb1", "meta1", &TaGmaP)
+		CheckError(err2, "TaGmap: Tempdb1 insertion has failed")
+		return
+	} else {
+		log.Println("TaGmap: fail")
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,18 +332,18 @@ func startLibLogging() string {
 
 func GetPicForAlbum(alb string) map[string]string {
 	// startLibLogging()
-	log.Printf("%s this is alb", alb)
+	log.Printf("GetPicForAlbum: %s this is alb", alb)
 	filter := bson.M{"album": alb}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "GetPicForAlbum: MongoDB connection has failed")
 	collection := client.Database("maindb").Collection("maindb")
 	var albuminfo Tagmap
 	err = collection.FindOne(context.Background(), filter).Decode(&albuminfo)
 	if err != nil { log.Fatal(err) }
-	log.Printf("%s this is album", alb)
-	log.Printf("%s this is AlbumID", albuminfo.AlbumID)
-	log.Printf("%s this is PicHttpAddr", albuminfo.PicHttpAddr)
+	log.Printf("GetPicForAlbum: %s this is album", alb)
+	log.Printf("GetPicForAlbum: %s this is AlbumID", albuminfo.AlbumID)
+	log.Printf("GetPicForAlbum: %s this is PicHttpAddr", albuminfo.PicHttpAddr)
 
 	var albinfo map[string]string = make(map[string]string)
 	albinfo["Album"] = alb
@@ -352,11 +366,12 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	filter := bson.D{}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "GetTitleOffsetAll: MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
 	cur, err := collection.Find(context.Background(), filter)
 	if err != nil { log.Fatal(err) }
 	if err = cur.All(context.Background(), &Main2SL); err != nil {
+		log.Println("GetTitleOffsetAll: cur.All has failed")
 		log.Fatal(err)
 	}
 	return
@@ -366,11 +381,11 @@ func gArtistInfo(Art string) map[string]string {
 	filter := bson.M{"artist": Art}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "gArtistInfo: MongoDB connection has failed")
 	collection := client.Database("tempdb2").Collection("artistid")
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
-	if err != nil { log.Fatal(err) }
+	if err != nil { log.Println("gArtistInfo: has failed") log.Fatal(err) }
 	return ArtInfo
 }
 
@@ -378,11 +393,11 @@ func gAlbumInfo(Alb string) map[string]string {
 	filter := bson.M{"album": Alb}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
+	CheckError(err, "gAlbumInfo: MongoDB connection has failed")
 	collection := client.Database("tempdb2").Collection("albumid")
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
-	if err != nil { log.Fatal(err) }
+	if err != nil { log.Println("gAlbumInfo: has failed") log.Fatal(err) }
 	return AlbInfo
 }
 
