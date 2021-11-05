@@ -210,7 +210,7 @@ func resizeImage(infile string, outfile string) string {
 }
 
 func move_bad_file(apath string) string {
-	dir, filename := filepath.Split(apath)
+	_, filename := filepath.Split(apath)
 	newpathname := os.Getenv("AMPGO_THUMB_PATH") + "crap/" + filename
 	err := os.Rename(apath, newpathname)
 	if err != nil {
