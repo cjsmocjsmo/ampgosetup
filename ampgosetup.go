@@ -130,14 +130,12 @@ func Setup() {
 	log.Println(dalb)
 	log.Println("GetDistAlbumMeta1 is complete \n")
 
-
 	log.Println("starting InsAlbumID \n")
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
 		go func(alb string) {
 			InsAlbumID(alb)
-			
 			wg1.Done()
 		}(alb)
 		wg1.Wait()

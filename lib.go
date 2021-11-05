@@ -255,7 +255,6 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 		page := strconv.Itoa(apage)
 		index := strconv.Itoa(idx)
 		uuid, _ := UUID()
-		
 		pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
 		fname, size := getFileInfo(apath)
 		httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + apath[5:]
@@ -308,8 +307,6 @@ func startLibLogging() string {
 	log.SetOutput(file)
 	return "Logging started"
 }
-
-
 
 func GetPicForAlbum(alb string) map[string]string {
 	// startLibLogging()
@@ -432,10 +429,10 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.HttpAddr = m2["httpaddr"]
 	Doko.Duration = duration["duration"]
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "UpdateMainDB: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
-	CheckError(err2, "maindb insertion has failed")
+	CheckError(err2, "UpdateMainDB: maindb insertion has failed")
 	
 	return
 }
@@ -495,10 +492,10 @@ func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2)
 
 func InsArtPipeline(AV1 ArtVieW2) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "InsArtPipeline: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
-	CheckError(err2, "artistview insertion has failed")
+	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
 }
 
 func GDistAlbum() (DAlbAll []map[string]string) {
@@ -547,10 +544,10 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 // //InsAlbViewID exported
 func InsAlbViewID(MyAlbview AlbVieW2) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "InsAlbViewID: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
-	CheckError(err2, "AmpgoInsertOne has failed")
+	CheckError(err2, "InsAlbViewID: AmpgoInsertOne has failed")
 	return
 }
 
@@ -562,7 +559,7 @@ func CreateRandomPicsDB() []Imageinfomap {
 	thumb_path := os.Getenv("AMPGO_THUMB_PATH")
 	thumb_glob_path := thumb_path + "/*.jpg"
 	thumb_glob, err := filepath.Glob(thumb_glob_path)
-	CheckError(err, "CheckThumbDB has fucked up")
+	CheckError(err, "CreateRandomPicsDB: CheckThumbDB has fucked up")
 	var BulkImages []Imageinfomap
 	var page int
 	for i, v := range thumb_glob {
@@ -594,10 +591,10 @@ func create_image_info_map(i int, afile string, page int) Imageinfomap {
 	ImageInfoMap.IType = itype
 	ImageInfoMap.Page = strconv.Itoa(page)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "create_image_info_map: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "coverart", "coverart", ImageInfoMap)
-	CheckError(err2, "coverart insertion has failed")
+	CheckError(err2, "create_image_info_map: coverart insertion has failed")
 	return ImageInfoMap
 }
 
@@ -611,7 +608,7 @@ func get_type(afile string) string {
 
 func get_image_size(apath string) string {
 	fi, err := os.Stat(apath)
-	CheckError(err, "os.stat has failed")
+	CheckError(err, "get_image_size: os.stat has failed")
 	size := fi.Size()
 	newsize := int(size)
 	return strconv.Itoa(newsize)
@@ -640,33 +637,29 @@ func CreateRandomPlaylistDB() string {
 	ranDBInfo.Playlist = emptylist
 
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "randplaylists", "randplaylists", ranDBInfo)
-	CheckError(err2, "randplaylists insertion has failed")
+	CheckError(err2, "CreateRandomPlaylistDB: randplaylists insertion has failed")
 	return "Created"
 }
 
 func ReadDurationFile(apath string) map[string]string {
-
 	data, err := ioutil.ReadFile(apath)
-	CheckError(err, "mp3info read has failed")
-
+	CheckError(err, "ReadDurationFile: mp3info read has failed")
 	var mp3info map[string]string
-
 	err2 := json.Unmarshal(data, &mp3info)
-	CheckError(err2, "json unmarshal has failed")
-
+	CheckError(err2, "ReadDurationFile: json unmarshal has failed")
 	return mp3info
 }
 
 func InsertDurationInfo(apath string) (string) {
 	mp3 := ReadDurationFile(apath)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "Connections has failed")
+	CheckError(err, "InsertDurationInfo: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "durdb", "durdb", mp3)
-	CheckError(err2, "durdb insertion has failed")
+	CheckError(err2, "InsertDurationInfo: durdb insertion has failed")
 	return "durdb Created"
 	
 }
