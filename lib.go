@@ -209,13 +209,29 @@ func resizeImage(infile string, outfile string) string {
 	return outfile
 }
 
+func move_bad_file(apath string) string {
+	dir, filename := filepath.Split(apath)
+	newpathname := os.Getenv("AMPGO_THUMB_PATH") + "crap/" + filename
+	err := os.Rename(apath, newpathname)
+	if err != nil {
+		log.Println(apath)
+		log.Fatal(err)
+	}
+	return "Bad file moved"
+}
+
 func DumpArtToFile(apath string) (string, string, string, string, string) {
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
 	artist := tag.Artist()
 	album := tag.Album()
 	title := tag.Title()
 	genre := tag.Genre()
-	CheckError(err, "Error while opening mp3 file")
+	if err != nil {
+		log.Println(err)
+		log.Println(apath)
+		log.Println(move_bad_file(apath))
+	}
+	// CheckError(err, "Error while opening mp3 file")
 	defer tag.Close()
 	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
 	newdumpOutFile2 := ""
