@@ -186,7 +186,7 @@ func getFileInfo(apath string) (filename string, size string) {
 		log.Println("getFileInfo: file open has fucked up")
 		os.Remove(apath)
 		filename = "BadFile"
-		size = 0
+		size = "0"
 		return
 	}
 	// CheckError(err, "getFileInfo: file open has fucked up")
@@ -307,6 +307,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	} else {
 		log.Println("TaGmap: fail")
 	}
+	return
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -385,7 +386,10 @@ func gArtistInfo(Art string) map[string]string {
 	collection := client.Database("tempdb2").Collection("artistid")
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
-	if err != nil { log.Println("gArtistInfo: has failed") log.Fatal(err) }
+	if err != nil { 
+		log.Println("gArtistInfo: has failed")
+		log.Fatal(err)
+	}
 	return ArtInfo
 }
 
@@ -397,7 +401,10 @@ func gAlbumInfo(Alb string) map[string]string {
 	collection := client.Database("tempdb2").Collection("albumid")
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
-	if err != nil { log.Println("gAlbumInfo: has failed") log.Fatal(err) }
+	if err != nil {
+		log.Println("gAlbumInfo: has failed")
+		log.Fatal(err)
+	}
 	return AlbInfo
 }
 
