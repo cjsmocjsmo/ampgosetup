@@ -182,14 +182,7 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 
 func getFileInfo(apath string) (filename string, size string) {
 	ltn, err := os.Open(apath)
-	if err != nil {
-		log.Println("getFileInfo: file open has fucked up")
-		os.Remove(apath)
-		filename = "BadFile"
-		size = "0"
-		return
-	}
-	// CheckError(err, "getFileInfo: file open has fucked up")
+	CheckError(err, "getFileInfo: file open has fucked up")
 	defer ltn.Close()
 	ltnInfo, _ := ltn.Stat()
 	filename = ltnInfo.Name()
@@ -220,30 +213,18 @@ func resizeImage(infile string, outfile string) string {
 	return outfile
 }
 
-func move_bad_file(apath string) string {
-	_, filename := filepath.Split(apath)
-	newpathname := os.Getenv("AMPGO_MEDIA_PATH") + "/crap/" + filename
-	err := os.Rename(apath, newpathname)
-	if err != nil {
-		log.Println(apath)
-		log.Fatal(err)
-	}
-	return "Bad file moved"
-}
-
 func DumpArtToFile(apath string) (string, string, string, string, string) {
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
+	if err != nil {
+		log.Println(err)
+		log.Println(apath)
+		return "None", "None", "None", "None", "None"
+	}
+	defer tag.Close()
 	artist := tag.Artist()
 	album := tag.Album()
 	title := tag.Title()
 	genre := tag.Genre()
-	if err != nil {
-		log.Println(err)
-		log.Println(apath)
-		log.Println(move_bad_file(apath))
-	}
-	// CheckError(err, "Error while opening mp3 file")
-	defer tag.Close()
 	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
 	newdumpOutFile2 := ""
 	newdumpOutFileThumb := ""
@@ -268,16 +249,15 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 }
 
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
-	fname, size := getFileInfo(apath)
-	if fname != "BadFile" {
-
+	artist, album, title, genre, picpath := DumpArtToFile(apath)
+	if artist != "None" && album != "None" && title != "None" {
 		log.Println(apath)
 		page := strconv.Itoa(apage)
 		index := strconv.Itoa(idx)
 		uuid, _ := UUID()
-		artist, album, title, genre, picpath := DumpArtToFile(apath)
-		pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
 		
+		pichttpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + picpath[5:]
+		fname, size := getFileInfo(apath)
 		httpaddr := os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + apath[5:]
 		TaGmaP.Dirpath = filepath.Dir(apath)
 		TaGmaP.Filename = fname
@@ -305,7 +285,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 		CheckError(err2, "TaGmap: Tempdb1 insertion has failed")
 		return
 	} else {
-		log.Println("TaGmap: fail")
+		os.Remove(apath)
 	}
 	return
 }
