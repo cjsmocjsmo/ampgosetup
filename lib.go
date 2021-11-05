@@ -178,6 +178,9 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 
 func getFileInfo(apath string) (filename string, size string) {
 	ltn, err := os.Open(apath)
+	if err != nil {
+		os.Remove(apath)
+	}
 	CheckError(err, "getFileInfo: file open has fucked up")
 	defer ltn.Close()
 	ltnInfo, _ := ltn.Stat()
