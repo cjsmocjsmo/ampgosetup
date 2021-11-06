@@ -41,6 +41,10 @@ type Tagmap struct {
 	Idx         string `bson:"idx"`
 	HttpAddr    string `bson:"httpaddr"`
 	Duration	string `bson:"duration"`
+
+	ArtStart    string `bson:"artstart"`
+	AlbStart    string `bson:"albstart"`
+	TitStart    string `bson:"titstart"`
 }
 
 type ArtVieW2 struct {
@@ -277,6 +281,9 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 		TaGmaP.Idx = index
 		TaGmaP.HttpAddr = httpaddr
 		TaGmaP.Duration = "None"
+		TaGmaP.ArtStart = "None"
+		TaGmaP.AlbStart = "None"
+		TaGmaP.TitStart = "None"
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 		CheckError(err, "TaGmap: Connections has failed")
 		defer Close(client, ctx, cancel)
@@ -399,6 +406,16 @@ func gDurationInfo(filename string) map[string]string {
 	return durinfo
 }
 
+func startsWith(astring string) string {
+	var sw string
+	if (astring[4:] == "The " || astring[4:] == "the ") {
+		sw = strings.ToUpper(astring[4:5])
+	} else {
+		sw = strings.ToUpper(astring[:1])
+	}
+	return sw
+}
+
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	log.Println(m2["filename"])
 	artID := gArtistInfo(m2["artist"])
@@ -428,6 +445,9 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.PicHttpAddr = m2["picHttpAddr"]
 	Doko.HttpAddr = m2["httpaddr"]
 	Doko.Duration = duration["duration"]
+	Doko.ArtStart = startsWith(m2["artist"])
+	Doko.AlbStart = startsWith(m2["album"])
+	Doko.TitStart = startsWith(m2["title"])
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "UpdateMainDB: Connections has failed")
 	defer Close(client, ctx, cancel)
