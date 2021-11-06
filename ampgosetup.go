@@ -64,25 +64,25 @@ func durationVisit(pAth string, f os.FileInfo, err error) error {
 }
 
 var titlepage int = 0
-var i int = 0
+var ii int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
 	log.Println(pAth)
-	if i < OffSet {
-		i++
+	if ii < OffSet {
+		ii++
 		titlepage = 1
-	} else if i % OffSet == 0 {
-		i++
+	} else if ii % OffSet == 0 {
+		ii++
 		titlepage++
 	} else {
 		fmt.Println("I'm Not A Page")
-		i++
+		ii++
 		titlepage = titlepage + 0
 	}
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
-		TaGmap(pAth, titlepage, i)
+		TaGmap(pAth, titlepage, ii)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
@@ -152,7 +152,6 @@ func Setup() {
 		wg2.Add(1)
 		go func(art string) {
 			InsArtistID(art)
-			
 			wg2.Done()
 		}(art)
 		wg2.Wait()
@@ -176,17 +175,29 @@ func Setup() {
 	}
 	log.Println("UpdateMainDB is complete \n")
 
-	log.Println("starting InsAlbumID \n")
-	var wg183 sync.WaitGroup
-	for _, alb := range dalb {
-		wg183.Add(1)
-		go func(alb string) {
-			InsAlbumID(alb)
-			wg183.Done()
-		}(alb)
-		wg183.Wait()
+	log.Println("starting ArtistFirst \n")
+	var wg99a sync.WaitGroup
+	for _, art := range dart {
+		wg99a.Add(1)
+		go func(art string) {
+			ArtistFirst(art)
+			wg99a.Done()
+		}(art)
+		wg99a.Wait()
 	}
-	log.Println("InsAlbumID is complete \n")
+	log.Println("ArtistFirst is complete \n")
+
+	log.Println("starting AlbumFirst \n")
+	var wg99 sync.WaitGroup
+	for _, alb := range dalb {
+		wg99.Add(1)
+		go func(alb string) {
+			AlbumFirst(alb)
+			wg99.Done()
+		}(alb)
+		wg99.Wait()
+	}
+	log.Println("AlbumFirst is complete \n")
 	
 	log.Println("starting GetPicForAlbum \n")
 	var wg133 sync.WaitGroup

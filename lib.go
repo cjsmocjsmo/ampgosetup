@@ -639,8 +639,6 @@ func create_image_http_addr(aimage string) string {
 	return os.Getenv("AMPGO_SERVER_ADDRESS") + ":" + os.Getenv("AMPGO_SERVER_PORT") + aimage[5:]
 }
 
-
-
 type randDb struct {
 	PlayListName string `bson:"playlistname"`
 	PlayListID string `bson:"playlistID"`
@@ -683,4 +681,273 @@ func InsertDurationInfo(apath string) (string) {
 	CheckError(err2, "InsertDurationInfo: durdb insertion has failed")
 	return "durdb Created"
 	
+}
+
+func ArtistFirst(astring string) string {
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+	defer Close(client, ctx, cancel)
+
+	char := startsWith(astring)
+	switch char {
+		case "A":
+			_, erra := InsertOne(client, ctx, "artistalpha", "A", astring)
+			CheckError(erra, "ArtistFirst: A insertion has failed")
+			return "A Created"
+
+		case "B":
+			_, errb := InsertOne(client, ctx, "artistalpha", "B", astring)
+			CheckError(errb, "ArtistFirst: B insertion has failed")
+			return "B Created"
+
+		case "C":
+			_, errc := InsertOne(client, ctx, "artistalpha", "C", astring)
+			CheckError(errc, "ArtistFirst: C insertion has failed")
+			return "C Created"
+
+		case "D":
+			_, errd := InsertOne(client, ctx, "artistalpha", "D", astring)
+			CheckError(errd, "ArtistFirst: D insertion has failed")
+			return "D Created"
+
+		case "E":
+			_, erre := InsertOne(client, ctx, "artistalpha", "E", astring)
+			CheckError(erre, "ArtistFirst: E insertion has failed")
+			return "E Created"
+			
+		case "F":
+			_, errf := InsertOne(client, ctx, "artistalpha", "F", astring)
+			CheckError(errf, "ArtistFirst: F insertion has failed")
+			return "F Created"
+
+		case "G":
+			_, errg := InsertOne(client, ctx, "artistalpha", "G", astring)
+			CheckError(errg, "ArtistFirst: G insertion has failed")
+			return "G Created"
+
+		case "H":
+			_, errh := InsertOne(client, ctx, "artistalpha", "H", astring)
+			CheckError(errh, "ArtistFirst: H insertion has failed")
+			return "H Created"
+
+		case "I":
+			_, erri := InsertOne(client, ctx, "artistalpha", "I", astring)
+			CheckError(erri, "ArtistFirst: I insertion has failed")
+			return "I Created"
+
+		case "J":
+			_, errj := InsertOne(client, ctx, "artistalpha", "J", astring)
+			CheckError(errj, "ArtistFirst: J insertion has failed")
+			return "J Created"
+
+		case "K":
+			_, errk := InsertOne(client, ctx, "artistalpha", "K", astring)
+			CheckError(errk, "ArtistFirst: K insertion has failed")
+			return "K Created"
+
+		case "L":
+			_, errl := InsertOne(client, ctx, "artistalpha", "L", astring)
+			CheckError(errl, "ArtistFirst: L insertion has failed")
+			return "L Created"
+
+		case "M":
+			_, errm := InsertOne(client, ctx, "artistalpha", "M", astring)
+			CheckError(errm, "ArtistFirst: M insertion has failed")
+			return "M Created"
+
+		case "N":
+			_, errn := InsertOne(client, ctx, "artistalpha", "N", astring)
+			CheckError(errn, "ArtistFirst: N insertion has failed")
+			return "N Created"
+
+		case "O":
+			_, erro := InsertOne(client, ctx, "artistalpha", "O", astring)
+			CheckError(erro, "ArtistFirst: O insertion has failed")
+			return "O Created"
+
+		case "P":
+			_, errp := InsertOne(client, ctx, "artistalpha", "P", astring)
+			CheckError(errp, "ArtistFirst: P insertion has failed")
+			return "P Created"
+
+		case "Q":
+			_, errq := InsertOne(client, ctx, "artistalpha", "Q", astring)
+			CheckError(errq, "ArtistFirst: Q insertion has failed")
+			return "Q Created"
+
+		case "R":
+			_, errr := InsertOne(client, ctx, "artistalpha", "R", astring)
+			CheckError(errr, "ArtistFirst: R insertion has failed")
+			return "R Created"
+
+		case "S":
+			_, errs := InsertOne(client, ctx, "artistalpha", "S", astring)
+			CheckError(errs, "ArtistFirst: S insertion has failed")
+			return "S Created"
+
+		case "T":
+			_, errt := InsertOne(client, ctx, "artistalpha", "T", astring)
+			CheckError(errt, "ArtistFirst: T insertion has failed")
+			return "T Created"
+
+		case "U":
+			_, erru := InsertOne(client, ctx, "artistalpha", "U", astring)
+			CheckError(erru, "ArtistFirst: U insertion has failed")
+			return "U Created"
+
+		case "V":
+			_, errv := InsertOne(client, ctx, "artistalpha", "V", astring)
+			CheckError(errv, "ArtistFirst: V insertion has failed")
+			return "V Created"
+		case "W":
+			_, errw := InsertOne(client, ctx, "artistalpha", "W", astring)
+			CheckError(errw, "ArtistFirst: W insertion has failed")
+			return "W Created"
+
+		case "X":
+			_, errx := InsertOne(client, ctx, "artistalpha", "X", astring)
+			CheckError(errx, "ArtistFirst: X insertion has failed")
+			return "X Created"
+
+		case "Z":
+			_, errz := InsertOne(client, ctx, "artistalpha", "Z", astring)
+			CheckError(errz, "ArtistFirst: Z insertion has failed")
+			return "Z Created"
+	}
+	return "None"
+}
+
+func AlbumFirst(astring string) string {
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+	defer Close(client, ctx, cancel)
+
+	char := startsWith(astring)
+	switch char {
+		case "A":
+			_, erra := InsertOne(client, ctx, "albumalpha", "A", astring)
+			CheckError(erra, "AlbumFirst: A insertion has failed")
+			return "A Created"
+
+		case "B":
+			_, errb := InsertOne(client, ctx, "albumalpha", "B", astring)
+			CheckError(errb, "AlbumFirst: B insertion has failed")
+			return "B Created"
+
+		case "C":
+			_, errc := InsertOne(client, ctx, "albumalpha", "C", astring)
+			CheckError(errc, "AlbumFirst: C insertion has failed")
+			return "C Created"
+
+		case "D":
+			_, errd := InsertOne(client, ctx, "albumalpha", "D", astring)
+			CheckError(errd, "AlbumFirst: D insertion has failed")
+			return "D Created"
+
+		case "E":
+			_, erre := InsertOne(client, ctx, "albumalpha", "E", astring)
+			CheckError(erre, "AlbumFirst: E insertion has failed")
+			return "E Created"
+
+		case "F":
+			_, errf := InsertOne(client, ctx, "albumalpha", "F", astring)
+			CheckError(errf, "AlbumFirst: F insertion has failed")
+			return "F Created"
+
+		case "G":
+			_, errg := InsertOne(client, ctx, "albumalpha", "G", astring)
+			CheckError(errg, "AlbumFirst: G insertion has failed")
+			return "G Created"
+
+		case "H":
+			_, errh := InsertOne(client, ctx, "albumalpha", "H", astring)
+			CheckError(errh, "AlbumFirst: H insertion has failed")
+			return "H Created"
+
+		case "I":
+			_, erri := InsertOne(client, ctx, "albumalpha", "I", astring)
+			CheckError(erri, "AlbumFirst: I insertion has failed")
+			return "I Created"
+
+		case "J":
+			_, errj := InsertOne(client, ctx, "albumalpha", "J", astring)
+			CheckError(errj, "AlbumFirst: J insertion has failed")
+			return "J Created"
+
+		case "K":
+			_, errk := InsertOne(client, ctx, "albumalpha", "K", astring)
+			CheckError(errk, "AlbumFirst: K insertion has failed")
+			return "K Created"
+
+		case "L":
+			_, errl := InsertOne(client, ctx, "albumalpha", "L", astring)
+			CheckError(errl, "AlbumFirst: L insertion has failed")
+			return "L Created"
+
+		case "M":
+			_, errm := InsertOne(client, ctx, "albumalpha", "M", astring)
+			CheckError(errm, "AlbumFirst: M insertion has failed")
+			return "M Created"
+
+		case "N":
+			_, errn := InsertOne(client, ctx, "albumalpha", "N", astring)
+			CheckError(errn, "AlbumFirst: N insertion has failed")
+			return "N Created"
+
+		case "O":
+			_, erro := InsertOne(client, ctx, "albumalpha", "O", astring)
+			CheckError(erro, "AlbumFirst: O insertion has failed")
+			return "O Created"
+
+		case "P":
+			_, errp := InsertOne(client, ctx, "albumalpha", "P", astring)
+			CheckError(errp, "AlbumFirst: P insertion has failed")
+			return "P Created"
+
+		case "Q":
+			_, errq := InsertOne(client, ctx, "albumalpha", "Q", astring)
+			CheckError(errq, "AlbumFirst: Q insertion has failed")
+			return "Q Created"
+
+		case "R":
+			_, errr := InsertOne(client, ctx, "albumalpha", "R", astring)
+			CheckError(errr, "AlbumFirst: R insertion has failed")
+			return "R Created"
+
+		case "S":
+			_, errs := InsertOne(client, ctx, "albumalpha", "S", astring)
+			CheckError(errs, "AlbumFirst: S insertion has failed")
+			return "S Created"
+
+		case "T":
+			_, errt := InsertOne(client, ctx, "albumalpha", "T", astring)
+			CheckError(errt, "AlbumFirst: T insertion has failed")
+			return "T Created"
+
+		case "U":
+			_, erru := InsertOne(client, ctx, "albumalpha", "U", astring)
+			CheckError(erru, "AlbumFirst: U insertion has failed")
+			return "U Created"
+
+		case "V":
+			_, errv := InsertOne(client, ctx, "albumalpha", "V", astring)
+			CheckError(errv, "AlbumFirst: V insertion has failed")
+			return "V Created"
+
+		case "W":
+			_, errw := InsertOne(client, ctx, "albumalpha", "W", astring)
+			CheckError(errw, "AlbumFirst: W insertion has failed")
+			return "W Created"
+
+		case "X":
+			_, errx := InsertOne(client, ctx, "albumalpha", "X", astring)
+			CheckError(errx, "AlbumFirst: X insertion has failed")
+			return "X Created"
+
+		case "Z":
+			_, errz := InsertOne(client, ctx, "albumalpha", "Z", astring)
+			CheckError(errz, "AlbumFirst: Z insertion has failed")
+			return "Z Created"
+	}
+	return "None"
 }
