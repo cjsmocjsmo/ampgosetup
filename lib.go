@@ -407,15 +407,14 @@ func gDurationInfo(filename string) map[string]string {
 }
 
 func startsWith(astring string) string {
-	var sw string
 	if (len(astring) > 3) {
 		if (astring[4:] == "The " || astring[4:] == "the ") {
-			sw = strings.ToUpper(astring[4:5])
+			return strings.ToUpper(astring[4:5])
 		}
 	} else {
-		sw = strings.ToUpper(astring[:1])
+		return strings.ToUpper(astring[:1])
 	}
-	return sw
+	return "None"
 }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
@@ -448,8 +447,8 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.HttpAddr = m2["httpaddr"]
 	Doko.Duration = duration["duration"]
 	Doko.ArtStart = startsWith(m2["artist"])
-	Doko.AlbStart = startsWith(m2["album"])
-	Doko.TitStart = startsWith(m2["title"])
+	Doko.AlbStart = strings.ToUpper(m2["album"][:1])
+	Doko.TitStart = strings.ToUpper(m2["title"][:1])
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "UpdateMainDB: Connections has failed")
 	defer Close(client, ctx, cancel)
