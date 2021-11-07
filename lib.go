@@ -689,7 +689,7 @@ func ArtistFirst(astring string) string {
 	// defer Close(client, ctx, cancel)
 	char := startsWith(astring)
 	switch {
-		case strings.Contains(char, "A"):
+		case char == "A":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -699,7 +699,7 @@ func ArtistFirst(astring string) string {
 			CheckError(erra, "ArtistFirst: A insertion has failed")
 			return "A Created"
 
-		case strings.Contains(char, "B"):
+		case char == "B":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -709,7 +709,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errb, "ArtistFirst: B insertion has failed")
 			return "B Created"
 
-		case strings.Contains(char, "C"):
+		case char == "C":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -719,7 +719,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errc, "ArtistFirst: C insertion has failed")
 			return "C Created"
 
-		case strings.Contains(char, "D"):
+		case char == "D":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -729,7 +729,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errd, "ArtistFirst: D insertion has failed")
 			return "D Created"
 
-		case strings.Contains(char, "E"):
+		case char == "E":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -739,7 +739,7 @@ func ArtistFirst(astring string) string {
 			CheckError(erre, "ArtistFirst: E insertion has failed")
 			return "E Created"
 			
-		case strings.Contains(char, "F"):
+		case char == "F":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -749,7 +749,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errf, "ArtistFirst: F insertion has failed")
 			return "F Created"
 
-		case strings.Contains(char, "G"):
+		case char == "G":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -759,7 +759,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errg, "ArtistFirst: G insertion has failed")
 			return "G Created"
 
-		case strings.Contains(char, "H"):
+		case char == "H":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -769,7 +769,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errh, "ArtistFirst: H insertion has failed")
 			return "H Created"
 
-		case strings.Contains(char, "I"):
+		case char == "I":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -779,7 +779,7 @@ func ArtistFirst(astring string) string {
 			CheckError(erri, "ArtistFirst: I insertion has failed")
 			return "I Created"
 
-		case strings.Contains(char, "J"):
+		case char == "J":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -789,7 +789,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errj, "ArtistFirst: J insertion has failed")
 			return "J Created"
 
-		case strings.Contains(char, "K"):
+		case char == "K":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -799,7 +799,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errk, "ArtistFirst: K insertion has failed")
 			return "K Created"
 
-		case strings.Contains(char, "L"):
+		case char == "L":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -809,7 +809,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errl, "ArtistFirst: L insertion has failed")
 			return "L Created"
 
-		case strings.Contains(char, "M"):
+		case char == "M":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -819,7 +819,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errm, "ArtistFirst: M insertion has failed")
 			return "M Created"
 
-		case strings.Contains(char, "N"):
+		case char == "N":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -829,7 +829,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errn, "ArtistFirst: N insertion has failed")
 			return "N Created"
 
-		case strings.Contains(char, "O"):
+		case char == "O":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -839,7 +839,7 @@ func ArtistFirst(astring string) string {
 			CheckError(erro, "ArtistFirst: O insertion has failed")
 			return "O Created"
 
-		case strings.Contains(char, "P"):
+		case char == "P":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -849,7 +849,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errp, "ArtistFirst: P insertion has failed")
 			return "P Created"
 
-		case strings.Contains(char, "Q"):
+		case char == "Q":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -859,7 +859,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errq, "ArtistFirst: Q insertion has failed")
 			return "Q Created"
 
-		case strings.Contains(char, "R"):
+		case char == "R":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -869,7 +869,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errr, "ArtistFirst: R insertion has failed")
 			return "R Created"
 
-		case strings.Contains(char, "S"):
+		case char == "S":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -879,7 +879,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errs, "ArtistFirst: S insertion has failed")
 			return "S Created"
 
-		case strings.Contains(char, "T"):
+		case char == "T":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -889,7 +889,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errt, "ArtistFirst: T insertion has failed")
 			return "T Created"
 
-		case strings.Contains(char, "U"):
+		case char == "U":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -899,7 +899,7 @@ func ArtistFirst(astring string) string {
 			CheckError(erru, "ArtistFirst: U insertion has failed")
 			return "U Created"
 
-		case strings.Contains(char, "V"):
+		case char == "V":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -909,7 +909,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errv, "ArtistFirst: V insertion has failed")
 			return "V Created"
 
-		case strings.Contains(char, "W"):
+		case char == "W":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -919,7 +919,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errw, "ArtistFirst: W insertion has failed")
 			return "W Created"
 
-		case strings.Contains(char, "X"):
+		case char == "X":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -929,7 +929,7 @@ func ArtistFirst(astring string) string {
 			CheckError(errx, "ArtistFirst: X insertion has failed")
 			return "X Created"
 
-		case strings.Contains(char, "Z"):
+		case char == "Z":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -948,7 +948,7 @@ func AlbumFirst(astring string) string {
 	// defer Close(client, ctx, cancel)
 	char := startsWith(astring)
 	switch {
-		case strings.Contains(char, "A"):
+		case char == "A":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -958,7 +958,7 @@ func AlbumFirst(astring string) string {
 			CheckError(erra, "AlbumFirst: A insertion has failed")
 			return "A Created"
 
-		case strings.Contains(char, "B"):
+		case char == "B":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -968,7 +968,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errb, "AlbumFirst: B insertion has failed")
 			return "B Created"
 
-		case strings.Contains(char, "C"):
+		case char == "C":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -978,7 +978,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errc, "AlbumFirst: C insertion has failed")
 			return "C Created"
 
-		case strings.Contains(char, "D"):
+		case char == "D":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -988,7 +988,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errd, "AlbumFirst: D insertion has failed")
 			return "D Created"
 
-		case strings.Contains(char, "E"):
+		case char == "E":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -998,7 +998,7 @@ func AlbumFirst(astring string) string {
 			CheckError(erre, "AlbumFirst: E insertion has failed")
 			return "E Created"
 
-		case strings.Contains(char, "F"):
+		case char == "F":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1008,7 +1008,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errf, "AlbumFirst: F insertion has failed")
 			return "F Created"
 
-		case strings.Contains(char, "G"):
+		case char == "G":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1018,7 +1018,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errg, "AlbumFirst: G insertion has failed")
 			return "G Created"
 
-		case strings.Contains(char, "H"):
+		case char == "H":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1028,7 +1028,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errh, "AlbumFirst: H insertion has failed")
 			return "H Created"
 
-		case strings.Contains(char, "I"):
+		case char == "I":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1038,7 +1038,7 @@ func AlbumFirst(astring string) string {
 			CheckError(erri, "AlbumFirst: I insertion has failed")
 			return "I Created"
 
-		case strings.Contains(char, "J"):
+		case char == "J":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1048,7 +1048,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errj, "AlbumFirst: J insertion has failed")
 			return "J Created"
 
-		case strings.Contains(char, "K"):
+		case char == "K":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1058,7 +1058,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errk, "AlbumFirst: K insertion has failed")
 			return "K Created"
 
-		case strings.Contains(char, "L"):
+		case char == "L":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1068,7 +1068,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errl, "AlbumFirst: L insertion has failed")
 			return "L Created"
 
-		case strings.Contains(char, "M"):
+		case char == "M":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1078,7 +1078,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errm, "AlbumFirst: M insertion has failed")
 			return "M Created"
 
-		case strings.Contains(char, "N"):
+		case char == "N":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1088,7 +1088,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errn, "AlbumFirst: N insertion has failed")
 			return "N Created"
 
-		case strings.Contains(char, "O"):
+		case char == "O":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1098,7 +1098,7 @@ func AlbumFirst(astring string) string {
 			CheckError(erro, "AlbumFirst: O insertion has failed")
 			return "O Created"
 
-		case strings.Contains(char, "P"):
+		case char == "P":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1108,7 +1108,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errp, "AlbumFirst: P insertion has failed")
 			return "P Created"
 
-		case strings.Contains(char, "Q"):
+		case char == "Q":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1118,7 +1118,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errq, "AlbumFirst: Q insertion has failed")
 			return "Q Created"
 
-		case strings.Contains(char, "R"):
+		case char == "R":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1128,7 +1128,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errr, "AlbumFirst: R insertion has failed")
 			return "R Created"
 
-		case strings.Contains(char, "S"):
+		case char == "S":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1138,7 +1138,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errs, "AlbumFirst: S insertion has failed")
 			return "S Created"
 
-		case strings.Contains(char, "T"):
+		case char == "T":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1148,7 +1148,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errt, "AlbumFirst: T insertion has failed")
 			return "T Created"
 
-		case strings.Contains(char, "U"):
+		case char == "U":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1158,7 +1158,7 @@ func AlbumFirst(astring string) string {
 			CheckError(erru, "AlbumFirst: U insertion has failed")
 			return "U Created"
 
-		case strings.Contains(char, "V"):
+		case char == "V":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1168,7 +1168,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errv, "AlbumFirst: V insertion has failed")
 			return "V Created"
 
-		case strings.Contains(char, "W"):
+		case char == "W":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1178,7 +1178,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errw, "AlbumFirst: W insertion has failed")
 			return "W Created"
 
-		case strings.Contains(char, "X"):
+		case char == "X":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
@@ -1188,7 +1188,7 @@ func AlbumFirst(astring string) string {
 			CheckError(errx, "AlbumFirst: X insertion has failed")
 			return "X Created"
 
-		case strings.Contains(char, "Z"):
+		case char == "Z":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 			defer Close(client, ctx, cancel)
