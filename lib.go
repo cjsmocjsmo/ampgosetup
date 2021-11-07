@@ -408,8 +408,10 @@ func gDurationInfo(filename string) map[string]string {
 
 func startsWith(astring string) string {
 	if (len(astring) > 3) {
-		if (astring[4:] == "The " || astring[4:] == "the ") {
+		if (astring[3:] == "The" || astring[3:] == "the") {
 			return strings.ToUpper(astring[4:5])
+		} else {
+			return strings.ToUpper(astring[:1])
 		}
 	} else {
 		return strings.ToUpper(astring[:1])
