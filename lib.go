@@ -1199,7 +1199,7 @@ func AlbumFirst(astring string) string {
 	return "None"
 }
 
-func SongFirst(astring string) string {
+func SongFirst() string {
 	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	// CheckError(err, "InsertDurationInfo: Connections has failed")
 	// defer Close(client, ctx, cancel)
@@ -1213,7 +1213,6 @@ func SongFirst(astring string) string {
 		_, err = InsertOne(client, ctx, "songalpha", "A", a)
 		CheckError(err, "SongFirst: a insertion has failed")
 	}
-	
 
 	bAll := AmpgoFind("maindb", "maindb", "titstart", "B")
 	for _, b := range bAll {
