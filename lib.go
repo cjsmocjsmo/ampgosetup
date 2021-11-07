@@ -684,156 +684,256 @@ func InsertDurationInfo(apath string) (string) {
 }
 
 func ArtistFirst(astring string) string {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
-	defer Close(client, ctx, cancel)
+	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	// CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+	// defer Close(client, ctx, cancel)
 	char := startsWith(astring)
 	switch {
 		case strings.Contains(char, "A"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, erra := InsertOne(client, ctx, "artistalpha", "A", item)
 			CheckError(erra, "ArtistFirst: A insertion has failed")
 			return "A Created"
 
 		case strings.Contains(char, "B"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errb := InsertOne(client, ctx, "artistalpha", "B", item)
 			CheckError(errb, "ArtistFirst: B insertion has failed")
 			return "B Created"
 
 		case strings.Contains(char, "C"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errc := InsertOne(client, ctx, "artistalpha", "C", item)
 			CheckError(errc, "ArtistFirst: C insertion has failed")
 			return "C Created"
 
 		case strings.Contains(char, "D"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errd := InsertOne(client, ctx, "artistalpha", "D", item)
 			CheckError(errd, "ArtistFirst: D insertion has failed")
 			return "D Created"
 
 		case strings.Contains(char, "E"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, erre := InsertOne(client, ctx, "artistalpha", "E", item)
 			CheckError(erre, "ArtistFirst: E insertion has failed")
 			return "E Created"
 			
 		case strings.Contains(char, "F"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errf := InsertOne(client, ctx, "artistalpha", "F", item)
 			CheckError(errf, "ArtistFirst: F insertion has failed")
 			return "F Created"
 
 		case strings.Contains(char, "G"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errg := InsertOne(client, ctx, "artistalpha", "G", item)
 			CheckError(errg, "ArtistFirst: G insertion has failed")
 			return "G Created"
 
 		case strings.Contains(char, "H"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errh := InsertOne(client, ctx, "artistalpha", "H", item)
 			CheckError(errh, "ArtistFirst: H insertion has failed")
 			return "H Created"
 
 		case strings.Contains(char, "I"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, erri := InsertOne(client, ctx, "artistalpha", "I", item)
 			CheckError(erri, "ArtistFirst: I insertion has failed")
 			return "I Created"
 
 		case strings.Contains(char, "J"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errj := InsertOne(client, ctx, "artistalpha", "J", item)
 			CheckError(errj, "ArtistFirst: J insertion has failed")
 			return "J Created"
 
 		case strings.Contains(char, "K"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errk := InsertOne(client, ctx, "artistalpha", "K", item)
 			CheckError(errk, "ArtistFirst: K insertion has failed")
 			return "K Created"
 
 		case strings.Contains(char, "L"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errl := InsertOne(client, ctx, "artistalpha", "L", item)
 			CheckError(errl, "ArtistFirst: L insertion has failed")
 			return "L Created"
 
 		case strings.Contains(char, "M"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errm := InsertOne(client, ctx, "artistalpha", "M", item)
 			CheckError(errm, "ArtistFirst: M insertion has failed")
 			return "M Created"
 
 		case strings.Contains(char, "N"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errn := InsertOne(client, ctx, "artistalpha", "N", item)
 			CheckError(errn, "ArtistFirst: N insertion has failed")
 			return "N Created"
 
 		case strings.Contains(char, "O"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, erro := InsertOne(client, ctx, "artistalpha", "O", item)
 			CheckError(erro, "ArtistFirst: O insertion has failed")
 			return "O Created"
 
 		case strings.Contains(char, "P"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errp := InsertOne(client, ctx, "artistalpha", "P", item)
 			CheckError(errp, "ArtistFirst: P insertion has failed")
 			return "P Created"
 
 		case strings.Contains(char, "Q"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errq := InsertOne(client, ctx, "artistalpha", "Q", item)
 			CheckError(errq, "ArtistFirst: Q insertion has failed")
 			return "Q Created"
 
 		case strings.Contains(char, "R"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errr := InsertOne(client, ctx, "artistalpha", "R", item)
 			CheckError(errr, "ArtistFirst: R insertion has failed")
 			return "R Created"
 
 		case strings.Contains(char, "S"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errs := InsertOne(client, ctx, "artistalpha", "S", item)
 			CheckError(errs, "ArtistFirst: S insertion has failed")
 			return "S Created"
 
 		case strings.Contains(char, "T"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errt := InsertOne(client, ctx, "artistalpha", "T", item)
 			CheckError(errt, "ArtistFirst: T insertion has failed")
 			return "T Created"
 
 		case strings.Contains(char, "U"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, erru := InsertOne(client, ctx, "artistalpha", "U", item)
 			CheckError(erru, "ArtistFirst: U insertion has failed")
 			return "U Created"
 
 		case strings.Contains(char, "V"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errv := InsertOne(client, ctx, "artistalpha", "V", item)
 			CheckError(errv, "ArtistFirst: V insertion has failed")
 			return "V Created"
 
 		case strings.Contains(char, "W"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errw := InsertOne(client, ctx, "artistalpha", "W", item)
 			CheckError(errw, "ArtistFirst: W insertion has failed")
 			return "W Created"
 
 		case strings.Contains(char, "X"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errx := InsertOne(client, ctx, "artistalpha", "X", item)
 			CheckError(errx, "ArtistFirst: X insertion has failed")
 			return "X Created"
 
 		case strings.Contains(char, "Z"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"artist": astring}
 			_, errz := InsertOne(client, ctx, "artistalpha", "Z", item)
 			CheckError(errz, "ArtistFirst: Z insertion has failed")
@@ -843,155 +943,256 @@ func ArtistFirst(astring string) string {
 }
 
 func AlbumFirst(astring string) string {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
-	defer Close(client, ctx, cancel)
+	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	// CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+	// defer Close(client, ctx, cancel)
 	char := startsWith(astring)
 	switch {
 		case strings.Contains(char, "A"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, erra := InsertOne(client, ctx, "albumalpha", "A", item)
 			CheckError(erra, "AlbumFirst: A insertion has failed")
 			return "A Created"
 
 		case strings.Contains(char, "B"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errb := InsertOne(client, ctx, "albumalpha", "B", item)
 			CheckError(errb, "AlbumFirst: B insertion has failed")
 			return "B Created"
 
 		case strings.Contains(char, "C"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errc := InsertOne(client, ctx, "albumalpha", "C", item)
 			CheckError(errc, "AlbumFirst: C insertion has failed")
 			return "C Created"
 
 		case strings.Contains(char, "D"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errd := InsertOne(client, ctx, "albumalpha", "D", item)
 			CheckError(errd, "AlbumFirst: D insertion has failed")
 			return "D Created"
 
 		case strings.Contains(char, "E"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, erre := InsertOne(client, ctx, "albumalpha", "E", item)
 			CheckError(erre, "AlbumFirst: E insertion has failed")
 			return "E Created"
 
 		case strings.Contains(char, "F"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errf := InsertOne(client, ctx, "albumalpha", "F", item)
 			CheckError(errf, "AlbumFirst: F insertion has failed")
 			return "F Created"
 
 		case strings.Contains(char, "G"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errg := InsertOne(client, ctx, "albumalpha", "G", item)
 			CheckError(errg, "AlbumFirst: G insertion has failed")
 			return "G Created"
 
 		case strings.Contains(char, "H"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errh := InsertOne(client, ctx, "albumalpha", "H", item)
 			CheckError(errh, "AlbumFirst: H insertion has failed")
 			return "H Created"
 
-		case strings.Contains(char, "I"):			
+		case strings.Contains(char, "I"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, erri := InsertOne(client, ctx, "albumalpha", "I", item)
 			CheckError(erri, "AlbumFirst: I insertion has failed")
 			return "I Created"
 
 		case strings.Contains(char, "J"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errj := InsertOne(client, ctx, "albumalpha", "J", item)
 			CheckError(errj, "AlbumFirst: J insertion has failed")
 			return "J Created"
 
 		case strings.Contains(char, "K"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errk := InsertOne(client, ctx, "albumalpha", "K", item)
 			CheckError(errk, "AlbumFirst: K insertion has failed")
 			return "K Created"
 
-		case strings.Contains(char, "L"):			var item map[string]string = map[string]string{"album": astring}
+		case strings.Contains(char, "L"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
+			var item map[string]string = map[string]string{"album": astring}
 			_, errl := InsertOne(client, ctx, "albumalpha", "L", item)
 			CheckError(errl, "AlbumFirst: L insertion has failed")
 			return "L Created"
 
 		case strings.Contains(char, "M"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errm := InsertOne(client, ctx, "albumalpha", "M", item)
 			CheckError(errm, "AlbumFirst: M insertion has failed")
 			return "M Created"
 
 		case strings.Contains(char, "N"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errn := InsertOne(client, ctx, "albumalpha", "N", item)
 			CheckError(errn, "AlbumFirst: N insertion has failed")
 			return "N Created"
 
 		case strings.Contains(char, "O"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, erro := InsertOne(client, ctx, "albumalpha", "O", item)
 			CheckError(erro, "AlbumFirst: O insertion has failed")
 			return "O Created"
 
 		case strings.Contains(char, "P"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errp := InsertOne(client, ctx, "albumalpha", "P", item)
 			CheckError(errp, "AlbumFirst: P insertion has failed")
 			return "P Created"
 
 		case strings.Contains(char, "Q"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errq := InsertOne(client, ctx, "albumalpha", "Q", item)
 			CheckError(errq, "AlbumFirst: Q insertion has failed")
 			return "Q Created"
 
 		case strings.Contains(char, "R"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errr := InsertOne(client, ctx, "albumalpha", "R", item)
 			CheckError(errr, "AlbumFirst: R insertion has failed")
 			return "R Created"
 
 		case strings.Contains(char, "S"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errs := InsertOne(client, ctx, "albumalpha", "S", item)
 			CheckError(errs, "AlbumFirst: S insertion has failed")
 			return "S Created"
 
 		case strings.Contains(char, "T"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errt := InsertOne(client, ctx, "albumalpha", "T", item)
 			CheckError(errt, "AlbumFirst: T insertion has failed")
 			return "T Created"
 
 		case strings.Contains(char, "U"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, erru := InsertOne(client, ctx, "albumalpha", "U", item)
 			CheckError(erru, "AlbumFirst: U insertion has failed")
 			return "U Created"
 
 		case strings.Contains(char, "V"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errv := InsertOne(client, ctx, "albumalpha", "V", item)
 			CheckError(errv, "AlbumFirst: V insertion has failed")
 			return "V Created"
 
 		case strings.Contains(char, "W"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errw := InsertOne(client, ctx, "albumalpha", "W", item)
 			CheckError(errw, "AlbumFirst: W insertion has failed")
 			return "W Created"
 
 		case strings.Contains(char, "X"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+
 			var item map[string]string = map[string]string{"album": astring}
 			_, errx := InsertOne(client, ctx, "albumalpha", "X", item)
 			CheckError(errx, "AlbumFirst: X insertion has failed")
 			return "X Created"
 
 		case strings.Contains(char, "Z"):
+			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			defer Close(client, ctx, cancel)
+			
 			var item map[string]string = map[string]string{"album": astring}
 			_, errz := InsertOne(client, ctx, "albumalpha", "Z", item)
 			CheckError(errz, "AlbumFirst: Z insertion has failed")
