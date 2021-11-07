@@ -198,6 +198,8 @@ func Setup() {
 		wg99.Wait()
 	}
 	log.Println("AlbumFirst is complete \n")
+
+	SongFirst()
 	
 	log.Println("starting GetPicForAlbum \n")
 	var wg133 sync.WaitGroup
