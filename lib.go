@@ -456,7 +456,6 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
 	CheckError(err2, "UpdateMainDB: maindb insertion has failed")
-	
 	return
 }
 
@@ -536,7 +535,6 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 	for _, song := range fullsonglist {
 		just_songID_list = append(just_songID_list, song["fileID"])
 	}
-
 	//remove double songID entries
 	unique_items := unique(just_songID_list)
 	for _, uitem := range unique_items {
@@ -656,7 +654,6 @@ func CreateRandomPlaylistDB() string {
 	ranDBInfo.PlayListID = uuid
 	ranDBInfo.PlayListCount = "0"
 	ranDBInfo.Playlist = emptylist
-
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
 	defer Close(client, ctx, cancel)
@@ -682,7 +679,6 @@ func InsertDurationInfo(apath string) (string) {
 	_, err2 := InsertOne(client, ctx, "durdb", "durdb", mp3)
 	CheckError(err2, "InsertDurationInfo: durdb insertion has failed")
 	return "durdb Created"
-	
 }
 
 func ArtistFirst(astring string) string {
@@ -1201,4 +1197,277 @@ func AlbumFirst(astring string) string {
 			return "Z Created"
 	}
 	return "None"
+}
+
+func SongFirst(astring string) string {
+	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	// CheckError(err, "InsertDurationInfo: Connections has failed")
+	// defer Close(client, ctx, cancel)
+	
+	aAll := AmpgoFind("maindb", "maindb", "titstart", "A")
+	for _, a := range aAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "A", a)
+		CheckError(err, "SongFirst: a insertion has failed")
+	}
+	
+
+	bAll := AmpgoFind("maindb", "maindb", "titstart", "B")
+	for _, b := range bAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "B", b)
+		CheckError(err, "SongFirst: b insertion has failed")
+	}
+
+	cAll := AmpgoFind("maindb", "maindb", "titstart", "C")
+	for _, c := range cAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "C", c)
+		CheckError(err, "SongFirst: c insertion has failed")
+	}
+
+	dAll := AmpgoFind("maindb", "maindb", "titstart", "D")
+	for _, d := range dAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "D", d)
+		CheckError(err, "SongFirst: d insertion has failed")
+	}
+
+	eAll := AmpgoFind("maindb", "maindb", "titstart", "E")
+	for _, e := range eAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "E", e)
+		CheckError(err, "SongFirst: e insertion has failed")
+	}
+
+	fAll := AmpgoFind("maindb", "maindb", "titstart", "F")
+	for _, f := range fAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "F", f)
+		CheckError(err, "SongFirst: f insertion has failed")
+	}
+	
+	gAll := AmpgoFind("maindb", "maindb", "titstart", "G")
+	for _, g := range gAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "G", g)
+		CheckError(err, "SongFirst: g insertion has failed")
+	}
+
+	hAll := AmpgoFind("maindb", "maindb", "titstart", "H")
+	for _, h := range hAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "H", h)
+		CheckError(err, "SongFirst: h insertion has failed")
+	}
+
+	iAll := AmpgoFind("maindb", "maindb", "titstart", "I")
+	for _, i := range iAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "I", i)
+		CheckError(err, "SongFirst: i insertion has failed")
+	}
+
+	jAll := AmpgoFind("maindb", "maindb", "titstart", "J")
+	for _, j := range jAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "J", j)
+		CheckError(err, "SongFirst: j insertion has failed")
+	}
+
+	kAll := AmpgoFind("maindb", "maindb", "titstart", "K")
+	for _, k := range kAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "K", k)
+		CheckError(err, "SongFirst: k insertion has failed")
+	}
+
+	lAll := AmpgoFind("maindb", "maindb", "titstart", "L")
+	for _, l := range lAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "L", l)
+		CheckError(err, "SongFirst: l insertion has failed")
+	}
+
+	mAll := AmpgoFind("maindb", "maindb", "titstart", "M")
+	for _, m := range mAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "M", m)
+		CheckError(err, "SongFirst: m insertion has failed")
+	}
+
+	nAll := AmpgoFind("maindb", "maindb", "titstart", "N")
+	for _, n := range nAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "N", n)
+		CheckError(err, "SongFirst: n insertion has failed")
+	}
+
+	oAll := AmpgoFind("maindb", "maindb", "titstart", "O")
+	for _, o := range oAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "O", o)
+		CheckError(err, "SongFirst: o insertion has failed")
+	}
+
+	pAll := AmpgoFind("maindb", "maindb", "titstart", "P")
+	for _, p := range pAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "P", p)
+		CheckError(err, "SongFirst: p insertion has failed")
+	}
+
+	qAll := AmpgoFind("maindb", "maindb", "titstart", "Q")
+	for _, q := range qAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "Q", q)
+		CheckError(err, "SongFirst: q insertion has failed")
+	}
+
+	rAll := AmpgoFind("maindb", "maindb", "titstart", "R")
+	for _, r := range rAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "R", r)
+		CheckError(err, "SongFirst: r insertion has failed")
+	}
+
+	sAll := AmpgoFind("maindb", "maindb", "titstart", "S")
+	for _, s := range sAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "S", s)
+		CheckError(err, "SongFirst: s insertion has failed")
+	}
+
+	tAll := AmpgoFind("maindb", "maindb", "titstart", "T")
+	for _, t := range tAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "T", t)
+		CheckError(err, "SongFirst: t insertion has failed")
+	}
+
+	uAll := AmpgoFind("maindb", "maindb", "titstart", "U")
+	for _, u := range uAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "U", u)
+		CheckError(err, "SongFirst: u insertion has failed")
+	}
+
+	vAll := AmpgoFind("maindb", "maindb", "titstart", "V")
+	for _, v := range vAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "V", v)
+		CheckError(err, "SongFirst: v insertion has failed")
+	}
+
+	wAll := AmpgoFind("maindb", "maindb", "titstart", "W")
+	for _, w := range wAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "W", w)
+		CheckError(err, "SongFirst: w insertion has failed")
+	}
+
+	xAll := AmpgoFind("maindb", "maindb", "titstart", "X")
+	for _, x := range xAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "X", x)
+		CheckError(err, "SongFirst: x insertion has failed")
+	}
+
+	yAll := AmpgoFind("maindb", "maindb", "titstart", "Y")
+	for _, y := range yAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "Y", y)
+		CheckError(err, "SongFirst: y insertion has failed")
+	}
+
+	zAll := AmpgoFind("maindb", "maindb", "titstart", "Z")
+	for _, z := range zAll {
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "SongFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		_, err = InsertOne(client, ctx, "songalpha", "Z", z)
+		CheckError(err, "SongFirst: z insertion has failed")
+	}
+
+
+
+
+
+	return "Complete"
 }
