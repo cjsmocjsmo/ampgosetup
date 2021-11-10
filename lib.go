@@ -682,9 +682,7 @@ func InsertDurationInfo(apath string) (string) {
 }
 
 func ArtistFirst(astring string) string {
-	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	// CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
-	// defer Close(client, ctx, cancel)
+	
 	char := startsWith(astring)
 	switch {
 		case char == "A":
@@ -941,14 +939,12 @@ func ArtistFirst(astring string) string {
 }
 
 func AlbumFirst(astring string) string {
-	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	// CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
-	// defer Close(client, ctx, cancel)
+
 	char := startsWith(astring)
 	switch {
 		case char == "A":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst:  Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -958,7 +954,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "B":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -968,7 +964,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "C":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -978,7 +974,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "D":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -988,7 +984,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "E":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -998,7 +994,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "F":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1008,7 +1004,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "G":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1018,7 +1014,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "H":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1028,7 +1024,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "I":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1038,7 +1034,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "J":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1048,7 +1044,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "K":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1058,7 +1054,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "L":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1068,7 +1064,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "M":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1078,7 +1074,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "N":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1088,7 +1084,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "O":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1098,7 +1094,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "P":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1108,7 +1104,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "Q":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1118,7 +1114,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "R":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1128,7 +1124,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "S":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1138,7 +1134,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "T":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1148,7 +1144,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "U":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1158,7 +1154,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "V":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1168,7 +1164,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "W":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1178,7 +1174,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "X":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 
 			var item map[string]string = map[string]string{"album": astring}
@@ -1188,7 +1184,7 @@ func AlbumFirst(astring string) string {
 
 		case char == "Z":
 			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "CreateRandomPlaylistDB: Connections has failed")
+			CheckError(err, "AlbumFirst: Connections has failed")
 			defer Close(client, ctx, cancel)
 			
 			var item map[string]string = map[string]string{"album": astring}
@@ -1200,9 +1196,6 @@ func AlbumFirst(astring string) string {
 }
 
 func SongFirst() string {
-	// client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-	// CheckError(err, "InsertDurationInfo: Connections has failed")
-	// defer Close(client, ctx, cancel)
 	
 	aAll := AmpgoFind("maindb", "maindb", "titstart", "A")
 	for _, a := range aAll {
