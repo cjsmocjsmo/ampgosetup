@@ -1485,9 +1485,9 @@ func SongFirst() string {
 
 	t1 := aa + bb + cc + dd + ee + ff + gg + hh + ii + jj + kk + ll + mm
 	t2 := nn + oo + pp + qq + rr + ss + tt + uu + vv + ww + xx + yy + zz
-	total := t1 + t2
-
-	var total2 map[string]int = map[string]int{"total":total}
+	tot := t1 + t2
+	total, _ := strconv.Itoa(tot)
+	var total2 map[string]string = map[string]string{"total":total}
 
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "SongFirst: Connections has failed")
