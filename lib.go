@@ -1198,6 +1198,7 @@ func AlbumFirst(astring string) string {
 func SongFirst() string {
 	
 	aAll := AmpgoFind("maindb", "maindb", "titstart", "A")
+	aa := len(aAll)
 	for _, a := range aAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1208,6 +1209,7 @@ func SongFirst() string {
 	}
 
 	bAll := AmpgoFind("maindb", "maindb", "titstart", "B")
+	bb := len(bAll)
 	for _, b := range bAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1218,6 +1220,7 @@ func SongFirst() string {
 	}
 
 	cAll := AmpgoFind("maindb", "maindb", "titstart", "C")
+	cc := len(cAll)
 	for _, c := range cAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1228,6 +1231,7 @@ func SongFirst() string {
 	}
 
 	dAll := AmpgoFind("maindb", "maindb", "titstart", "D")
+	dd := len(dAll)
 	for _, d := range dAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1238,6 +1242,7 @@ func SongFirst() string {
 	}
 
 	eAll := AmpgoFind("maindb", "maindb", "titstart", "E")
+	ee := len(eAll)
 	for _, e := range eAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1248,6 +1253,7 @@ func SongFirst() string {
 	}
 
 	fAll := AmpgoFind("maindb", "maindb", "titstart", "F")
+	ff := len(fAll)
 	for _, f := range fAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1258,6 +1264,7 @@ func SongFirst() string {
 	}
 	
 	gAll := AmpgoFind("maindb", "maindb", "titstart", "G")
+	gg := len(gAll)
 	for _, g := range gAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1268,6 +1275,7 @@ func SongFirst() string {
 	}
 
 	hAll := AmpgoFind("maindb", "maindb", "titstart", "H")
+	hh := len(hAll)
 	for _, h := range hAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1278,6 +1286,7 @@ func SongFirst() string {
 	}
 
 	iAll := AmpgoFind("maindb", "maindb", "titstart", "I")
+	ii := len(iAll)
 	for _, i := range iAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1288,6 +1297,7 @@ func SongFirst() string {
 	}
 
 	jAll := AmpgoFind("maindb", "maindb", "titstart", "J")
+	jj := len(jAll)
 	for _, j := range jAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1298,6 +1308,7 @@ func SongFirst() string {
 	}
 
 	kAll := AmpgoFind("maindb", "maindb", "titstart", "K")
+	kk := len(kAll)
 	for _, k := range kAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1308,6 +1319,7 @@ func SongFirst() string {
 	}
 
 	lAll := AmpgoFind("maindb", "maindb", "titstart", "L")
+	ll := len(lAll)
 	for _, l := range lAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1318,6 +1330,7 @@ func SongFirst() string {
 	}
 
 	mAll := AmpgoFind("maindb", "maindb", "titstart", "M")
+	mm := len(mAll)
 	for _, m := range mAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1328,6 +1341,7 @@ func SongFirst() string {
 	}
 
 	nAll := AmpgoFind("maindb", "maindb", "titstart", "N")
+	nn := len(nAll)
 	for _, n := range nAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1338,6 +1352,7 @@ func SongFirst() string {
 	}
 
 	oAll := AmpgoFind("maindb", "maindb", "titstart", "O")
+	oo := len(oAll)
 	for _, o := range oAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1348,6 +1363,7 @@ func SongFirst() string {
 	}
 
 	pAll := AmpgoFind("maindb", "maindb", "titstart", "P")
+	pp := len(pAll)
 	for _, p := range pAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1358,6 +1374,7 @@ func SongFirst() string {
 	}
 
 	qAll := AmpgoFind("maindb", "maindb", "titstart", "Q")
+	qq := len(qAll)
 	for _, q := range qAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1368,6 +1385,7 @@ func SongFirst() string {
 	}
 
 	rAll := AmpgoFind("maindb", "maindb", "titstart", "R")
+	rr := len(rAll)
 	for _, r := range rAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1378,6 +1396,7 @@ func SongFirst() string {
 	}
 
 	sAll := AmpgoFind("maindb", "maindb", "titstart", "S")
+	ss := len(sAll)
 	for _, s := range sAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1388,6 +1407,7 @@ func SongFirst() string {
 	}
 
 	tAll := AmpgoFind("maindb", "maindb", "titstart", "T")
+	tt := len(tAll)
 	for _, t := range tAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1398,6 +1418,7 @@ func SongFirst() string {
 	}
 
 	uAll := AmpgoFind("maindb", "maindb", "titstart", "U")
+	uu := len(uAll)
 	for _, u := range uAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1408,6 +1429,7 @@ func SongFirst() string {
 	}
 
 	vAll := AmpgoFind("maindb", "maindb", "titstart", "V")
+	vv := len(vAll)
 	for _, v := range vAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1418,6 +1440,7 @@ func SongFirst() string {
 	}
 
 	wAll := AmpgoFind("maindb", "maindb", "titstart", "W")
+	ww := len(wAll)
 	for _, w := range wAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1428,6 +1451,7 @@ func SongFirst() string {
 	}
 
 	xAll := AmpgoFind("maindb", "maindb", "titstart", "X")
+	xx := len(xAll)
 	for _, x := range xAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1438,6 +1462,7 @@ func SongFirst() string {
 	}
 
 	yAll := AmpgoFind("maindb", "maindb", "titstart", "Y")
+	yy := len(yAll)
 	for _, y := range yAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1448,6 +1473,7 @@ func SongFirst() string {
 	}
 
 	zAll := AmpgoFind("maindb", "maindb", "titstart", "Z")
+	zz := len(zAll)
 	for _, z := range zAll {
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 		CheckError(err, "SongFirst: Connections has failed")
@@ -1457,9 +1483,18 @@ func SongFirst() string {
 		CheckError(err, "SongFirst: z insertion has failed")
 	}
 
+	t1 := aa + bb + cc + dd + ee + ff + gg + hh + ii + jj + kk + ll + mm
+	t2 := nn + oo + pp + qq + rr + ss + tt + uu + vv + ww + xx + yy + zz
+	total := t1 + t2
 
+	var total2 map[string]int = map[string]int{"total":total}
 
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "SongFirst: Connections has failed")
+	defer Close(client, ctx, cancel)
 
+	_, err = InsertOne(client, ctx, "songtotal", "total", &total2)
+	CheckError(err, "SongFirst: z insertion has failed")
 
 	return "Complete"
 }

@@ -57,7 +57,7 @@ func durationVisit(pAth string, f os.FileInfo, err error) error {
 	if ext == ".mp3info" {
 		InsertDurationInfo(pAth)
 	} else {
-		fmt.Println("WTF are you? You must be a Dir")
+		fmt.Println("WTF are you?")
 		fmt.Println(pAth)
 	}
 	return nil
