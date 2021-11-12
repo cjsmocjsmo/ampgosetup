@@ -67,21 +67,22 @@ var titlepage int = 0
 var ii int = 0
 func visit(pAth string, f os.FileInfo, err error) error {
 	log.Println(pAth)
-	if ii < OffSet {
-		ii++
-		titlepage = 1
-	} else if ii % OffSet == 0 {
-		ii++
-		titlepage++
-	} else {
-		fmt.Println("I'm Not A Page")
-		ii++
-		titlepage = titlepage + 0
-	}
+
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3" {
+		if ii < OffSet {
+			ii++
+			titlepage = 1
+		} else if ii % OffSet == 0 {
+			ii++
+			titlepage++
+		} else {
+			fmt.Println("I'm Not A Page")
+			ii++
+			titlepage = titlepage + 0
+		}
 		TaGmap(pAth, titlepage, ii)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
