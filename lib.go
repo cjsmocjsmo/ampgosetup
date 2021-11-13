@@ -643,12 +643,18 @@ type randDb struct {
 	PlayListName string `bson:"playlistname"`
 	PlayListID string `bson:"playlistID"`
 	PlayListCount string `bson:"playlistcount"`
-	Playlist []string `bson:"playlist"`
+	Playlist []map[string]string `bson:"playlist"`
 }
 
 func CreateRandomPlaylistDB() string {
 	var ranDBInfo randDb
-	var emptylist []string = []string{"No Songs Found"}
+
+
+	var emptylist []map[string]string;
+	var emptyitem map[string]string = map[string]string{"None":"No Songs Found"}
+	emptylist = append(emptylist, emptyitem)
+
+
 	uuid, _ := UUID()
 	ranDBInfo.PlayListName = "EmptyRandomPlaylist"
 	ranDBInfo.PlayListID = uuid
