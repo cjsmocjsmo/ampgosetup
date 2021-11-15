@@ -273,6 +273,8 @@ func Setup() {
 	CreateRandomPicsDB()
 
 	CreateRandomPlaylistDB()
+
+	CreateCurrentPlayListNameDB()
 	
 	var lines = []string{
 		"Go",

@@ -648,13 +648,9 @@ type randDb struct {
 
 func CreateRandomPlaylistDB() string {
 	var ranDBInfo randDb
-
-
 	var emptylist []map[string]string;
 	var emptyitem map[string]string = map[string]string{"None":"No Songs Found"}
 	emptylist = append(emptylist, emptyitem)
-
-
 	uuid, _ := UUID()
 	ranDBInfo.PlayListName = "EmptyRandomPlaylist"
 	ranDBInfo.PlayListID = uuid
@@ -686,6 +682,18 @@ func InsertDurationInfo(apath string) (string) {
 	CheckError(err2, "InsertDurationInfo: durdb insertion has failed")
 	return "durdb Created"
 }
+
+
+func CreateCurrentPlayListNameDB() string {
+	var curPlayListName map[string]string = map[string]string{"curplaylistname": "None"}
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "InsertDurationInfo: Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "curplaylistname", "curplaylistname", &curPlayListName)
+	CheckError(err2, "InsertDurationInfo: curplaylistname insertion has failed")
+	return "curplaylistname Created"
+}
+
 
 func ArtistFirst(astring string) string {
 	
