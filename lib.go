@@ -685,7 +685,7 @@ func InsertDurationInfo(apath string) (string) {
 
 
 func CreateCurrentPlayListNameDB() string {
-	var curPlayListName map[string]string = map[string]string{"curplaylistname": "None", "curplaylistID": "None"}
+	var curPlayListName map[string]string = map[string]string{"record": "1", "curplaylistname": "None", "curplaylistID": "None"}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "InsertDurationInfo: Connections has failed")
 	defer Close(client, ctx, cancel)
