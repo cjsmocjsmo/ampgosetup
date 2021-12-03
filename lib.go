@@ -285,7 +285,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 		TaGmaP.ArtStart = "None"
 		TaGmaP.AlbStart = "None"
 		TaGmaP.TitStart = "None"
-		TaGmaP.Howl = "null"
+		TaGmaP.Howl = ""
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 		CheckError(err, "TaGmap: Connections has failed")
 		defer Close(client, ctx, cancel)
