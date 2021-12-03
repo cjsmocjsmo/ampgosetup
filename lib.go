@@ -45,6 +45,7 @@ type Tagmap struct {
 	ArtStart    string `bson:"artstart"`
 	AlbStart    string `bson:"albstart"`
 	TitStart    string `bson:"titstart"`
+	Howl        string `bson:"howl"`
 }
 
 type ArtVieW2 struct {
@@ -284,6 +285,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 		TaGmaP.ArtStart = "None"
 		TaGmaP.AlbStart = "None"
 		TaGmaP.TitStart = "None"
+		TaGmaP.Howl = "null"
 		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 		CheckError(err, "TaGmap: Connections has failed")
 		defer Close(client, ctx, cancel)
@@ -451,6 +453,7 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.ArtStart = startsWith(m2["artist"])
 	Doko.AlbStart = strings.ToUpper(m2["album"][:1])
 	Doko.TitStart = strings.ToUpper(m2["title"][:1])
+	Doko.Howl = m2["howl"]
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "UpdateMainDB: Connections has failed")
 	defer Close(client, ctx, cancel)
