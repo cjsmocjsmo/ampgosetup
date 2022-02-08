@@ -21,16 +21,16 @@
 package ampgosetup
 
 import (
-	"os"
 	"fmt"
 	"log"
+	"os"
 	"path"
+	"runtime"
 	"sync"
 	"time"
-	"runtime"
 	// "context"
-	"strconv"
 	"path/filepath"
+	"strconv"
 )
 
 var OFFSET string = os.Getenv("AMPGO_OFFSET")
@@ -65,6 +65,7 @@ func durationVisit(pAth string, f os.FileInfo, err error) error {
 
 var titlepage int = 0
 var ii int = 0
+
 func visit(pAth string, f os.FileInfo, err error) error {
 	log.Println(pAth)
 
@@ -75,7 +76,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		if ii < OffSet {
 			ii++
 			titlepage = 1
-		} else if ii % OffSet == 0 {
+		} else if ii%OffSet == 0 {
 			ii++
 			titlepage++
 		} else {
@@ -95,10 +96,10 @@ func visit(pAth string, f os.FileInfo, err error) error {
 func SetUpCheck() {
 	Setup()
 	// fileinfo, err := os.Stat("setup.txt")
-    // if os.IsNotExist(err) {
+	// if os.IsNotExist(err) {
 	// 	Setup()
-    // }
-    // log.Println(fileinfo)
+	// }
+	// log.Println(fileinfo)
 }
 
 //SetUp is exported to main
@@ -117,21 +118,21 @@ func Setup() {
 	log.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	log.Println("starting duration walk \n")
+	log.Println("starting duration walk")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
-	log.Println("duration walk is complete \n")
+	log.Println("duration walk is complete")
 
-	log.Println("starting walk \n")
+	log.Println("starting walk")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
-	log.Println("walk is complete \n")
+	log.Println("walk is complete")
 
-	log.Println("starting GetDistAlbumMeta1 \n")
+	log.Println("starting GetDistAlbumMeta1")
 	dalb := AmpgoDistinct("tempdb1", "meta1", "album")
 	fmt.Println(dalb)
 	log.Println(dalb)
-	log.Println("GetDistAlbumMeta1 is complete \n")
+	log.Println("GetDistAlbumMeta1 is complete ")
 
-	log.Println("starting InsAlbumID \n")
+	log.Println("starting InsAlbumID")
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
@@ -141,11 +142,11 @@ func Setup() {
 		}(alb)
 		wg1.Wait()
 	}
-	log.Println("InsAlbumID is complete \n")
+	log.Println("InsAlbumID is complete ")
 
 	log.Println("starting GDistArtist")
 	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
-	log.Println("GDistArtist is complete \n")
+	log.Println("GDistArtist is complete ")
 
 	log.Println("starting InsArtistID")
 	var wg2 sync.WaitGroup
@@ -157,11 +158,11 @@ func Setup() {
 		}(art)
 		wg2.Wait()
 	}
-	log.Println("InsArtistID is complete \n")
+	log.Println("InsArtistID is complete ")
 
 	log.Println("starting GetTitleOffSetAll")
 	AllObj := GetTitleOffsetAll()
-	log.Println("GetTitleOffSetAll is complete \n")
+	log.Println("GetTitleOffSetAll is complete ")
 
 	log.Println("starting UpdateMainDB")
 	var wg3 sync.WaitGroup
@@ -174,9 +175,9 @@ func Setup() {
 		}(blob)
 		wg3.Wait()
 	}
-	log.Println("UpdateMainDB is complete \n")
+	log.Println("UpdateMainDB is complete ")
 
-	log.Println("starting ArtistFirst \n")
+	log.Println("starting ArtistFirst ")
 	var wg99a sync.WaitGroup
 	for _, art := range dart {
 		wg99a.Add(1)
@@ -186,9 +187,9 @@ func Setup() {
 		}(art)
 		wg99a.Wait()
 	}
-	log.Println("ArtistFirst is complete \n")
+	log.Println("ArtistFirst is complete ")
 
-	log.Println("starting AlbumFirst \n")
+	log.Println("starting AlbumFirst ")
 	var wg99 sync.WaitGroup
 	for _, alb := range dalb {
 		wg99.Add(1)
@@ -198,11 +199,11 @@ func Setup() {
 		}(alb)
 		wg99.Wait()
 	}
-	log.Println("AlbumFirst is complete \n")
+	log.Println("AlbumFirst is complete ")
 
 	SongFirst()
-	
-	log.Println("starting GetPicForAlbum \n")
+
+	log.Println("starting GetPicForAlbum ")
 	var wg133 sync.WaitGroup
 	for _, alb := range dalb {
 		wg133.Add(1)
@@ -213,12 +214,12 @@ func Setup() {
 		}(alb)
 		wg133.Wait()
 	}
-	log.Println("GetPicForAlbum is complete \n")
+	log.Println("GetPicForAlbum is complete")
 
 	// //AggArtist
 	log.Println("starting UpdateMainDB")
 	DistArtist := GDistArtist2()
-	log.Println("GDistArtist2 is complete \n")
+	log.Println("GDistArtist2 is complete ")
 
 	log.Println("starting GArtInfo2")
 	var wg5 sync.WaitGroup
@@ -226,14 +227,14 @@ func Setup() {
 	for artIdx, DArtt := range DistArtist {
 		if artIdx < OffSet {
 			artpage = 1
-		} else if artIdx % OffSet == 0 {
+		} else if artIdx%OffSet == 0 {
 			artpage++
 		} else {
 			artpage = artpage + 0
 		}
-		
+
 		APL := ArtPipline(DArtt, artpage, artIdx)
-		
+
 		wg5.Add(1)
 		go func(APL ArtVieW2) {
 			InsArtPipeline(APL)
@@ -258,7 +259,7 @@ func Setup() {
 		wg6.Add(1)
 		if albIdx < OffSet {
 			albpage = 1
-		} else if albIdx % OffSet == 0 {
+		} else if albIdx%OffSet == 0 {
 			albpage++
 		} else {
 			albpage = albpage + 0
@@ -275,7 +276,7 @@ func Setup() {
 	CreateRandomPlaylistDB()
 
 	CreateCurrentPlayListNameDB()
-	
+
 	var lines = []string{
 		"Go",
 		"is",
@@ -289,34 +290,33 @@ func Setup() {
 	}
 
 	f, err := os.Create("setup.txt")
-    if err != nil {
-        log.Fatal(err)
-    }
-    // remember to close the file
-    defer f.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// remember to close the file
+	defer f.Close()
 
-    for _, line := range lines {
-        _, err := f.WriteString(line + "\n")
-        if err != nil {
-            log.Fatal(err)
-        }
-    }
+	for _, line := range lines {
+		_, err := f.WriteString(line + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 
 	// fmt.Println("AlbumOffSet is complete")
 	t2 := time.Now().Sub(ti)
 	fmt.Println(t2)
 	fmt.Println("THE END")
 
-
-// func Update() {
-// 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
-// 	// If the file doesn't exist, create it or append to the file
-// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	log.SetOutput(file)
-// 	log.Println("Logging started")
+	// func Update() {
+	// 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
+	// 	// If the file doesn't exist, create it or append to the file
+	// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// 	log.SetOutput(file)
+	// 	log.Println("Logging started")
 
 	// ti = time.Now()
 	// fmt.Println(ti)
@@ -324,5 +324,3 @@ func Setup() {
 	// runtime.GOMAXPROCS(runtime.NumCPU())
 
 }
-
-

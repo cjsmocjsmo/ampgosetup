@@ -1,29 +1,29 @@
 package ampgosetup
 
 import (
-	"os"
-	"log"
-	"fmt"
-	"time"
 	"context"
-	"strings"
-	"strconv"
-	"io/ioutil"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
-	"path/filepath"
+	"fmt"
 	"github.com/bogem/id3v2"
 	"github.com/disintegration/imaging"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"time"
 )
 
 // Tagmap exported
 type Tagmap struct {
 	Dirpath     string `bson:"dirpath"`
-	Filename    string `bson:"filename"` 
+	Filename    string `bson:"filename"`
 	Extension   string `bson:"extension"`
 	FileID      string `bson:"fileID"`
 	Filesize    string `bson:"filesize"`
@@ -35,17 +35,17 @@ type Tagmap struct {
 	Genre       string `bson:"genre"`
 	TitlePage   string `bson:"titlepage"`
 	PicID       string `bson:"picID"`
-	PicDB       string `bson:"picDB"` 
+	PicDB       string `bson:"picDB"`
 	PicPath     string `bson:"picPath"`
 	PicHttpAddr string `bson:"picHttpAddr"`
 	Idx         string `bson:"idx"`
 	HttpAddr    string `bson:"httpaddr"`
-	Duration	string `bson:"duration"`
+	Duration    string `bson:"duration"`
 
-	ArtStart    string `bson:"artstart"`
-	AlbStart    string `bson:"albstart"`
-	TitStart    string `bson:"titstart"`
-	Howl        string `bson:"howl"`
+	ArtStart string `bson:"artstart"`
+	AlbStart string `bson:"albstart"`
+	TitStart string `bson:"titstart"`
+	Howl     string `bson:"howl"`
 }
 
 type ArtVieW2 struct {
@@ -104,15 +104,15 @@ func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc)
 }
 
 func Connect(uri string) (*mongo.Client, context.Context, context.CancelFunc, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 30 * time.Second)
-    client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
-    return client, ctx, cancel, err
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	return client, ctx, cancel, err
 }
 
 func InsertOne(client *mongo.Client, ctx context.Context, dataBase, col string, doc interface{}) (*mongo.InsertOneResult, error) {
-    collection := client.Database(dataBase).Collection(col)
-    result, err := collection.InsertOne(ctx, doc)
-    return result, err
+	collection := client.Database(dataBase).Collection(col)
+	result, err := collection.InsertOne(ctx, doc)
+	return result, err
 }
 
 func Query(client *mongo.Client, ctx context.Context, dataBase, col string, query, field interface{}) (result *mongo.Cursor, err error) {
@@ -155,7 +155,7 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 
 func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
 	filter := bson.D{}
-	if (filtertype == "None" && filterstring == "None") {
+	if filtertype == "None" && filterstring == "None" {
 		filter = bson.D{{}}
 	} else {
 		filter = bson.D{{filtertype, filterstring}}
@@ -302,9 +302,8 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 func InsAlbumID(alb string) {
 	uuid, _ := UUID()
-	Albid := map[string]string{"album" : alb, "albumID": uuid}
+	Albid := map[string]string{"album": alb, "albumID": uuid}
 	AmpgoInsertOne("tempdb2", "albumid", Albid)
-	return
 }
 
 func startLibLogging() string {
@@ -327,7 +326,9 @@ func GetPicForAlbum(alb string) map[string]string {
 	collection := client.Database("maindb").Collection("maindb")
 	var albuminfo Tagmap
 	err = collection.FindOne(context.Background(), filter).Decode(&albuminfo)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Printf("GetPicForAlbum: %s this is album", alb)
 	log.Printf("GetPicForAlbum: %s this is AlbumID", albuminfo.AlbumID)
 	log.Printf("GetPicForAlbum: %s this is PicHttpAddr", albuminfo.PicHttpAddr)
@@ -344,9 +345,8 @@ func GetPicForAlbum(alb string) map[string]string {
 
 func InsArtistID(art string) {
 	uuid, _ := UUID()
-	Artid := map[string]string{"artist" : art, "artistID" : uuid}
+	Artid := map[string]string{"artist": art, "artistID": uuid}
 	AmpgoInsertOne("tempdb2", "artistid", Artid)
-	return
 }
 
 func GetTitleOffsetAll() (Main2SL []map[string]string) {
@@ -356,7 +356,9 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	CheckError(err, "GetTitleOffsetAll: MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
 	cur, err := collection.Find(context.Background(), filter)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	if err = cur.All(context.Background(), &Main2SL); err != nil {
 		log.Println("GetTitleOffsetAll: cur.All has failed")
 		log.Fatal(err)
@@ -372,7 +374,7 @@ func gArtistInfo(Art string) map[string]string {
 	collection := client.Database("tempdb2").Collection("artistid")
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
-	if err != nil { 
+	if err != nil {
 		log.Println("gArtistInfo: has failed")
 		log.Fatal(err)
 	}
@@ -403,14 +405,16 @@ func gDurationInfo(filename string) map[string]string {
 	collection := client.Database("durdb").Collection("durdb")
 	var durinfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	log.Println(durinfo)
 	return durinfo
 }
 
 func startsWith(astring string) string {
-	if (len(astring) > 3) {
-		if (astring[3:] == "The" || astring[3:] == "the") {
+	if len(astring) > 3 {
+		if astring[3:] == "The" || astring[3:] == "the" {
 			return strings.ToUpper(astring[4:5])
 		} else {
 			return strings.ToUpper(astring[:1])
@@ -418,7 +422,6 @@ func startsWith(astring string) string {
 	} else {
 		return strings.ToUpper(astring[:1])
 	}
-	return "None"
 }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
@@ -472,15 +475,15 @@ func GDistArtist2() (dArtAll []map[string]string) {
 }
 
 func unique(arr []string) []string {
-    occured := map[string]bool{}
-    result := []string{}
-    for e := range arr {
-        if occured[arr[e]] != true {
-            occured[arr[e]] = true
-            result = append(result, arr[e])
-        }
-    }
-    return result
+	occured := map[string]bool{}
+	result := []string{}
+	for e := range arr {
+		if occured[arr[e]] != true {
+			occured[arr[e]] = true
+			result = append(result, arr[e])
+		}
+	}
+	return result
 }
 
 func create_just_albumID_list(alist []map[string]string) (just_albumID_list []string) {
@@ -498,11 +501,11 @@ func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map
 		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
 		final_alblist = append(final_alblist, albINFO)
 	}
-	return 
+	return
 }
 
 func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2) {
-	dirtyalblist := AmpgoFind("maindb","maindb", "artistID", artmap["artistID"]) //[]map[string]string
+	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
 	results2 := get_albums_for_artist(dirtyalblist)
 	albc := len(results2)
 	albcount := strconv.Itoa(albc)
@@ -549,7 +552,7 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 
 // // // AlbPipeline exported
 func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2) {
-	dirtysonglist := AmpgoFind("maindb","maindb", "albumID", DAlb["albumID"])
+	dirtysonglist := AmpgoFind("maindb", "maindb", "albumID", DAlb["albumID"])
 	results := get_songs_for_album(dirtysonglist)
 	songcount := len(results)
 	MyAlbview.Artist = DAlb["artist"]
@@ -562,7 +565,7 @@ func AlbPipeline(DAlb map[string]string, page int, idx int) (MyAlbview AlbVieW2)
 	MyAlbview.AlbumPage = strconv.Itoa(page)
 	MyAlbview.Idx = strconv.Itoa(idx)
 	MyAlbview.PicHttpAddr = DAlb["picHttpAddr"]
-	return 
+	return
 }
 
 // //InsAlbViewID exported
@@ -572,7 +575,6 @@ func InsAlbViewID(MyAlbview AlbVieW2) {
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "albumview", "albumview", &MyAlbview)
 	CheckError(err2, "InsAlbViewID: AmpgoInsertOne has failed")
-	return
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -589,7 +591,7 @@ func CreateRandomPicsDB() []Imageinfomap {
 	for i, v := range thumb_glob {
 		if i < 5 {
 			page = 1
-		} else if i % 5 == 0 {
+		} else if i%5 == 0 {
 			page++
 		} else {
 			page = page + 0
@@ -643,16 +645,16 @@ func create_image_http_addr(aimage string) string {
 }
 
 type randDb struct {
-	PlayListName string `bson:"playlistname"`
-	PlayListID string `bson:"playlistID"`
-	PlayListCount string `bson:"playlistcount"`
-	Playlist []map[string]string `bson:"playlist"`
+	PlayListName  string              `bson:"playlistname"`
+	PlayListID    string              `bson:"playlistID"`
+	PlayListCount string              `bson:"playlistcount"`
+	Playlist      []map[string]string `bson:"playlist"`
 }
 
 func CreateRandomPlaylistDB() string {
 	var ranDBInfo randDb
-	var emptylist []map[string]string;
-	var emptyitem map[string]string = map[string]string{"None":"No Songs Found"}
+	var emptylist []map[string]string
+	var emptyitem map[string]string = map[string]string{"None": "No Songs Found"}
 	emptylist = append(emptylist, emptyitem)
 	uuid, _ := UUID()
 	ranDBInfo.PlayListName = "EmptyRandomPlaylist"
@@ -676,7 +678,7 @@ func ReadDurationFile(apath string) map[string]string {
 	return mp3info
 }
 
-func InsertDurationInfo(apath string) (string) {
+func InsertDurationInfo(apath string) string {
 	mp3 := ReadDurationFile(apath)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "InsertDurationInfo: Connections has failed")
@@ -685,7 +687,6 @@ func InsertDurationInfo(apath string) (string) {
 	CheckError(err2, "InsertDurationInfo: durdb insertion has failed")
 	return "durdb Created"
 }
-
 
 func CreateCurrentPlayListNameDB() string {
 	var curPlayListName map[string]string = map[string]string{"record": "1", "curplaylistname": "None", "curplaylistID": "None"}
@@ -697,260 +698,259 @@ func CreateCurrentPlayListNameDB() string {
 	return "curplaylistname Created"
 }
 
-
 func ArtistFirst(astring string) string {
-	
+
 	char := startsWith(astring)
 	switch {
-		case char == "A":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "A":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, erra := InsertOne(client, ctx, "artistalpha", "A", item)
-			CheckError(erra, "ArtistFirst: A insertion has failed")
-			return "A Created"
+		var item map[string]string = map[string]string{"artist": astring}
+		_, erra := InsertOne(client, ctx, "artistalpha", "A", item)
+		CheckError(erra, "ArtistFirst: A insertion has failed")
+		return "A Created"
 
-		case char == "B":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "B":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errb := InsertOne(client, ctx, "artistalpha", "B", item)
-			CheckError(errb, "ArtistFirst: B insertion has failed")
-			return "B Created"
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errb := InsertOne(client, ctx, "artistalpha", "B", item)
+		CheckError(errb, "ArtistFirst: B insertion has failed")
+		return "B Created"
 
-		case char == "C":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "C":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errc := InsertOne(client, ctx, "artistalpha", "C", item)
-			CheckError(errc, "ArtistFirst: C insertion has failed")
-			return "C Created"
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errc := InsertOne(client, ctx, "artistalpha", "C", item)
+		CheckError(errc, "ArtistFirst: C insertion has failed")
+		return "C Created"
 
-		case char == "D":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "D":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errd := InsertOne(client, ctx, "artistalpha", "D", item)
-			CheckError(errd, "ArtistFirst: D insertion has failed")
-			return "D Created"
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errd := InsertOne(client, ctx, "artistalpha", "D", item)
+		CheckError(errd, "ArtistFirst: D insertion has failed")
+		return "D Created"
 
-		case char == "E":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "E":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, erre := InsertOne(client, ctx, "artistalpha", "E", item)
-			CheckError(erre, "ArtistFirst: E insertion has failed")
-			return "E Created"
-			
-		case char == "F":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, erre := InsertOne(client, ctx, "artistalpha", "E", item)
+		CheckError(erre, "ArtistFirst: E insertion has failed")
+		return "E Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errf := InsertOne(client, ctx, "artistalpha", "F", item)
-			CheckError(errf, "ArtistFirst: F insertion has failed")
-			return "F Created"
+	case char == "F":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "G":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errf := InsertOne(client, ctx, "artistalpha", "F", item)
+		CheckError(errf, "ArtistFirst: F insertion has failed")
+		return "F Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errg := InsertOne(client, ctx, "artistalpha", "G", item)
-			CheckError(errg, "ArtistFirst: G insertion has failed")
-			return "G Created"
+	case char == "G":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "H":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errg := InsertOne(client, ctx, "artistalpha", "G", item)
+		CheckError(errg, "ArtistFirst: G insertion has failed")
+		return "G Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errh := InsertOne(client, ctx, "artistalpha", "H", item)
-			CheckError(errh, "ArtistFirst: H insertion has failed")
-			return "H Created"
+	case char == "H":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "I":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errh := InsertOne(client, ctx, "artistalpha", "H", item)
+		CheckError(errh, "ArtistFirst: H insertion has failed")
+		return "H Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, erri := InsertOne(client, ctx, "artistalpha", "I", item)
-			CheckError(erri, "ArtistFirst: I insertion has failed")
-			return "I Created"
+	case char == "I":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "J":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, erri := InsertOne(client, ctx, "artistalpha", "I", item)
+		CheckError(erri, "ArtistFirst: I insertion has failed")
+		return "I Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errj := InsertOne(client, ctx, "artistalpha", "J", item)
-			CheckError(errj, "ArtistFirst: J insertion has failed")
-			return "J Created"
+	case char == "J":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "K":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errj := InsertOne(client, ctx, "artistalpha", "J", item)
+		CheckError(errj, "ArtistFirst: J insertion has failed")
+		return "J Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errk := InsertOne(client, ctx, "artistalpha", "K", item)
-			CheckError(errk, "ArtistFirst: K insertion has failed")
-			return "K Created"
+	case char == "K":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "L":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errk := InsertOne(client, ctx, "artistalpha", "K", item)
+		CheckError(errk, "ArtistFirst: K insertion has failed")
+		return "K Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errl := InsertOne(client, ctx, "artistalpha", "L", item)
-			CheckError(errl, "ArtistFirst: L insertion has failed")
-			return "L Created"
+	case char == "L":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "M":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errl := InsertOne(client, ctx, "artistalpha", "L", item)
+		CheckError(errl, "ArtistFirst: L insertion has failed")
+		return "L Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errm := InsertOne(client, ctx, "artistalpha", "M", item)
-			CheckError(errm, "ArtistFirst: M insertion has failed")
-			return "M Created"
+	case char == "M":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "N":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errm := InsertOne(client, ctx, "artistalpha", "M", item)
+		CheckError(errm, "ArtistFirst: M insertion has failed")
+		return "M Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errn := InsertOne(client, ctx, "artistalpha", "N", item)
-			CheckError(errn, "ArtistFirst: N insertion has failed")
-			return "N Created"
+	case char == "N":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "O":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errn := InsertOne(client, ctx, "artistalpha", "N", item)
+		CheckError(errn, "ArtistFirst: N insertion has failed")
+		return "N Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, erro := InsertOne(client, ctx, "artistalpha", "O", item)
-			CheckError(erro, "ArtistFirst: O insertion has failed")
-			return "O Created"
+	case char == "O":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "P":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, erro := InsertOne(client, ctx, "artistalpha", "O", item)
+		CheckError(erro, "ArtistFirst: O insertion has failed")
+		return "O Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errp := InsertOne(client, ctx, "artistalpha", "P", item)
-			CheckError(errp, "ArtistFirst: P insertion has failed")
-			return "P Created"
+	case char == "P":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "Q":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errp := InsertOne(client, ctx, "artistalpha", "P", item)
+		CheckError(errp, "ArtistFirst: P insertion has failed")
+		return "P Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errq := InsertOne(client, ctx, "artistalpha", "Q", item)
-			CheckError(errq, "ArtistFirst: Q insertion has failed")
-			return "Q Created"
+	case char == "Q":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "R":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errq := InsertOne(client, ctx, "artistalpha", "Q", item)
+		CheckError(errq, "ArtistFirst: Q insertion has failed")
+		return "Q Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errr := InsertOne(client, ctx, "artistalpha", "R", item)
-			CheckError(errr, "ArtistFirst: R insertion has failed")
-			return "R Created"
+	case char == "R":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "S":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errr := InsertOne(client, ctx, "artistalpha", "R", item)
+		CheckError(errr, "ArtistFirst: R insertion has failed")
+		return "R Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errs := InsertOne(client, ctx, "artistalpha", "S", item)
-			CheckError(errs, "ArtistFirst: S insertion has failed")
-			return "S Created"
+	case char == "S":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "T":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errs := InsertOne(client, ctx, "artistalpha", "S", item)
+		CheckError(errs, "ArtistFirst: S insertion has failed")
+		return "S Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errt := InsertOne(client, ctx, "artistalpha", "T", item)
-			CheckError(errt, "ArtistFirst: T insertion has failed")
-			return "T Created"
+	case char == "T":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "U":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errt := InsertOne(client, ctx, "artistalpha", "T", item)
+		CheckError(errt, "ArtistFirst: T insertion has failed")
+		return "T Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, erru := InsertOne(client, ctx, "artistalpha", "U", item)
-			CheckError(erru, "ArtistFirst: U insertion has failed")
-			return "U Created"
+	case char == "U":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "V":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, erru := InsertOne(client, ctx, "artistalpha", "U", item)
+		CheckError(erru, "ArtistFirst: U insertion has failed")
+		return "U Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errv := InsertOne(client, ctx, "artistalpha", "V", item)
-			CheckError(errv, "ArtistFirst: V insertion has failed")
-			return "V Created"
+	case char == "V":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "W":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errv := InsertOne(client, ctx, "artistalpha", "V", item)
+		CheckError(errv, "ArtistFirst: V insertion has failed")
+		return "V Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errw := InsertOne(client, ctx, "artistalpha", "W", item)
-			CheckError(errw, "ArtistFirst: W insertion has failed")
-			return "W Created"
+	case char == "W":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "X":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errw := InsertOne(client, ctx, "artistalpha", "W", item)
+		CheckError(errw, "ArtistFirst: W insertion has failed")
+		return "W Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errx := InsertOne(client, ctx, "artistalpha", "X", item)
-			CheckError(errx, "ArtistFirst: X insertion has failed")
-			return "X Created"
+	case char == "X":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-		case char == "Z":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "ArtistFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errx := InsertOne(client, ctx, "artistalpha", "X", item)
+		CheckError(errx, "ArtistFirst: X insertion has failed")
+		return "X Created"
 
-			var item map[string]string = map[string]string{"artist": astring}
-			_, errz := InsertOne(client, ctx, "artistalpha", "Z", item)
-			CheckError(errz, "ArtistFirst: Z insertion has failed")
-			return "Z Created"
+	case char == "Z":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "ArtistFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		var item map[string]string = map[string]string{"artist": astring}
+		_, errz := InsertOne(client, ctx, "artistalpha", "Z", item)
+		CheckError(errz, "ArtistFirst: Z insertion has failed")
+		return "Z Created"
 	}
 	return "None"
 }
@@ -959,293 +959,303 @@ func AlbumFirst(astring string) string {
 
 	char := startsWith(astring)
 	switch {
-		case char == "A":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst:  Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "A":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst:  Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, erra := InsertOne(client, ctx, "albumalpha", "A", item)
-			CheckError(erra, "AlbumFirst: A insertion has failed")
-			return "A Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, erra := InsertOne(client, ctx, "albumalpha", "A", item)
+		CheckError(erra, "AlbumFirst: A insertion has failed")
+		return "A Created"
 
-		case char == "B":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "B":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errb := InsertOne(client, ctx, "albumalpha", "B", item)
-			CheckError(errb, "AlbumFirst: B insertion has failed")
-			return "B Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errb := InsertOne(client, ctx, "albumalpha", "B", item)
+		CheckError(errb, "AlbumFirst: B insertion has failed")
+		return "B Created"
 
-		case char == "C":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "C":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errc := InsertOne(client, ctx, "albumalpha", "C", item)
-			CheckError(errc, "AlbumFirst: C insertion has failed")
-			return "C Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errc := InsertOne(client, ctx, "albumalpha", "C", item)
+		CheckError(errc, "AlbumFirst: C insertion has failed")
+		return "C Created"
 
-		case char == "D":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "D":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errd := InsertOne(client, ctx, "albumalpha", "D", item)
-			CheckError(errd, "AlbumFirst: D insertion has failed")
-			return "D Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errd := InsertOne(client, ctx, "albumalpha", "D", item)
+		CheckError(errd, "AlbumFirst: D insertion has failed")
+		return "D Created"
 
-		case char == "E":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "E":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, erre := InsertOne(client, ctx, "albumalpha", "E", item)
-			CheckError(erre, "AlbumFirst: E insertion has failed")
-			return "E Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, erre := InsertOne(client, ctx, "albumalpha", "E", item)
+		CheckError(erre, "AlbumFirst: E insertion has failed")
+		return "E Created"
 
-		case char == "F":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "F":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errf := InsertOne(client, ctx, "albumalpha", "F", item)
-			CheckError(errf, "AlbumFirst: F insertion has failed")
-			return "F Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errf := InsertOne(client, ctx, "albumalpha", "F", item)
+		CheckError(errf, "AlbumFirst: F insertion has failed")
+		return "F Created"
 
-		case char == "G":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "G":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errg := InsertOne(client, ctx, "albumalpha", "G", item)
-			CheckError(errg, "AlbumFirst: G insertion has failed")
-			return "G Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errg := InsertOne(client, ctx, "albumalpha", "G", item)
+		CheckError(errg, "AlbumFirst: G insertion has failed")
+		return "G Created"
 
-		case char == "H":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "H":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errh := InsertOne(client, ctx, "albumalpha", "H", item)
-			CheckError(errh, "AlbumFirst: H insertion has failed")
-			return "H Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errh := InsertOne(client, ctx, "albumalpha", "H", item)
+		CheckError(errh, "AlbumFirst: H insertion has failed")
+		return "H Created"
 
-		case char == "I":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "I":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, erri := InsertOne(client, ctx, "albumalpha", "I", item)
-			CheckError(erri, "AlbumFirst: I insertion has failed")
-			return "I Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, erri := InsertOne(client, ctx, "albumalpha", "I", item)
+		CheckError(erri, "AlbumFirst: I insertion has failed")
+		return "I Created"
 
-		case char == "J":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "J":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errj := InsertOne(client, ctx, "albumalpha", "J", item)
-			CheckError(errj, "AlbumFirst: J insertion has failed")
-			return "J Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errj := InsertOne(client, ctx, "albumalpha", "J", item)
+		CheckError(errj, "AlbumFirst: J insertion has failed")
+		return "J Created"
 
-		case char == "K":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "K":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errk := InsertOne(client, ctx, "albumalpha", "K", item)
-			CheckError(errk, "AlbumFirst: K insertion has failed")
-			return "K Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errk := InsertOne(client, ctx, "albumalpha", "K", item)
+		CheckError(errk, "AlbumFirst: K insertion has failed")
+		return "K Created"
 
-		case char == "L":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "L":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errl := InsertOne(client, ctx, "albumalpha", "L", item)
-			CheckError(errl, "AlbumFirst: L insertion has failed")
-			return "L Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errl := InsertOne(client, ctx, "albumalpha", "L", item)
+		CheckError(errl, "AlbumFirst: L insertion has failed")
+		return "L Created"
 
-		case char == "M":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "M":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errm := InsertOne(client, ctx, "albumalpha", "M", item)
-			CheckError(errm, "AlbumFirst: M insertion has failed")
-			return "M Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errm := InsertOne(client, ctx, "albumalpha", "M", item)
+		CheckError(errm, "AlbumFirst: M insertion has failed")
+		return "M Created"
 
-		case char == "N":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "N":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errn := InsertOne(client, ctx, "albumalpha", "N", item)
-			CheckError(errn, "AlbumFirst: N insertion has failed")
-			return "N Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errn := InsertOne(client, ctx, "albumalpha", "N", item)
+		CheckError(errn, "AlbumFirst: N insertion has failed")
+		return "N Created"
 
-		case char == "O":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "O":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, erro := InsertOne(client, ctx, "albumalpha", "O", item)
-			CheckError(erro, "AlbumFirst: O insertion has failed")
-			return "O Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, erro := InsertOne(client, ctx, "albumalpha", "O", item)
+		CheckError(erro, "AlbumFirst: O insertion has failed")
+		return "O Created"
 
-		case char == "P":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "P":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errp := InsertOne(client, ctx, "albumalpha", "P", item)
-			CheckError(errp, "AlbumFirst: P insertion has failed")
-			return "P Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errp := InsertOne(client, ctx, "albumalpha", "P", item)
+		CheckError(errp, "AlbumFirst: P insertion has failed")
+		return "P Created"
 
-		case char == "Q":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "Q":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errq := InsertOne(client, ctx, "albumalpha", "Q", item)
-			CheckError(errq, "AlbumFirst: Q insertion has failed")
-			return "Q Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errq := InsertOne(client, ctx, "albumalpha", "Q", item)
+		CheckError(errq, "AlbumFirst: Q insertion has failed")
+		return "Q Created"
 
-		case char == "R":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "R":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errr := InsertOne(client, ctx, "albumalpha", "R", item)
-			CheckError(errr, "AlbumFirst: R insertion has failed")
-			return "R Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errr := InsertOne(client, ctx, "albumalpha", "R", item)
+		CheckError(errr, "AlbumFirst: R insertion has failed")
+		return "R Created"
 
-		case char == "S":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "S":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errs := InsertOne(client, ctx, "albumalpha", "S", item)
-			CheckError(errs, "AlbumFirst: S insertion has failed")
-			return "S Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errs := InsertOne(client, ctx, "albumalpha", "S", item)
+		CheckError(errs, "AlbumFirst: S insertion has failed")
+		return "S Created"
 
-		case char == "T":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "T":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errt := InsertOne(client, ctx, "albumalpha", "T", item)
-			CheckError(errt, "AlbumFirst: T insertion has failed")
-			return "T Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errt := InsertOne(client, ctx, "albumalpha", "T", item)
+		CheckError(errt, "AlbumFirst: T insertion has failed")
+		return "T Created"
 
-		case char == "U":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "U":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, erru := InsertOne(client, ctx, "albumalpha", "U", item)
-			CheckError(erru, "AlbumFirst: U insertion has failed")
-			return "U Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, erru := InsertOne(client, ctx, "albumalpha", "U", item)
+		CheckError(erru, "AlbumFirst: U insertion has failed")
+		return "U Created"
 
-		case char == "V":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "V":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errv := InsertOne(client, ctx, "albumalpha", "V", item)
-			CheckError(errv, "AlbumFirst: V insertion has failed")
-			return "V Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errv := InsertOne(client, ctx, "albumalpha", "V", item)
+		CheckError(errv, "AlbumFirst: V insertion has failed")
+		return "V Created"
 
-		case char == "W":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "W":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errw := InsertOne(client, ctx, "albumalpha", "W", item)
-			CheckError(errw, "AlbumFirst: W insertion has failed")
-			return "W Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errw := InsertOne(client, ctx, "albumalpha", "W", item)
+		CheckError(errw, "AlbumFirst: W insertion has failed")
+		return "W Created"
 
-		case char == "X":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
+	case char == "X":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
 
-			var item map[string]string = map[string]string{"album": astring}
-			_, errx := InsertOne(client, ctx, "albumalpha", "X", item)
-			CheckError(errx, "AlbumFirst: X insertion has failed")
-			return "X Created"
+		var item map[string]string = map[string]string{"album": astring}
+		_, errx := InsertOne(client, ctx, "albumalpha", "X", item)
+		CheckError(errx, "AlbumFirst: X insertion has failed")
+		return "X Created"
 
-		case char == "Z":
-			client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-			CheckError(err, "AlbumFirst: Connections has failed")
-			defer Close(client, ctx, cancel)
-			
-			var item map[string]string = map[string]string{"album": astring}
-			_, errz := InsertOne(client, ctx, "albumalpha", "Z", item)
-			CheckError(errz, "AlbumFirst: Z insertion has failed")
-			return "Z Created"
+	case char == "Z":
+		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+		CheckError(err, "AlbumFirst: Connections has failed")
+		defer Close(client, ctx, cancel)
+
+		var item map[string]string = map[string]string{"album": astring}
+		_, errz := InsertOne(client, ctx, "albumalpha", "Z", item)
+		CheckError(errz, "AlbumFirst: Z insertion has failed")
+		return "Z Created"
 	}
 	return "None"
 }
 
-func SongFirst() string {
-	
+func songfirsta() int {
 	aAll := AmpgoFind("maindb", "maindb", "titstart", "A")
-	aa := len(aAll)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "SongFirst: Connections has failed")
+	defer Close(client, ctx, cancel)
 	for _, a := range aAll {
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		CheckError(err, "SongFirst: Connections has failed")
-		defer Close(client, ctx, cancel)
-
 		_, err = InsertOne(client, ctx, "songalpha", "A", a)
 		CheckError(err, "SongFirst: a insertion has failed")
 	}
+	aa := len(aAll)
+	return aa
+}
 
+func songfirstb() int {
 	bAll := AmpgoFind("maindb", "maindb", "titstart", "B")
-	bb := len(bAll)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "SongFirst: Connections has failed")
+	defer Close(client, ctx, cancel)
 	for _, b := range bAll {
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		CheckError(err, "SongFirst: Connections has failed")
-		defer Close(client, ctx, cancel)
-
 		_, err = InsertOne(client, ctx, "songalpha", "B", b)
 		CheckError(err, "SongFirst: b insertion has failed")
 	}
+	bb := len(bAll)
+	return bb
+}
 
+func songfirstc() int {
 	cAll := AmpgoFind("maindb", "maindb", "titstart", "C")
-	cc := len(cAll)
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "SongFirst: Connections has failed")
+	defer Close(client, ctx, cancel)
 	for _, c := range cAll {
-		client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
-		CheckError(err, "SongFirst: Connections has failed")
-		defer Close(client, ctx, cancel)
-
 		_, err = InsertOne(client, ctx, "songalpha", "C", c)
 		CheckError(err, "SongFirst: c insertion has failed")
 	}
+	cc := len(cAll)
+	return cc
+}
+
+func SongFirst() string {
+
+	aa := songfirsta()
+	bb := songfirstb()
+	cc := songfirstc()
 
 	dAll := AmpgoFind("maindb", "maindb", "titstart", "D")
 	dd := len(dAll)
@@ -1279,7 +1289,7 @@ func SongFirst() string {
 		_, err = InsertOne(client, ctx, "songalpha", "F", f)
 		CheckError(err, "SongFirst: f insertion has failed")
 	}
-	
+
 	gAll := AmpgoFind("maindb", "maindb", "titstart", "G")
 	gg := len(gAll)
 	for _, g := range gAll {
@@ -1504,7 +1514,7 @@ func SongFirst() string {
 	t2 := nn + oo + pp + qq + rr + ss + tt + uu + vv + ww + xx + yy + zz
 	tot := t1 + t2
 	total := strconv.Itoa(tot)
-	var total2 map[string]string = map[string]string{"total":total}
+	var total2 map[string]string = map[string]string{"total": total}
 
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "SongFirst: Connections has failed")
