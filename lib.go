@@ -154,11 +154,11 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 }
 
 func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
-	filter := bson.D{}
+	filter := bson.M{}
 	if filtertype == "None" && filterstring == "None" {
-		filter = bson.D{{}}
+		filter = bson.M{}
 	} else {
-		filter = bson.D{{filtertype, filterstring}}
+		filter = bson.M{filtertype: filterstring}
 	}
 	// filter := bson.D{{filtertype, filterstring}}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
@@ -243,8 +243,9 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
 		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
 		g, err := os.Create(newdumpOutFile2)
-		defer g.Close()
 		CheckError(err, "DumpArtToFile: Unable to create newdumpOutFile2")
+		defer g.Close()
+
 		n3, err := g.Write(pic.Picture)
 		CheckError(err, "DumpArtToFile: newdumpOutfile2 Write has fucked up")
 		fmt.Println(n3, "DumpArtToFile: bytes written successfully")
@@ -519,6 +520,30 @@ func ArtPipline(artmap map[string]string, page int, idx int) (MyArView ArtVieW2)
 }
 
 func InsArtPipeline(AV1 ArtVieW2) {
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	CheckError(err, "InsArtPipeline: Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
+	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
+}
+
+func ArtPipline2(artmap map[string]string, page int, idx int) map[string]string {
+	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
+	results2 := get_albums_for_artist(dirtyalblist)
+	albc := len(results2)
+	albcount := strconv.Itoa(albc)
+	var MyArView map[string]string = map[string]string{
+		"albcount": strconv.Itoa(albc),
+		"Artist":   artmap["artist"],
+		"ArtistID": artmap["artistID"],
+		"AlbCount": albcount,
+		"Page":     strconv.Itoa(page),
+	}
+
+	return MyArView
+}
+
+func InsArtPipeline2(AV1 map[string]string) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "InsArtPipeline: Connections has failed")
 	defer Close(client, ctx, cancel)

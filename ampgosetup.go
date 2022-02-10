@@ -223,6 +223,7 @@ func Setup() {
 
 	log.Println("starting GArtInfo2")
 	var wg5 sync.WaitGroup
+	var wg15 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
 		if artIdx < OffSet {
@@ -241,6 +242,15 @@ func Setup() {
 			wg5.Done()
 		}(APL)
 		wg5.Wait()
+
+		APL2 := ArtPipline2(DArtt, artpage, artIdx)
+
+		wg15.Add(1)
+		go func(APL2 map[string]string) {
+			InsArtPipeline2(APL2)
+			wg15.Done()
+		}(APL2)
+		wg15.Wait()
 	}
 	fmt.Println("AggArtists is complete")
 	log.Println("AggArtists is complete")
