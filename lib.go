@@ -531,15 +531,12 @@ func ArtPipline2(artmap map[string]string, page int, idx int) map[string]string 
 	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
 	results2 := get_albums_for_artist(dirtyalblist)
 	albc := len(results2)
-	albcount := strconv.Itoa(albc)
 	var MyArView map[string]string = map[string]string{
-		"albcount": strconv.Itoa(albc),
 		"Artist":   artmap["artist"],
 		"ArtistID": artmap["artistID"],
-		"AlbCount": albcount,
+		"AlbCount": strconv.Itoa(albc),
 		"Page":     strconv.Itoa(page),
 	}
-
 	return MyArView
 }
 
@@ -547,7 +544,7 @@ func InsArtPipeline2(AV1 map[string]string) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "InsArtPipeline: Connections has failed")
 	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "artistview", "artistview", &AV1)
+	_, err2 := InsertOne(client, ctx, "artistview2", "artistview2", &AV1)
 	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
 }
 
