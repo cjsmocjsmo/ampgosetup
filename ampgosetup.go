@@ -246,7 +246,7 @@ func Setup() {
 		APL2 := ArtPipline2(DArtt, artpage, artIdx)
 
 		wg15.Add(1)
-		go func(APL2 map[string]string) {
+		go func(APL2 ArtVieW3) {
 			InsArtPipeline2(APL2)
 			wg15.Done()
 		}(APL2)

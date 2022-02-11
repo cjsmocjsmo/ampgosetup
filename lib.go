@@ -57,6 +57,15 @@ type ArtVieW2 struct {
 	Index    string              `bson:"idx"`
 }
 
+type ArtVieW3 struct {
+	Artist   string   `bson:"artist"`
+	ArtistID string   `bson:"artistID"`
+	Albums   []string `bson:"albums"`
+	AlbCount string   `bson:"albcount"`
+	Page     string   `bson:"page"`
+	Index    string   `bson:"idx"`
+}
+
 type AlbVieW2 struct {
 	Artist      string              `bson:"artist"`
 	ArtistID    string              `bson:"artistID"`
@@ -527,20 +536,32 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
 }
 
-func ArtPipline2(artmap map[string]string, page int, idx int) map[string]string {
-	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
-	results2 := get_albums_for_artist(dirtyalblist)
-	albc := len(results2)
-	var MyArView map[string]string = map[string]string{
-		"Artist":   artmap["artist"],
-		"ArtistID": artmap["artistID"],
-		"AlbCount": strconv.Itoa(albc),
-		"Page":     strconv.Itoa(page),
+func get_album_art_for_artist(fullalblist []map[string]string) (final_alblist []string) {
+	just_albumID_list := create_just_albumID_list(fullalblist)
+	//remove double albumid entries
+	unique_items := unique(just_albumID_list)
+	for _, uitem := range unique_items {
+		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
+		ai := albINFO["picHttpAddr"]
+		final_alblist = append(final_alblist, ai)
 	}
+	return
+}
+
+func ArtPipline2(artmap map[string]string, page int, idx int) ArtVieW3 {
+	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
+	results2 := get_album_art_for_artist(dirtyalblist)
+	// albc := len(results2)
+	var MyArView ArtVieW3
+	MyArView.Artist = artmap["artist"]
+	MyArView.ArtistID = artmap["artistID"]
+	MyArView.Albums = results2
+	MyArView.Page = strconv.Itoa(page)
+	
 	return MyArView
 }
 
-func InsArtPipeline2(AV1 map[string]string) {
+func InsArtPipeline2(AV1 ArtVieW3) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "InsArtPipeline: Connections has failed")
 	defer Close(client, ctx, cancel)
