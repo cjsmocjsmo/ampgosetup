@@ -52,16 +52,16 @@ func CheckError(err error, msg string) {
 	}
 }
 
-func durationVisit(pAth string, f os.FileInfo, err error) error {
-	ext := path.Ext(pAth)
-	if ext == ".mp3info" {
-		InsertDurationInfo(pAth)
-	} else {
-		fmt.Println("WTF are you?")
-		fmt.Println(pAth)
-	}
-	return nil
-}
+// func durationVisit(pAth string, f os.FileInfo, err error) error {
+// 	ext := path.Ext(pAth)
+// 	if ext == ".mp3info" {
+// 		InsertDurationInfo(pAth)
+// 	} else {
+// 		fmt.Println("WTF are you?")
+// 		fmt.Println(pAth)
+// 	}
+// 	return nil
+// }
 
 var titlepage int = 0
 var ii int = 0
@@ -72,6 +72,8 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
 		fmt.Println("FOOUND JPG")
+	} else if ext == ".mp3info" {
+		InsertDurationInfo(pAth)
 	} else if ext == ".mp3" {
 		if ii < OffSet {
 			ii++
@@ -118,9 +120,9 @@ func Setup() {
 	log.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	log.Println("starting duration walk")
-	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
-	log.Println("duration walk is complete")
+	// log.Println("starting duration walk")
+	// filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
+	// log.Println("duration walk is complete")
 
 	log.Println("starting walk")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
@@ -223,7 +225,7 @@ func Setup() {
 
 	log.Println("starting GArtInfo2")
 	var wg5 sync.WaitGroup
-	var wg15 sync.WaitGroup
+	// var wg15 sync.WaitGroup
 	var artpage int = 0
 	for artIdx, DArtt := range DistArtist {
 		if artIdx < OffSet {
@@ -243,14 +245,14 @@ func Setup() {
 		}(APL)
 		wg5.Wait()
 
-		APL2 := ArtPipline2(DArtt, artpage, artIdx)
+		// APL2 := ArtPipline2(DArtt, artpage, artIdx)
 
-		wg15.Add(1)
-		go func(APL2 ArtVieW3) {
-			InsArtPipeline2(APL2)
-			wg15.Done()
-		}(APL2)
-		wg15.Wait()
+		// wg15.Add(1)
+		// go func(APL2 ArtVieW3) {
+		// 	InsArtPipeline2(APL2)
+		// 	wg15.Done()
+		// }(APL2)
+		// wg15.Wait()
 	}
 	fmt.Println("AggArtists is complete")
 	log.Println("AggArtists is complete")

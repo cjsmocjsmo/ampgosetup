@@ -57,14 +57,14 @@ type ArtVieW2 struct {
 	Index    string              `bson:"idx"`
 }
 
-type ArtVieW3 struct {
-	Artist   string   `bson:"artist"`
-	ArtistID string   `bson:"artistID"`
-	Albums   []string `bson:"albums"`
-	AlbCount string   `bson:"albcount"`
-	Page     string   `bson:"page"`
-	Index    string   `bson:"idx"`
-}
+// type ArtVieW3 struct {
+// 	Artist   string   `bson:"artist"`
+// 	ArtistID string   `bson:"artistID"`
+// 	Albums   []string `bson:"albums"`
+// 	AlbCount string   `bson:"albcount"`
+// 	Page     string   `bson:"page"`
+// 	Index    string   `bson:"idx"`
+// }
 
 type AlbVieW2 struct {
 	Artist      string              `bson:"artist"`
@@ -484,7 +484,7 @@ func GDistArtist2() (dArtAll []map[string]string) {
 	return dArtAll
 }
 
-func unique(arr []string) []string {
+func Unique(arr []string) []string {
 	occured := map[string]bool{}
 	result := []string{}
 	for e := range arr {
@@ -506,7 +506,7 @@ func create_just_albumID_list(alist []map[string]string) (just_albumID_list []st
 func get_albums_for_artist(fullalblist []map[string]string) (final_alblist []map[string]string) {
 	just_albumID_list := create_just_albumID_list(fullalblist)
 	//remove double albumid entries
-	unique_items := unique(just_albumID_list)
+	unique_items := Unique(just_albumID_list)
 	for _, uitem := range unique_items {
 		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
 		final_alblist = append(final_alblist, albINFO)
@@ -536,38 +536,38 @@ func InsArtPipeline(AV1 ArtVieW2) {
 	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
 }
 
-func get_album_art_for_artist(fullalblist []map[string]string) (final_alblist []string) {
-	just_albumID_list := create_just_albumID_list(fullalblist)
-	//remove double albumid entries
-	unique_items := unique(just_albumID_list)
-	for _, uitem := range unique_items {
-		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
-		ai := albINFO["picHttpAddr"]
-		final_alblist = append(final_alblist, ai)
-	}
-	return
-}
+// func get_album_art_for_artist(fullalblist []map[string]string) (final_alblist []string) {
+// 	just_albumID_list := create_just_albumID_list(fullalblist)
+// 	//remove double albumid entries
+// 	unique_items := unique(just_albumID_list)
+// 	for _, uitem := range unique_items {
+// 		albINFO := AmpgoFindOne("maindb", "maindb", "albumID", uitem)
+// 		ai := albINFO["picHttpAddr"]
+// 		final_alblist = append(final_alblist, ai)
+// 	}
+// 	return
+// }
 
-func ArtPipline2(artmap map[string]string, page int, idx int) ArtVieW3 {
-	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
-	results2 := get_album_art_for_artist(dirtyalblist)
-	// albc := len(results2)
-	var MyArView ArtVieW3
-	MyArView.Artist = artmap["artist"]
-	MyArView.ArtistID = artmap["artistID"]
-	MyArView.Albums = results2
-	MyArView.Page = strconv.Itoa(page)
-	
-	return MyArView
-}
+// func ArtPipline2(artmap map[string]string, page int, idx int) ArtVieW3 {
+// 	dirtyalblist := AmpgoFind("maindb", "maindb", "artistID", artmap["artistID"]) //[]map[string]string
+// 	results2 := get_album_art_for_artist(dirtyalblist)
+// 	// albc := len(results2)
+// 	var MyArView ArtVieW3
+// 	MyArView.Artist = artmap["artist"]
+// 	MyArView.ArtistID = artmap["artistID"]
+// 	MyArView.Albums = results2
+// 	MyArView.Page = strconv.Itoa(page)
 
-func InsArtPipeline2(AV1 ArtVieW3) {
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "InsArtPipeline: Connections has failed")
-	defer Close(client, ctx, cancel)
-	_, err2 := InsertOne(client, ctx, "artistview2", "artistview2", &AV1)
-	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
-}
+// 	return MyArView
+// }
+
+// func InsArtPipeline2(AV1 ArtVieW3) {
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+// 	CheckError(err, "InsArtPipeline: Connections has failed")
+// 	defer Close(client, ctx, cancel)
+// 	_, err2 := InsertOne(client, ctx, "artistview2", "artistview2", &AV1)
+// 	CheckError(err2, "InsArtPipeline: artistview insertion has failed")
+// }
 
 func GDistAlbum() (DAlbAll []map[string]string) {
 	DAlbumID := AmpgoDistinct("maindb", "maindb", "albumID")
@@ -585,7 +585,7 @@ func get_songs_for_album(fullsonglist []map[string]string) (final_songlist []map
 		just_songID_list = append(just_songID_list, song["fileID"])
 	}
 	//remove double songID entries
-	unique_items := unique(just_songID_list)
+	unique_items := Unique(just_songID_list)
 	for _, uitem := range unique_items {
 		songINFO := AmpgoFindOne("maindb", "maindb", "fileID", uitem)
 		final_songlist = append(final_songlist, songINFO)
