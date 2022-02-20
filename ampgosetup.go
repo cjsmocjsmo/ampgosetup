@@ -95,8 +95,23 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	return nil
 }
 
+func StartSetupLogging() string {
+	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
+	// If the file doesn't exist, create it or append to the file
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(file)
+	log.Println("Logging started")
+	return "server logging started"
+}
+
 func SetUpCheck() {
+	StartLibLogging()
+	StartSetupLogging()
 	Setup()
+
 	// fileinfo, err := os.Stat("setup.txt")
 	// if os.IsNotExist(err) {
 	// 	Setup()
@@ -106,15 +121,6 @@ func SetUpCheck() {
 
 //SetUp is exported to main
 func Setup() {
-	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
-	// If the file doesn't exist, create it or append to the file
-	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
-	log.Println("Logging started")
-
 	ti := time.Now()
 	fmt.Println(ti)
 	log.Println(ti)

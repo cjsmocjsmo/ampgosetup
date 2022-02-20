@@ -83,13 +83,13 @@ type Imageinfomap struct {
 	Dirpath       string `bson:"dirpath"`
 	Filename      string `bson:"filename"`
 	Imagesize     string `bson:"imagesize"`
-	ImageHttpAddr string `bson:"imagehttpaddr`
+	ImageHttpAddr string `bson:"imageHttpAddr"`
 	Index         string `bson:"index"`
 	IType         string `bson:"itype"`
 	Page          string `bson:"page"`
 }
 
-func startLogging() string {
+func StartLibLogging() string {
 	logtxtfile := os.Getenv("AMPGO_LIB_LOG_PATH")
 	// If the file doesn't exist, create it or append to the file
 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
@@ -100,8 +100,6 @@ func startLogging() string {
 	log.Println("Logging started")
 	return "Logging started"
 }
-
-var lStart = startLogging()
 
 func Close(client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	defer cancel()
@@ -316,15 +314,15 @@ func InsAlbumID(alb string) {
 	AmpgoInsertOne("tempdb2", "albumid", Albid)
 }
 
-func startLibLogging() string {
-	var logtxtfile string = os.Getenv("AMPGO_LIB_LOG_PATH")
-	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
-	return "Logging started"
-}
+// func startLibLogging() string {
+// 	var logtxtfile string = os.Getenv("AMPGO_LIB_LOG_PATH")
+// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	log.SetOutput(file)
+// 	return "Logging started"
+// }
 
 func GetPicForAlbum(alb string) map[string]string {
 	// startLibLogging()
