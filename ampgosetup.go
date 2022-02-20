@@ -108,8 +108,8 @@ func StartSetupLogging() string {
 }
 
 func SetUpCheck() {
-	StartLibLogging()
-	StartSetupLogging()
+	// StartLibLogging()
+	// StartSetupLogging()
 	Setup()
 
 	// fileinfo, err := os.Stat("setup.txt")
