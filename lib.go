@@ -665,6 +665,25 @@ func create_image_info_map(i int, afile string, page int) Imageinfomap {
 	return ImageInfoMap
 }
 
+func CreateFolderJpgImageInfoMap(afile string) {
+	itype := get_type(afile)
+	dir, filename := filepath.Split(afile)
+	image_size := get_image_size(afile)
+	image_http_path := create_image_http_addr(afile)
+	var ImageInfoMap Imageinfomap
+	ImageInfoMap.Dirpath = dir
+	ImageInfoMap.Filename = filename
+	ImageInfoMap.Imagesize = image_size
+	ImageInfoMap.ImageHttpAddr = image_http_path
+	ImageInfoMap.IType = itype
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
+	CheckError(err, "create_image_info_map: Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "foldercoverart", "foldercoverart", ImageInfoMap)
+	CheckError(err2, "create_image_info_map: coverart insertion has failed")
+	return
+}
+
 func get_type(afile string) string {
 	if strings.Contains(afile, "thumb") {
 		return "thumb"

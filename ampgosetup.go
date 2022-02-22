@@ -71,6 +71,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
+		CreateFolderJpgImageInfoMap(pAth)
 		fmt.Println("FOOUND JPG")
 	} else if ext == ".mp3info" {
 		InsertDurationInfo(pAth)
@@ -82,7 +83,6 @@ func visit(pAth string, f os.FileInfo, err error) error {
 			ii++
 			titlepage++
 		} else {
-			fmt.Println("I'm Not A Page")
 			ii++
 			titlepage = titlepage + 0
 		}
