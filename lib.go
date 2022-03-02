@@ -162,9 +162,7 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 
 func AmpgoFind(dbb string, collb string, filtertype string, filterstring string) []map[string]string {
 	filter := bson.M{}
-	if filtertype == "None" && filterstring == "None" {
-		filter = bson.M{}
-	} else {
+	if filtertype != "None" && filterstring != "None" {
 		filter = bson.M{filtertype: filterstring}
 	}
 	// filter := bson.D{{filtertype, filterstring}}
@@ -225,7 +223,31 @@ func resizeImage(infile string, outfile string) string {
 	return outfile
 }
 
+type Fjpg struct {
+	exists bool
+	path   string
+}
+
+func folderjpg_check(apath string) Fjpg {
+	fjpg := "/folder.jpg"
+	dir, _ := filepath.Split(apath)
+	testfile := dir + fjpg
+	_, error := os.Stat(testfile)
+	if os.IsNotExist(error) {
+		var pic Fjpg
+		pic.exists = false
+		pic.path = testfile
+		return pic
+	} else {
+		var pic Fjpg
+		pic.exists = true
+		pic.path = testfile
+		return pic
+	}
+}
+
 func DumpArtToFile(apath string) (string, string, string, string, string) {
+	folderjpgcheck := folderjpg_check(apath)
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
 	if err != nil {
 		log.Println(err)
@@ -233,32 +255,41 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		return "None", "None", "None", "None", "None"
 	}
 	defer tag.Close()
-	artist := tag.Artist()
-	album := tag.Album()
-	title := tag.Title()
-	genre := tag.Genre()
-	pictures := tag.GetFrames(tag.CommonID("Attached picture"))
-	newdumpOutFile2 := ""
-	newdumpOutFileThumb := ""
-	for _, f := range pictures {
-		pic, ok := f.(id3v2.PictureFrame)
-		if !ok {
-			log.Fatal("DumpArtToFile: Couldn't assert picture frame")
-		}
-		dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
-		newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
-		dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
-		newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
-		g, err := os.Create(newdumpOutFile2)
-		CheckError(err, "DumpArtToFile: Unable to create newdumpOutFile2")
-		defer g.Close()
+	if folderjpgcheck.exists {
+		artist := tag.Artist()
+		album := tag.Album()
+		title := tag.Title()
+		genre := tag.Genre()
+		albumart := folderjpgcheck.path
+		return artist, album, title, genre, albumart
+	} else {
+		artist := tag.Artist()
+		album := tag.Album()
+		title := tag.Title()
+		genre := tag.Genre()
+		pictures := tag.GetFrames(tag.CommonID("Attached picture"))
+		newdumpOutFile2 := ""
+		newdumpOutFileThumb := ""
+		for _, f := range pictures {
+			pic, ok := f.(id3v2.PictureFrame)
+			if !ok {
+				log.Fatal("DumpArtToFile: Couldn't assert picture frame")
+			}
+			dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
+			newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
+			dumpOutFileThumb := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + "_thumb.jpg"
+			newdumpOutFileThumb = strings.Replace(dumpOutFileThumb, " ", "_", -1)
+			g, err := os.Create(newdumpOutFile2)
+			CheckError(err, "DumpArtToFile: Unable to create newdumpOutFile2")
+			defer g.Close()
 
-		n3, err := g.Write(pic.Picture)
-		CheckError(err, "DumpArtToFile: newdumpOutfile2 Write has fucked up")
-		fmt.Println(n3, "DumpArtToFile: bytes written successfully")
+			n3, err := g.Write(pic.Picture)
+			CheckError(err, "DumpArtToFile: newdumpOutfile2 Write has fucked up")
+			fmt.Println(n3, "DumpArtToFile: bytes written successfully")
+		}
+		outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
+		return artist, album, title, genre, outfile22
 	}
-	outfile22 := resizeImage(newdumpOutFile2, newdumpOutFileThumb)
-	return artist, album, title, genre, outfile22
 }
 
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
@@ -486,7 +517,7 @@ func Unique(arr []string) []string {
 	occured := map[string]bool{}
 	result := []string{}
 	for e := range arr {
-		if occured[arr[e]] != true {
+		if !occured[arr[e]] {
 			occured[arr[e]] = true
 			result = append(result, arr[e])
 		}
@@ -681,7 +712,6 @@ func CreateFolderJpgImageInfoMap(afile string) {
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, "foldercoverart", "foldercoverart", ImageInfoMap)
 	CheckError(err2, "create_image_info_map: coverart insertion has failed")
-	return
 }
 
 func get_type(afile string) string {
