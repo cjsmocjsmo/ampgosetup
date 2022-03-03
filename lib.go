@@ -229,7 +229,7 @@ type Fjpg struct {
 }
 
 func folderjpg_check(apath string) Fjpg {
-	fjpg := "/folder.jpg"
+	fjpg := "folder.jpg"
 	dir, _ := filepath.Split(apath)
 	testfile := dir + fjpg
 	_, error := os.Stat(testfile)
