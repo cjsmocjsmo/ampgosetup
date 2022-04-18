@@ -22,7 +22,7 @@ package ampgosetup
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"os"
 	"path"
 	"runtime"
@@ -46,8 +46,8 @@ func convertSTR(astring string) int {
 func CheckError(err error, msg string) {
 	if err != nil {
 		fmt.Println(msg)
-		log.Println(msg)
-		log.Println(err)
+		fmt.Println(msg)
+		fmt.Println(err)
 		panic(err)
 	}
 }
@@ -67,7 +67,7 @@ var titlepage int = 0
 var ii int = 0
 
 func visit(pAth string, f os.FileInfo, err error) error {
-	log.Println(pAth)
+	fmt.Println(pAth)
 
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
@@ -91,21 +91,21 @@ func visit(pAth string, f os.FileInfo, err error) error {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
 	}
-	log.Println(pAth)
+	fmt.Println(pAth)
 	return nil
 }
 
-func StartSetupLogging() string {
-	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
-	// If the file doesn't exist, create it or append to the file
-	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(file)
-	log.Println("Logging started")
-	return "server logging started"
-}
+// func StartSetupLogging() string {
+// 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
+// 	// If the file doesn't exist, create it or append to the file
+// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.SetOutput(file)
+// 	fmt.Println("Logging started")
+// 	return "server logging started"
+// }
 
 func SetUpCheck() {
 	// StartLibLogging()
@@ -116,31 +116,31 @@ func SetUpCheck() {
 	// if os.IsNotExist(err) {
 	// 	Setup()
 	// }
-	// log.Println(fileinfo)
+	// fmt.Println(fileinfo)
 }
 
 //SetUp is exported to main
 func Setup() {
 	ti := time.Now()
 	fmt.Println(ti)
-	log.Println(ti)
+	fmt.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	// log.Println("starting duration walk")
+	// fmt.Println("starting duration walk")
 	// filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
-	// log.Println("duration walk is complete")
+	// fmt.Println("duration walk is complete")
 
-	log.Println("starting walk")
+	fmt.Println("starting walk")
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
-	log.Println("walk is complete")
+	fmt.Println("walk is complete")
 
-	log.Println("starting GetDistAlbumMeta1")
+	fmt.Println("starting GetDistAlbumMeta1")
 	dalb := AmpgoDistinct("tempdb1", "meta1", "album")
 	fmt.Println(dalb)
-	log.Println(dalb)
-	log.Println("GetDistAlbumMeta1 is complete ")
+	fmt.Println(dalb)
+	fmt.Println("GetDistAlbumMeta1 is complete ")
 
-	log.Println("starting InsAlbumID")
+	fmt.Println("starting InsAlbumID")
 	var wg1 sync.WaitGroup
 	for _, alb := range dalb {
 		wg1.Add(1)
@@ -150,13 +150,13 @@ func Setup() {
 		}(alb)
 		wg1.Wait()
 	}
-	log.Println("InsAlbumID is complete ")
+	fmt.Println("InsAlbumID is complete ")
 
-	log.Println("starting GDistArtist")
+	fmt.Println("starting GDistArtist")
 	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
-	log.Println("GDistArtist is complete ")
+	fmt.Println("GDistArtist is complete ")
 
-	log.Println("starting InsArtistID")
+	fmt.Println("starting InsArtistID")
 	var wg2 sync.WaitGroup
 	for _, art := range dart {
 		wg2.Add(1)
@@ -166,16 +166,16 @@ func Setup() {
 		}(art)
 		wg2.Wait()
 	}
-	log.Println("InsArtistID is complete ")
+	fmt.Println("InsArtistID is complete ")
 
-	log.Println("starting GetTitleOffSetAll")
+	fmt.Println("starting GetTitleOffSetAll")
 	AllObj := GetTitleOffsetAll()
-	log.Println("GetTitleOffSetAll is complete ")
+	fmt.Println("GetTitleOffSetAll is complete ")
 
-	log.Println("starting UpdateMainDB")
+	fmt.Println("starting UpdateMainDB")
 	var wg3 sync.WaitGroup
 	for _, blob := range AllObj {
-		log.Println(blob)
+		fmt.Println(blob)
 		wg3.Add(1)
 		go func(blob map[string]string) {
 			UpdateMainDB(blob)
@@ -183,9 +183,9 @@ func Setup() {
 		}(blob)
 		wg3.Wait()
 	}
-	log.Println("UpdateMainDB is complete ")
+	fmt.Println("UpdateMainDB is complete ")
 
-	log.Println("starting ArtistFirst ")
+	fmt.Println("starting ArtistFirst ")
 	var wg99a sync.WaitGroup
 	for _, art := range dart {
 		wg99a.Add(1)
@@ -195,9 +195,9 @@ func Setup() {
 		}(art)
 		wg99a.Wait()
 	}
-	log.Println("ArtistFirst is complete ")
+	fmt.Println("ArtistFirst is complete ")
 
-	log.Println("starting AlbumFirst ")
+	fmt.Println("starting AlbumFirst ")
 	var wg99 sync.WaitGroup
 	for _, alb := range dalb {
 		wg99.Add(1)
@@ -207,11 +207,11 @@ func Setup() {
 		}(alb)
 		wg99.Wait()
 	}
-	log.Println("AlbumFirst is complete ")
+	fmt.Println("AlbumFirst is complete ")
 
 	SongFirst()
 
-	log.Println("starting GetPicForAlbum ")
+	fmt.Println("starting GetPicForAlbum ")
 	var wg133 sync.WaitGroup
 	for _, alb := range dalb {
 		wg133.Add(1)
@@ -222,14 +222,14 @@ func Setup() {
 		}(alb)
 		wg133.Wait()
 	}
-	log.Println("GetPicForAlbum is complete")
+	fmt.Println("GetPicForAlbum is complete")
 
 	// //AggArtist
-	log.Println("starting UpdateMainDB")
+	fmt.Println("starting UpdateMainDB")
 	DistArtist := GDistArtist2()
-	log.Println("GDistArtist2 is complete ")
+	fmt.Println("GDistArtist2 is complete ")
 
-	log.Println("starting GArtInfo2")
+	fmt.Println("starting GArtInfo2")
 	var wg5 sync.WaitGroup
 	// var wg15 sync.WaitGroup
 	var artpage int = 0
@@ -261,14 +261,14 @@ func Setup() {
 		// wg15.Wait()
 	}
 	fmt.Println("AggArtists is complete")
-	log.Println("AggArtists is complete")
+	fmt.Println("AggArtists is complete")
 	// // ArtistOffSet()w11
 	// // fmt.Println("ArtistOffSet is complete")
 
 	// //AggAlbum
 	// fmt.Println("AggAlbum has started")
 
-	log.Println("Starting GDistAlbum3")
+	fmt.Println("Starting GDistAlbum3")
 	DistAlbum := GDistAlbum()
 
 	var wg6 sync.WaitGroup
@@ -309,7 +309,7 @@ func Setup() {
 
 	f, err := os.Create("setup.txt")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	// remember to close the file
 	defer f.Close()
@@ -317,7 +317,7 @@ func Setup() {
 	for _, line := range lines {
 		_, err := f.WriteString(line + "\n")
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 	}
 
@@ -331,14 +331,14 @@ func Setup() {
 	// 	// If the file doesn't exist, create it or append to the file
 	// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	// 	if err != nil {
-	// 		log.Fatal(err)
+	// 		fmt.Println(err)
 	// 	}
-	// 	log.SetOutput(file)
-	// 	log.Println("Logging started")
+	// 	fmt.SetOutput(file)
+	// 	fmt.Println("Logging started")
 
 	// ti = time.Now()
 	// fmt.Println(ti)
-	// log.Println(ti)
+	// fmt.Println(ti)
 	// runtime.GOMAXPROCS(runtime.NumCPU())
 
 }
