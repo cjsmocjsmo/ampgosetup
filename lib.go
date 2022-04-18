@@ -94,10 +94,10 @@ func StartLibLogging() string {
 	// If the file doesn't exist, create it or append to the file
 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	log.SetOutput(file)
-	log.Println("Logging started")
+	fmt.Println("Logging started")
 	return "Logging started"
 }
 
@@ -154,8 +154,8 @@ func AmpgoFindOne(db string, coll string, filtertype string, filterstring string
 	var results map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&results)
 	if err != nil {
-		log.Println("AmpgoFindOne: find one has fucked up")
-		log.Fatal(err)
+		fmt.Println("AmpgoFindOne: find one has fucked up")
+		fmt.Println(err)
 	}
 	return results
 }
@@ -174,8 +174,8 @@ func AmpgoFind(dbb string, collb string, filtertype string, filterstring string)
 	CheckError(err, "AmpgoFind: ArtPipeline find has failed")
 	var results []map[string]string //all albums for artist to include double entries
 	if err = cur.All(context.TODO(), &results); err != nil {
-		log.Println("AmpgoFind: cur.All has fucked up")
-		log.Fatal(err)
+		fmt.Println("AmpgoFind: cur.All has fucked up")
+		fmt.Println(err)
 	}
 	return results
 }
@@ -250,8 +250,8 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 	folderjpgcheck := folderjpg_check(apath)
 	tag, err := id3v2.Open(apath, id3v2.Options{Parse: true})
 	if err != nil {
-		log.Println(err)
-		log.Println(apath)
+		fmt.Println(err)
+		fmt.Println(apath)
 		return "None", "None", "None", "None", "None"
 	}
 	defer tag.Close()
@@ -273,7 +273,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 		for _, f := range pictures {
 			pic, ok := f.(id3v2.PictureFrame)
 			if !ok {
-				log.Fatal("DumpArtToFile: Couldn't assert picture frame")
+				fmt.Println("DumpArtToFile: Couldn't assert picture frame")
 			}
 			dumpOutFile2 := os.Getenv("AMPGO_THUMB_PATH") + tag.Artist() + "_-_" + tag.Album() + ".jpg"
 			newdumpOutFile2 = strings.Replace(dumpOutFile2, " ", "_", -1)
@@ -295,7 +295,7 @@ func DumpArtToFile(apath string) (string, string, string, string, string) {
 func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 	artist, album, title, genre, picpath := DumpArtToFile(apath)
 	if artist != "None" && album != "None" && title != "None" {
-		log.Println(apath)
+		fmt.Println(apath)
 		page := strconv.Itoa(apage)
 		index := strconv.Itoa(idx)
 		uuid, _ := UUID()
@@ -349,7 +349,7 @@ func InsAlbumID(alb string) {
 // 	var logtxtfile string = os.Getenv("AMPGO_LIB_LOG_PATH")
 // 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 // 	if err != nil {
-// 		log.Fatal(err)
+// 		fmt.Println(err)
 // 	}
 // 	log.SetOutput(file)
 // 	return "Logging started"
@@ -366,7 +366,7 @@ func GetPicForAlbum(alb string) map[string]string {
 	var albuminfo Tagmap
 	err = collection.FindOne(context.Background(), filter).Decode(&albuminfo)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	log.Printf("GetPicForAlbum: %s this is album", alb)
 	log.Printf("GetPicForAlbum: %s this is AlbumID", albuminfo.AlbumID)
@@ -378,7 +378,7 @@ func GetPicForAlbum(alb string) map[string]string {
 	albinfo["PicPath"] = albuminfo.PicHttpAddr
 	AmpgoInsertOne("tempdb2", "artidpic", albinfo)
 	fmt.Println(albinfo)
-	log.Println(albinfo)
+	fmt.Println(albinfo)
 	return albinfo
 }
 
@@ -396,11 +396,11 @@ func GetTitleOffsetAll() (Main2SL []map[string]string) {
 	collection := client.Database("tempdb1").Collection("meta1")
 	cur, err := collection.Find(context.Background(), filter)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	if err = cur.All(context.Background(), &Main2SL); err != nil {
-		log.Println("GetTitleOffsetAll: cur.All has failed")
-		log.Fatal(err)
+		fmt.Println("GetTitleOffsetAll: cur.All has failed")
+		fmt.Println(err)
 	}
 	return
 }
@@ -414,8 +414,8 @@ func gArtistInfo(Art string) map[string]string {
 	var ArtInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&ArtInfo)
 	if err != nil {
-		log.Println("gArtistInfo: has failed")
-		log.Fatal(err)
+		fmt.Println("gArtistInfo: has failed")
+		fmt.Println(err)
 	}
 	return ArtInfo
 }
@@ -429,14 +429,14 @@ func gAlbumInfo(Alb string) map[string]string {
 	var AlbInfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&AlbInfo)
 	if err != nil {
-		log.Println("gAlbumInfo: has failed")
-		log.Fatal(err)
+		fmt.Println("gAlbumInfo: has failed")
+		fmt.Println(err)
 	}
 	return AlbInfo
 }
 
 func gDurationInfo(filename string) map[string]string {
-	log.Println(filename)
+	fmt.Println(filename)
 	filter := bson.M{"filename": filename}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
@@ -445,9 +445,10 @@ func gDurationInfo(filename string) map[string]string {
 	var durinfo map[string]string = make(map[string]string)
 	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("gDuration has failed")
+		fmt.Println(err)
 	}
-	log.Println(durinfo)
+	fmt.Println(durinfo)
 	return durinfo
 }
 
@@ -464,15 +465,17 @@ func startsWith(astring string) string {
 }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
-	log.Println(m2["filename"])
+	fmt.Println(m2["filename"])
 	artID := gArtistInfo(m2["artist"])
-	log.Println(artID)
+	fmt.Println(artID)
 	albID := gAlbumInfo(m2["album"])
-	log.Println(albID)
+	fmt.Println("this is albID")
+	fmt.Println(albID)
 	fullpath := m2["dirpath"] + "/" + m2["filename"]
-	log.Println(fullpath)
+	fmt.Println(fullpath)
 	duration := gDurationInfo(fullpath)
-	log.Println(duration)
+	fmt.Println("this is duration")
+	fmt.Println(duration)
 	Doko.Dirpath = m2["dirpath"]
 	Doko.Filename = m2["filename"]
 	Doko.Extension = m2["extension"]
