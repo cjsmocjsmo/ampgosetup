@@ -289,6 +289,7 @@ func Setup() {
 		}(APLX)
 		wg6.Wait()
 	}
+	
 	CreateRandomPicsDB()
 
 	CreateRandomPlaylistDB()
