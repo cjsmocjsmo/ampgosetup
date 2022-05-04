@@ -1,11 +1,17 @@
 package ampgosetup
 
+import (
+	"strings"
+)
+
 func AlbumFirst(astring string) string {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "AlbumFirst:  Connections has failed")
 	defer Close(client, ctx, cancel)
 
-	char := StartsWith(astring)
+	// char := StartsWith(astring)
+
+	char := strings.ToUpper(astring[:1])
 
 	switch {
 	case char == "A":

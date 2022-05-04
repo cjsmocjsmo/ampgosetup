@@ -1,29 +1,18 @@
 package ampgosetup
 
-// "context"
-// // "crypto/rand"
-// // "encoding/hex"
-// // "encoding/json"
-// "fmt"
-// // "github.com/bogem/id3v2"
-// // "github.com/disintegration/imaging"
-// "go.mongodb.org/mongo-driver/bson"
-// // "go.mongodb.org/mongo-driver/mongo"
-// // "go.mongodb.org/mongo-driver/mongo/options"
-// // "io/ioutil"
-// // "log"
-// // "os"
-// // "path/filepath"
-// // "strconv"
-// "strings"
-// "time"
+import (
+	"strings"
+)
 
 func ArtistFirst(astring string) string {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgo")
 	CheckError(err, "ArtistFirst: Connections has failed")
 	defer Close(client, ctx, cancel)
 
-	char := StartsWith(astring)
+	// char := StartsWith(astring)
+
+	char := strings.ToUpper(astring[:1])
+
 	switch {
 	case char == "A":
 		var item map[string]string = map[string]string{"artist": astring}

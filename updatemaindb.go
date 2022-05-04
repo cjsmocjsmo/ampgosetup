@@ -67,17 +67,17 @@ func gDurationInfo(filename string) map[string]string {
 	return durinfo
 }
 
-func StartsWith(astring string) string {
-	if len(astring) > 3 {
-		if astring[3:] == "The" || astring[3:] == "the" {
-			return strings.ToUpper(astring[4:5])
-		} else {
-			return strings.ToUpper(astring[:1])
-		}
-	} else {
-		return strings.ToUpper(astring[:1])
-	}
-}
+// func StartsWith(astring string) string {
+// 	if len(astring) > 3 {
+// 		if astring[3:] == "The" || astring[3:] == "the" {
+// 			return strings.ToUpper(astring[4:5])
+// 		} else {
+// 			return strings.ToUpper(astring[:1])
+// 		}
+// 	} else {
+// 		return strings.ToUpper(astring[:1])
+// 	}
+// }
 
 func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	fmt.Println(m2["filename"])
@@ -110,7 +110,8 @@ func UpdateMainDB(m2 map[string]string) (Doko Tagmap) {
 	Doko.PicHttpAddr = m2["picHttpAddr"]
 	Doko.HttpAddr = m2["httpaddr"]
 	Doko.Duration = duration["duration"]
-	Doko.ArtStart = StartsWith(m2["artist"])
+	// Doko.ArtStart = StartsWith(m2["artist"])
+	Doko.ArtStart = strings.ToUpper(m2["artist"][:1])
 	Doko.AlbStart = strings.ToUpper(m2["album"][:1])
 	Doko.TitStart = strings.ToUpper(m2["title"][:1])
 	Doko.Howl = m2["howl"]
