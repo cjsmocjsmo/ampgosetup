@@ -6,6 +6,7 @@ require (
 	github.com/bogem/id3v2 v1.2.0
 	github.com/disintegration/imaging v1.6.2
 	go.mongodb.org/mongo-driver v1.6.0
+	// gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
 
 require (

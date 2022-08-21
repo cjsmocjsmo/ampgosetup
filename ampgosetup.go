@@ -29,8 +29,11 @@ import (
 	// "sync"
 	"time"
 	// "context"
+	"encoding/json"
 	"path/filepath"
 	"strconv"
+	// "gopkg.in/yaml.v3"
+
 )
 
 var OFFSET string = os.Getenv("AMPGO_OFFSET")
@@ -45,7 +48,6 @@ func convertSTR(astring string) int {
 //CheckError exported
 func CheckError(err error, msg string) {
 	if err != nil {
-		fmt.Println(msg)
 		fmt.Println(msg)
 		fmt.Println(err)
 		panic(err)
@@ -63,6 +65,52 @@ func CheckError(err error, msg string) {
 // 	return nil
 // }
 
+func check(e error) {
+    if e != nil {
+        panic(e)
+    }
+}
+
+
+type JsonMP3 struct {
+    BaseDir string
+    Full_Filename string
+    File_Size string
+    Ext string
+    Dir string
+    Filename string
+    Dir_Split_List string
+    Dir_catagory string
+    Dir_artist string
+    Dir_album string
+    Dir_delem string
+    File_delem string
+    File_split_list string
+    Track string
+    File_artist string
+    File_album string
+    File_song string
+    File_id string
+    Tags_artist string
+    Tags_album string
+    Tags_song string
+    Artist_firs string
+    Album_first string
+    Song_first string
+    Jpg_exists string
+    Play_length string
+}
+
+func read_file(apath string) {
+	var jsonmp3 JsonMP3
+	data, er := os.ReadFile(apath)
+	check(er)
+	err := json.Unmarshal(data, &jsonmp3)
+	check(err)
+	fmt.Println(jsonmp3)
+
+}
+
 var titlepage int = 0
 var ii int = 0
 
@@ -70,10 +118,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	fmt.Println(pAth)
 
 	ext := path.Ext(pAth)
-	if ext == ".jpg" {
-		fmt.Println(pAth)
-	
-	} else if ext == ".yaml" {
+	if ext == ".json" {
 		if ii < OffSet {
 			ii++
 			titlepage = 1
@@ -84,6 +129,8 @@ func visit(pAth string, f os.FileInfo, err error) error {
 			ii++
 			titlepage = titlepage + 0
 		}
+		read_file(pAth)
+		fmt.Println(pAth)
 		// TaGmap(pAth, titlepage, ii)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
@@ -129,7 +176,7 @@ func Setup() {
 	// fmt.Println("duration walk is complete")
 
 	fmt.Println("starting walk")
-	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
+	filepath.Walk(os.Getenv("AMPGO_MEDIA_YAML_PATH"), visit)
 	fmt.Println("walk is complete")
 
 	// fmt.Println("starting GetDistAlbumMeta1")
