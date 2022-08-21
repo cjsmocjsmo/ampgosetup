@@ -26,7 +26,7 @@ import (
 	"os"
 	"path"
 	"runtime"
-	"sync"
+	// "sync"
 	"time"
 	// "context"
 	"path/filepath"
@@ -71,11 +71,9 @@ func visit(pAth string, f os.FileInfo, err error) error {
 
 	ext := path.Ext(pAth)
 	if ext == ".jpg" {
-		CreateFolderJpgImageInfoMap(pAth)
-		fmt.Println("FOOUND JPG")
-	} else if ext == ".mp3info" {
-		InsertDurationInfo(pAth)
-	} else if ext == ".mp3" {
+		fmt.Println(pAth)
+	
+	} else if ext == ".yaml" {
 		if ii < OffSet {
 			ii++
 			titlepage = 1
@@ -86,12 +84,12 @@ func visit(pAth string, f os.FileInfo, err error) error {
 			ii++
 			titlepage = titlepage + 0
 		}
-		TaGmap(pAth, titlepage, ii)
+		// TaGmap(pAth, titlepage, ii)
 	} else {
 		fmt.Println("WTF are you? You must be a Dir")
 		fmt.Println(pAth)
 	}
-	fmt.Println(pAth)
+	// fmt.Println(pAth)
 	return nil
 }
 
@@ -134,193 +132,193 @@ func Setup() {
 	filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), visit)
 	fmt.Println("walk is complete")
 
-	fmt.Println("starting GetDistAlbumMeta1")
-	dalb := AmpgoDistinct("tempdb1", "meta1", "album")
-	fmt.Println(dalb)
-	fmt.Println(dalb)
-	fmt.Println("GetDistAlbumMeta1 is complete ")
+	// fmt.Println("starting GetDistAlbumMeta1")
+	// dalb := AmpgoDistinct("tempdb1", "meta1", "album")
+	// fmt.Println(dalb)
+	// fmt.Println(dalb)
+	// fmt.Println("GetDistAlbumMeta1 is complete ")
 
-	fmt.Println("starting InsAlbumID")
-	var wg1 sync.WaitGroup
-	for _, alb := range dalb {
-		wg1.Add(1)
-		go func(alb string) {
-			InsAlbumID(alb)
-			wg1.Done()
-		}(alb)
-		wg1.Wait()
-	}
-	fmt.Println("InsAlbumID is complete ")
+	// fmt.Println("starting InsAlbumID")
+	// var wg1 sync.WaitGroup
+	// for _, alb := range dalb {
+	// 	wg1.Add(1)
+	// 	go func(alb string) {
+	// 		InsAlbumID(alb)
+	// 		wg1.Done()
+	// 	}(alb)
+	// 	wg1.Wait()
+	// }
+	// fmt.Println("InsAlbumID is complete ")
 
-	fmt.Println("starting GDistArtist")
-	dart := AmpgoDistinct("tempdb1", "meta1", "artist")
-	fmt.Println("GDistArtist is complete ")
+	// fmt.Println("starting GDistArtist")
+	// dart := AmpgoDistinct("tempdb1", "meta1", "artist")
+	// fmt.Println("GDistArtist is complete ")
 
-	fmt.Println("starting InsArtistID")
-	var wg2 sync.WaitGroup
-	for _, art := range dart {
-		wg2.Add(1)
-		go func(art string) {
-			InsArtistID(art)
-			wg2.Done()
-		}(art)
-		wg2.Wait()
-	}
-	fmt.Println("InsArtistID is complete ")
+	// fmt.Println("starting InsArtistID")
+	// var wg2 sync.WaitGroup
+	// for _, art := range dart {
+	// 	wg2.Add(1)
+	// 	go func(art string) {
+	// 		InsArtistID(art)
+	// 		wg2.Done()
+	// 	}(art)
+	// 	wg2.Wait()
+	// }
+	// fmt.Println("InsArtistID is complete ")
 
-	fmt.Println("starting GetTitleOffSetAll")
-	AllObj := GetTitleOffsetAll()
-	fmt.Println("GetTitleOffSetAll is complete ")
+	// fmt.Println("starting GetTitleOffSetAll")
+	// AllObj := GetTitleOffsetAll()
+	// fmt.Println("GetTitleOffSetAll is complete ")
 
-	fmt.Println("starting UpdateMainDB")
-	var wg3 sync.WaitGroup
-	for _, blob := range AllObj {
-		fmt.Println(blob)
-		wg3.Add(1)
-		go func(blob map[string]string) {
-			UpdateMainDB(blob)
-			wg3.Done()
-		}(blob)
-		wg3.Wait()
-	}
-	fmt.Println("UpdateMainDB is complete ")
+	// fmt.Println("starting UpdateMainDB")
+	// var wg3 sync.WaitGroup
+	// for _, blob := range AllObj {
+	// 	fmt.Println(blob)
+	// 	wg3.Add(1)
+	// 	go func(blob map[string]string) {
+	// 		UpdateMainDB(blob)
+	// 		wg3.Done()
+	// 	}(blob)
+	// 	wg3.Wait()
+	// }
+	// fmt.Println("UpdateMainDB is complete ")
 
-	fmt.Println("starting ArtistFirst ")
-	var wg99a sync.WaitGroup
-	for _, art := range dart {
-		wg99a.Add(1)
-		go func(art string) {
-			ArtistFirst(art)
-			wg99a.Done()
-		}(art)
-		wg99a.Wait()
-	}
-	fmt.Println("ArtistFirst is complete ")
+	// fmt.Println("starting ArtistFirst ")
+	// var wg99a sync.WaitGroup
+	// for _, art := range dart {
+	// 	wg99a.Add(1)
+	// 	go func(art string) {
+	// 		ArtistFirst(art)
+	// 		wg99a.Done()
+	// 	}(art)
+	// 	wg99a.Wait()
+	// }
+	// fmt.Println("ArtistFirst is complete ")
 
-	fmt.Println("starting AlbumFirst ")
-	var wg99 sync.WaitGroup
-	for _, alb := range dalb {
-		wg99.Add(1)
-		go func(alb string) {
-			AlbumFirst(alb)
-			wg99.Done()
-		}(alb)
-		wg99.Wait()
-	}
-	fmt.Println("AlbumFirst is complete ")
+	// fmt.Println("starting AlbumFirst ")
+	// var wg99 sync.WaitGroup
+	// for _, alb := range dalb {
+	// 	wg99.Add(1)
+	// 	go func(alb string) {
+	// 		AlbumFirst(alb)
+	// 		wg99.Done()
+	// 	}(alb)
+	// 	wg99.Wait()
+	// }
+	// fmt.Println("AlbumFirst is complete ")
 
-	SongFirst()
+	// SongFirst()
 
-	fmt.Println("starting GetPicForAlbum ")
-	var wg133 sync.WaitGroup
-	for _, alb := range dalb {
-		wg133.Add(1)
-		go func(alb string) {
-			zoo := GetPicForAlbum(alb)
-			fmt.Println(zoo)
-			wg133.Done()
-		}(alb)
-		wg133.Wait()
-	}
-	fmt.Println("GetPicForAlbum is complete")
+	// fmt.Println("starting GetPicForAlbum ")
+	// var wg133 sync.WaitGroup
+	// for _, alb := range dalb {
+	// 	wg133.Add(1)
+	// 	go func(alb string) {
+	// 		zoo := GetPicForAlbum(alb)
+	// 		fmt.Println(zoo)
+	// 		wg133.Done()
+	// 	}(alb)
+	// 	wg133.Wait()
+	// }
+	// fmt.Println("GetPicForAlbum is complete")
 
-	// //AggArtist
-	fmt.Println("starting UpdateMainDB")
-	DistArtist := GDistArtist2()
-	fmt.Println("GDistArtist2 is complete ")
+	// // //AggArtist
+	// fmt.Println("starting UpdateMainDB")
+	// DistArtist := GDistArtist2()
+	// fmt.Println("GDistArtist2 is complete ")
 
-	fmt.Println("starting GArtInfo2")
-	var wg5 sync.WaitGroup
-	// var wg15 sync.WaitGroup
-	var artpage int = 0
-	for artIdx, DArtt := range DistArtist {
-		if artIdx < OffSet {
-			artpage = 1
-		} else if artIdx%OffSet == 0 {
-			artpage++
-		} else {
-			artpage = artpage + 0
-		}
+	// fmt.Println("starting GArtInfo2")
+	// var wg5 sync.WaitGroup
+	// // var wg15 sync.WaitGroup
+	// var artpage int = 0
+	// for artIdx, DArtt := range DistArtist {
+	// 	if artIdx < OffSet {
+	// 		artpage = 1
+	// 	} else if artIdx%OffSet == 0 {
+	// 		artpage++
+	// 	} else {
+	// 		artpage = artpage + 0
+	// 	}
 
-		APL := ArtPipline(DArtt, artpage, artIdx)
+	// 	APL := ArtPipline(DArtt, artpage, artIdx)
 
-		wg5.Add(1)
-		go func(APL ArtVieW2) {
-			InsArtPipeline(APL)
-			wg5.Done()
-		}(APL)
-		wg5.Wait()
+	// 	wg5.Add(1)
+	// 	go func(APL ArtVieW2) {
+	// 		InsArtPipeline(APL)
+	// 		wg5.Done()
+	// 	}(APL)
+	// 	wg5.Wait()
 
-		// APL2 := ArtPipline2(DArtt, artpage, artIdx)
+	// 	// APL2 := ArtPipline2(DArtt, artpage, artIdx)
 
-		// wg15.Add(1)
-		// go func(APL2 ArtVieW3) {
-		// 	InsArtPipeline2(APL2)
-		// 	wg15.Done()
-		// }(APL2)
-		// wg15.Wait()
-	}
-	fmt.Println("AggArtists is complete")
-	fmt.Println("AggArtists is complete")
-	// // ArtistOffSet()w11
-	// // fmt.Println("ArtistOffSet is complete")
+	// 	// wg15.Add(1)
+	// 	// go func(APL2 ArtVieW3) {
+	// 	// 	InsArtPipeline2(APL2)
+	// 	// 	wg15.Done()
+	// 	// }(APL2)
+	// 	// wg15.Wait()
+	// }
+	// fmt.Println("AggArtists is complete")
+	// fmt.Println("AggArtists is complete")
+	// // // ArtistOffSet()w11
+	// // // fmt.Println("ArtistOffSet is complete")
 
-	// //AggAlbum
-	// fmt.Println("AggAlbum has started")
+	// // //AggAlbum
+	// // fmt.Println("AggAlbum has started")
 
-	fmt.Println("Starting GDistAlbum3")
-	DistAlbum := GDistAlbum()
+	// fmt.Println("Starting GDistAlbum3")
+	// DistAlbum := GDistAlbum()
 
-	var wg6 sync.WaitGroup
-	var albpage int = 0
-	for albIdx, DAlb := range DistAlbum {
-		wg6.Add(1)
-		if albIdx < OffSet {
-			albpage = 1
-		} else if albIdx%OffSet == 0 {
-			albpage++
-		} else {
-			albpage = albpage + 0
-		}
-		APLX := AlbPipeline(DAlb, albpage, albIdx)
-		go func(APLX AlbVieW2) {
-			InsAlbViewID(APLX)
-			wg6.Done()
-		}(APLX)
-		wg6.Wait()
-	}
+	// var wg6 sync.WaitGroup
+	// var albpage int = 0
+	// for albIdx, DAlb := range DistAlbum {
+	// 	wg6.Add(1)
+	// 	if albIdx < OffSet {
+	// 		albpage = 1
+	// 	} else if albIdx%OffSet == 0 {
+	// 		albpage++
+	// 	} else {
+	// 		albpage = albpage + 0
+	// 	}
+	// 	APLX := AlbPipeline(DAlb, albpage, albIdx)
+	// 	go func(APLX AlbVieW2) {
+	// 		InsAlbViewID(APLX)
+	// 		wg6.Done()
+	// 	}(APLX)
+	// 	wg6.Wait()
+	// }
 	
-	CreateRandomPicsDB()
+	// CreateRandomPicsDB()
 
-	CreateRandomPlaylistDB()
+	// CreateRandomPlaylistDB()
 
-	CreateCurrentPlayListNameDB()
+	// CreateCurrentPlayListNameDB()
 
-	var lines = []string{
-		"Go",
-		"is",
-		"the",
-		"best",
-		"programming",
-		"language",
-		"in",
-		"the",
-		"world",
-	}
+	// var lines = []string{
+	// 	"Go",
+	// 	"is",
+	// 	"the",
+	// 	"best",
+	// 	"programming",
+	// 	"language",
+	// 	"in",
+	// 	"the",
+	// 	"world",
+	// }
 
-	f, err := os.Create("setup.txt")
-	if err != nil {
-		fmt.Println(err)
-	}
-	// remember to close the file
-	defer f.Close()
+	// f, err := os.Create("setup.txt")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// // remember to close the file
+	// defer f.Close()
 
-	for _, line := range lines {
-		_, err := f.WriteString(line + "\n")
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
+	// for _, line := range lines {
+	// 	_, err := f.WriteString(line + "\n")
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// }
 
 	// fmt.Println("AlbumOffSet is complete")
 	t2 := time.Now().Sub(ti)
