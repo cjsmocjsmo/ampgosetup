@@ -79,13 +79,13 @@ type JsonMP3 struct {
     Ext string
     Dir string
     Filename string
-    Dir_Split_List string
+    Dir_Split_List []string
     Dir_catagory string
     Dir_artist string
     Dir_album string
     Dir_delem string
     File_delem string
-    File_split_list string
+    File_split_list []string
     Track string
     File_artist string
     File_album string
