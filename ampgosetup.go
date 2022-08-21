@@ -97,7 +97,7 @@ type JsonMP3 struct {
     Artist_firs string
     Album_first string
     Song_first string
-    Jpg_exists string
+    Jpg_exists bool
     Play_length string
 }
 
