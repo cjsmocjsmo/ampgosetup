@@ -72,6 +72,25 @@ func check(e error) {
     }
 }
 
+type JsonJPG struct {
+	BaseDir string
+    Full_Filename string
+    File_Size string
+    Ext string
+    Filename string
+    Dir string
+    Dir_Split_List []string
+    Dir_catagory string
+    Dir_artist string
+    Dir_album string
+    Index string
+    Dir_delem string
+    File_id string
+    Jpg_width string
+    Jpg_height string
+    File_delem string
+    Img_base64_str string
+}
 
 type JsonMP3 struct {
     BaseDir string
@@ -103,14 +122,22 @@ type JsonMP3 struct {
     Play_length string
 }
 
-func read_file(apath string) {
+func read_file_mp3(apath string) {
 	var jsonmp3 JsonMP3
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &jsonmp3)
 	check(err)
 	fmt.Println(jsonmp3)
+}
 
+func read_file_jpg(apath string) {
+	var jsonjpg JsonJPG
+	data, er := os.ReadFile(apath)
+	check(er)
+	err := json.Unmarshal(data, &jsonjpg)
+	check(err)
+	fmt.Println(jsonjpg)
 }
 
 var titlepage int = 0
@@ -133,7 +160,7 @@ func visit(pAth string, f os.FileInfo, err error) error {
 			ii++
 			titlepage = titlepage + 0
 		}
-		read_file(pAth)
+		read_file_mp3(pAth)
 		fmt.Println(pAth)
 		// TaGmap(pAth, titlepage, ii)
 	} else {
@@ -189,9 +216,14 @@ func Setup() {
 
 	fmt.Println("starting walk")
 	for idx, foo := range files {
-		if strings.Contains(foo, "mp3") {
+		switch{
+		case strings.Contains(foo, "mp3"):
 			fmt.Println(idx, foo)
-			read_file(foo)
+			read_file_mp3(foo)
+
+		case strings.Contains(foo, "jpg"):
+			fmt.Println(idx, foo)
+			read_file_jpg(foo)
 		}
 	}
 	
