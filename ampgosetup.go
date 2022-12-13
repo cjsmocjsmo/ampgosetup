@@ -94,10 +94,11 @@ type JsonMP3 struct {
     Tags_artist string
     Tags_album string
     Tags_song string
-    Artist_firs string
+    Artist_first string
     Album_first string
     Song_first string
     Jpg_exists bool
+	Img_base64_str string
     Play_length string
 }
 
@@ -118,6 +119,8 @@ func visit(pAth string, f os.FileInfo, err error) error {
 	fmt.Println(pAth)
 
 	ext := path.Ext(pAth)
+	fmt.Println(pAth)
+	fmt.Println(ext)
 	if ext == ".json" {
 		if ii < OffSet {
 			ii++
@@ -174,9 +177,22 @@ func Setup() {
 	// fmt.Println("starting duration walk")
 	// filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
 	// fmt.Println("duration walk is complete")
+	var addr string = os.Getenv("AMPGO_MEDIA_METADATA_PATH")
+	var address string = addr + "/*.json"
+	files, err := filepath.Glob(address)
+	// ServerCheckError(err, "Glob metadata failed")
+	if err != nil {
+        fmt.Println(err)
+    }
+	// var lfiles int = len(files)
 
 	fmt.Println("starting walk")
-	filepath.Walk(os.Getenv("AMPGO_MEDIA_YAML_PATH"), visit)
+	for idx, foo := range files {
+		fmt.Println(idx, foo)
+	}
+	
+	// fmt.Println(os.Getenv("AMPGO_MEDIA_METADATA_PATH"))
+	// filepath.Walk(os.Getenv("AMPGO_MEDIA_METADATA_PATH"), visit)
 	fmt.Println("walk is complete")
 
 	// fmt.Println("starting GetDistAlbumMeta1")
