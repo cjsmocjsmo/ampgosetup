@@ -189,6 +189,7 @@ func Setup() {
 	fmt.Println("starting walk")
 	for idx, foo := range files {
 		fmt.Println(idx, foo)
+		read_file(foo)
 	}
 	
 	// fmt.Println(os.Getenv("AMPGO_MEDIA_METADATA_PATH"))
