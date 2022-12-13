@@ -83,7 +83,7 @@ type JsonJPG struct {
     Dir_catagory string
     Dir_artist string
     Dir_album string
-    Index string
+    Index int
     Dir_delem string
     File_id string
     Jpg_width string
@@ -110,6 +110,7 @@ type JsonMP3 struct {
     File_artist string
     File_album string
     File_song string
+	Index int
     File_id string
     Tags_artist string
     Tags_album string
