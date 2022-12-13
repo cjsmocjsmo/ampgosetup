@@ -22,10 +22,12 @@ package ampgosetup
 
 import (
 	"fmt"
+	"strings"
 	// "log"
 	"os"
 	"path"
 	"runtime"
+
 	// "sync"
 	"time"
 	// "context"
@@ -33,7 +35,6 @@ import (
 	"path/filepath"
 	"strconv"
 	// "gopkg.in/yaml.v3"
-
 )
 
 var OFFSET string = os.Getenv("AMPGO_OFFSET")
@@ -188,8 +189,10 @@ func Setup() {
 
 	fmt.Println("starting walk")
 	for idx, foo := range files {
-		fmt.Println(idx, foo)
-		read_file(foo)
+		if strings.Contains(foo, "mp3") {
+			fmt.Println(idx, foo)
+			read_file(foo)
+		}
 	}
 	
 	// fmt.Println(os.Getenv("AMPGO_MEDIA_METADATA_PATH"))
