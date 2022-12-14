@@ -170,8 +170,8 @@ func read_artist_ids(apath string) {
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &artids)
-		check(err)
-		InsertArtistIDS("maindb", "artistids", artids)
+	check(err)
+	InsertArtistIDS("maindb", "artistids", artids)
 	fmt.Println(artids)
 }
 
