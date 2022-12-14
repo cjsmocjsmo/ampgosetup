@@ -114,7 +114,7 @@ func InsertPagesJson(db string, coll string, ablob JsonPage) {
 	CheckError(err2, "InsertPagesJson has failed")
 }
 
-func InsertArtistIDS(db string, coll string, ablob ArtistIDS) {
+func InsertArtistIDS(db string, coll string, ablob []ArtistIDS) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "InsertArtistIDS: Connections has failed")
 	defer Close(client, ctx, cancel)
@@ -122,7 +122,7 @@ func InsertArtistIDS(db string, coll string, ablob ArtistIDS) {
 	CheckError(err2, "InsertArtistIDS has failed")
 }
 
-func InsertAlbumIDS(db string, coll string, ablob AlbumIDS) {
+func InsertAlbumIDS(db string, coll string, ablob []AlbumIDS) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "InsertAlbumIDS: Connections has failed")
 	defer Close(client, ctx, cancel)

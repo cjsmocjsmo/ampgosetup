@@ -158,7 +158,7 @@ func read_file_pages(apath string) {
 }
 
 func read_artist_ids(apath string) {
-	var artids ArtistIDS
+	var artids []ArtistIDS
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &artids)
@@ -168,7 +168,7 @@ func read_artist_ids(apath string) {
 }
 
 func read_album_ids(apath string) {
-	var albids AlbumIDS
+	var albids []AlbumIDS
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &albids)
