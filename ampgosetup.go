@@ -25,7 +25,7 @@ import (
 	"strings"
 	// "log"
 	"os"
-	"path"
+	// "path"
 	"runtime"
 
 	// "sync"
@@ -141,36 +141,45 @@ func read_file_jpg(apath string) {
 	fmt.Println(jsonjpg)
 }
 
-var titlepage int = 0
-var ii int = 0
-
-func visit(pAth string, f os.FileInfo, err error) error {
-	fmt.Println(pAth)
-
-	ext := path.Ext(pAth)
-	fmt.Println(pAth)
-	fmt.Println(ext)
-	if ext == ".json" {
-		if ii < OffSet {
-			ii++
-			titlepage = 1
-		} else if ii%OffSet == 0 {
-			ii++
-			titlepage++
-		} else {
-			ii++
-			titlepage = titlepage + 0
-		}
-		read_file_mp3(pAth)
-		fmt.Println(pAth)
-		// TaGmap(pAth, titlepage, ii)
-	} else {
-		fmt.Println("WTF are you? You must be a Dir")
-		fmt.Println(pAth)
-	}
-	// fmt.Println(pAth)
-	return nil
+func read_file_pages(apath string) {
+	var jsonpages []JsonJPG
+	data, er := os.ReadFile(apath)
+	check(er)
+	err := json.Unmarshal(data, &jsonpages)
+	check(err)
+	fmt.Println(jsonpages)
 }
+
+// var titlepage int = 0
+// var ii int = 0
+
+// func visit(pAth string, f os.FileInfo, err error) error {
+// 	fmt.Println(pAth)
+
+// 	ext := path.Ext(pAth)
+// 	fmt.Println(pAth)
+// 	fmt.Println(ext)
+// 	if ext == ".json" {
+// 		if ii < OffSet {
+// 			ii++
+// 			titlepage = 1
+// 		} else if ii%OffSet == 0 {
+// 			ii++
+// 			titlepage++
+// 		} else {
+// 			ii++
+// 			titlepage = titlepage + 0
+// 		}
+// 		read_file_mp3(pAth)
+// 		fmt.Println(pAth)
+// 		// TaGmap(pAth, titlepage, ii)
+// 	} else {
+// 		fmt.Println("WTF are you? You must be a Dir")
+// 		fmt.Println(pAth)
+// 	}
+// 	// fmt.Println(pAth)
+// 	return nil
+// }
 
 // func StartSetupLogging() string {
 // 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
@@ -225,6 +234,11 @@ func Setup() {
 		case strings.Contains(foo, "jpg"):
 			fmt.Println(idx, foo)
 			read_file_jpg(foo)
+
+		case strings.Contains(foo, "page"):
+			fmt.Println(idx, foo)
+			read_file_pages(foo)
+			
 		}
 	}
 	
