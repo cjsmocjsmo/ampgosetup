@@ -218,6 +218,7 @@ func Setup() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	var addr string = os.Getenv("AMPGO_MEDIA_METADATA_PATH")
 	var address string = addr + "/*.json"
+	log.Println(address)
 	files, err := filepath.Glob(address)
 	if err != nil {
         fmt.Println(err)
@@ -227,15 +228,15 @@ func Setup() {
 	for idx, foo := range files {
 		switch{
 		case strings.Contains(foo, "mp3"):
-			fmt.Println(idx, foo)
+			log.Println(idx, foo)
 			read_file_mp3(foo)
 
 		case strings.Contains(foo, "jpg"):
-			fmt.Println(idx, foo)
+			log.Println(idx, foo)
 			read_file_jpg(foo)
 
 		case strings.Contains(foo, "page"):
-			fmt.Println(idx, foo)
+			log.Println(idx, foo)
 			read_file_pages(foo)
 			
 		// case strings.Contains(foo, "Artist_ID"):
