@@ -164,7 +164,7 @@ func read_artist_ids(apath string) {
 	err := json.Unmarshal(data, &artids)
 	check(err)
 	fmt.Println(artids)
-	InsertArtistIDS("maindb", "pages", artids)
+	InsertArtistIDS("maindb", "artistids", artids)
 }
 
 func read_album_ids(apath string) {
@@ -174,7 +174,7 @@ func read_album_ids(apath string) {
 	err := json.Unmarshal(data, &albids)
 	check(err)
 	fmt.Println(albids)
-	InsertAlbumIDS("maindb", "pages", albids)
+	InsertAlbumIDS("maindb", "albumids", albids)
 }
 
 func StartSetupLogging() string {
