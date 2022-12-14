@@ -23,7 +23,7 @@ package ampgosetup
 import (
 	"fmt"
 	"strings"
-	// "log"
+	"log"
 	"os"
 	// "path"
 	"runtime"
@@ -54,17 +54,6 @@ func CheckError(err error, msg string) {
 		panic(err)
 	}
 }
-
-// func durationVisit(pAth string, f os.FileInfo, err error) error {
-// 	ext := path.Ext(pAth)
-// 	if ext == ".mp3info" {
-// 		InsertDurationInfo(pAth)
-// 	} else {
-// 		fmt.Println("WTF are you?")
-// 		fmt.Println(pAth)
-// 	}
-// 	return nil
-// }
 
 func check(e error) {
     if e != nil {
@@ -128,6 +117,16 @@ type JsonPage struct {
 	PageList []JsonMP3
 }
 
+type ArtistIDS struct {
+	Artist string
+	ArtistID string
+}
+
+type AlbumIDS struct {
+	Album string
+	AlbumID string
+}
+
 func read_file_mp3(apath string) {
 	var jsonmp3 JsonMP3
 	data, er := os.ReadFile(apath)
@@ -158,79 +157,63 @@ func read_file_pages(apath string) {
 	InsertPagesJson("maindb", "pages", jsonpages)
 }
 
-// var titlepage int = 0
-// var ii int = 0
-
-// func visit(pAth string, f os.FileInfo, err error) error {
-// 	fmt.Println(pAth)
-
-// 	ext := path.Ext(pAth)
-// 	fmt.Println(pAth)
-// 	fmt.Println(ext)
-// 	if ext == ".json" {
-// 		if ii < OffSet {
-// 			ii++
-// 			titlepage = 1
-// 		} else if ii%OffSet == 0 {
-// 			ii++
-// 			titlepage++
-// 		} else {
-// 			ii++
-// 			titlepage = titlepage + 0
-// 		}
-// 		read_file_mp3(pAth)
-// 		fmt.Println(pAth)
-// 		// TaGmap(pAth, titlepage, ii)
-// 	} else {
-// 		fmt.Println("WTF are you? You must be a Dir")
-// 		fmt.Println(pAth)
-// 	}
-// 	// fmt.Println(pAth)
-// 	return nil
-// }
-
-// func StartSetupLogging() string {
-// 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
-// 	// If the file doesn't exist, create it or append to the file
-// 	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	fmt.SetOutput(file)
-// 	fmt.Println("Logging started")
-// 	return "server logging started"
-// }
-
-func SetUpCheck() {
-	// StartLibLogging()
-	// StartSetupLogging()
-	Setup()
-
-	// fileinfo, err := os.Stat("setup.txt")
-	// if os.IsNotExist(err) {
-	// 	Setup()
-	// }
-	// fmt.Println(fileinfo)
+func read_artist_ids(apath string) {
+	var artids ArtistIDS
+	data, er := os.ReadFile(apath)
+	check(er)
+	err := json.Unmarshal(data, &artids)
+	check(err)
+	fmt.Println(artids)
+	InsertArtistIDS("maindb", "pages", artids)
 }
+
+func read_album_ids(apath string) {
+	var albids AlbumIDS
+	data, er := os.ReadFile(apath)
+	check(er)
+	err := json.Unmarshal(data, &albids)
+	check(err)
+	fmt.Println(albids)
+	InsertAlbumIDS("maindb", "pages", albids)
+}
+
+func StartSetupLogging() string {
+	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
+	// If the file doesn't exist, create it or append to the file
+	file, err := os.OpenFile(logtxtfile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		fmt.Println(err)
+	}
+	log.SetOutput(file)
+	fmt.Println("Logging started")
+	return "server logging started"
+}
+
+// func SetUpCheck() {
+// 	// StartLibLogging()
+// 	// StartSetupLogging()
+// 	Setup()
+
+// 	// fileinfo, err := os.Stat("setup.txt")
+// 	// if os.IsNotExist(err) {
+// 	// 	Setup()
+// 	// }
+// 	// fmt.Println(fileinfo)
+// }
 
 //SetUp is exported to main
 func Setup() {
+	StartSetupLogging()
 	ti := time.Now()
 	fmt.Println(ti)
-	fmt.Println(ti)
+	log.Println(ti)
 	runtime.GOMAXPROCS(runtime.NumCPU())
-
-	// fmt.Println("starting duration walk")
-	// filepath.Walk(os.Getenv("AMPGO_MEDIA_PATH"), durationVisit)
-	// fmt.Println("duration walk is complete")
 	var addr string = os.Getenv("AMPGO_MEDIA_METADATA_PATH")
 	var address string = addr + "/*.json"
 	files, err := filepath.Glob(address)
-	// ServerCheckError(err, "Glob metadata failed")
 	if err != nil {
         fmt.Println(err)
     }
-	// var lfiles int = len(files)
 
 	fmt.Println("starting walk")
 	for idx, foo := range files {
@@ -247,11 +230,15 @@ func Setup() {
 			fmt.Println(idx, foo)
 			read_file_pages(foo)
 			
+		case strings.Contains(foo, "Artist_ID"):
+			fmt.Println(idx, foo)
+			read_artist_ids(foo)
+
+		case strings.Contains(foo, "Album_ID"):
+			fmt.Println(idx, foo)
+			read_album_ids(foo)
 		}
 	}
-	
-	// fmt.Println(os.Getenv("AMPGO_MEDIA_METADATA_PATH"))
-	// filepath.Walk(os.Getenv("AMPGO_MEDIA_METADATA_PATH"), visit)
 	fmt.Println("walk is complete")
 
 	// fmt.Println("starting GetDistAlbumMeta1")
