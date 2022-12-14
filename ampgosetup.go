@@ -117,23 +117,23 @@ type JsonPage struct {
 	PageList []JsonMP3
 }
 
-type ArtistID struct {
-	Artist string
-	ArtistID string
-}
+// type ArtistID struct {
+// 	Artist string
+// 	ArtistID string
+// }
 
-type ArtistIDLIST struct {
-	ArtistIDList []ArtistID
-}
+// type ArtistIDLIST struct {
+// 	ArtistIDList []ArtistID
+// }
 
-type AlbumID struct {
-	Album string
-	AlbumID string
-}
+// type AlbumID struct {
+// 	Album string
+// 	AlbumID string
+// }
 
-type AlbumIDLIST struct {
-	AlbumIDList []AlbumID
-}
+// type AlbumIDLIST struct {
+// 	AlbumIDList []AlbumID
+// }
 
 func read_file_mp3(apath string) {
 	var jsonmp3 JsonMP3
@@ -165,25 +165,25 @@ func read_file_pages(apath string) {
 	InsertPagesJson("maindb", "pages", jsonpages)
 }
 
-func read_artist_ids(apath string) {
-	var artids ArtistIDLIST
-	data, er := os.ReadFile(apath)
-	check(er)
-	err := json.Unmarshal(data, &artids)
-	check(err)
-	InsertArtistIDS("maindb", "artistids", artids)
-	fmt.Println(artids)
-}
+// func read_artist_ids(apath string) {
+// 	var artids ArtistIDLIST
+// 	data, er := os.ReadFile(apath)
+// 	check(er)
+// 	err := json.Unmarshal(data, &artids)
+// 	check(err)
+// 	InsertArtistIDS("maindb", "artistids", artids)
+// 	fmt.Println(artids)
+// }
 
-func read_album_ids(apath string) {
-	var albids AlbumIDLIST
-	data, er := os.ReadFile(apath)
-	check(er)
-	err := json.Unmarshal(data, &albids)
-	check(err)
-	fmt.Println(albids)
-	InsertAlbumIDS("maindb", "albumids", albids)
-}
+// func read_album_ids(apath string) {
+// 	var albids AlbumIDLIST
+// 	data, er := os.ReadFile(apath)
+// 	check(er)
+// 	err := json.Unmarshal(data, &albids)
+// 	check(err)
+// 	fmt.Println(albids)
+// 	InsertAlbumIDS("maindb", "albumids", albids)
+// }
 
 func StartSetupLogging() string {
 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
@@ -238,13 +238,13 @@ func Setup() {
 			fmt.Println(idx, foo)
 			read_file_pages(foo)
 			
-		case strings.Contains(foo, "Artist_ID"):
-			fmt.Println(idx, foo)
-			read_artist_ids(foo)
+		// case strings.Contains(foo, "Artist_ID"):
+		// 	fmt.Println(idx, foo)
+		// 	read_artist_ids(foo)
 
-		case strings.Contains(foo, "Album_ID"):
-			fmt.Println(idx, foo)
-			read_album_ids(foo)
+		// case strings.Contains(foo, "Album_ID"):
+		// 	fmt.Println(idx, foo)
+		// 	read_album_ids(foo)
 		}
 	}
 	fmt.Println("walk is complete")
