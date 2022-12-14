@@ -123,6 +123,11 @@ type JsonMP3 struct {
     Play_length string
 }
 
+type JsonPage struct {
+	Page string
+	PageList []JsonMP3
+}
+
 func read_file_mp3(apath string) {
 	var jsonmp3 JsonMP3
 	data, er := os.ReadFile(apath)
@@ -144,7 +149,7 @@ func read_file_jpg(apath string) {
 }
 
 func read_file_pages(apath string) {
-	var jsonpages []JsonMP3
+	var jsonpages JsonPage
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &jsonpages)

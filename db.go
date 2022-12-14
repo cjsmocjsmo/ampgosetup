@@ -92,24 +92,24 @@ func AmpgoInsertOne(db string, coll string, ablob map[string]string) {
 
 func InsertMP3Json(db string, coll string, ablob JsonMP3) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "AmpgoInsertOne: Connections has failed")
+	CheckError(err, "InsertMP3Json: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
-	CheckError(err2, "AmpgoInsertOne has failed")
+	CheckError(err2, "InsertMP3Json has failed")
 }
 
 func InsertJPGJson(db string, coll string, ablob JsonJPG) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "AmpgoInsertOne: Connections has failed")
+	CheckError(err, "InsertJPGJson: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
-	CheckError(err2, "AmpgoInsertOne has failed")
+	CheckError(err2, "InsertJPGJson has failed")
 }
 
-func InsertPagesJson(db string, coll string, ablob []JsonMP3) {
+func InsertPagesJson(db string, coll string, ablob JsonPage) {
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	CheckError(err, "AmpgoInsertOne: Connections has failed")
+	CheckError(err, "InsertPagesJson: Connections has failed")
 	defer Close(client, ctx, cancel)
 	_, err2 := InsertOne(client, ctx, db, coll, ablob)
-	CheckError(err2, "AmpgoInsertOne has failed")
+	CheckError(err2, "InsertPagesJson has failed")
 }
