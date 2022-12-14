@@ -117,14 +117,22 @@ type JsonPage struct {
 	PageList []JsonMP3
 }
 
-type ArtistIDS struct {
+type ArtistID struct {
 	Artist string
 	ArtistID string
 }
 
-type AlbumIDS struct {
+type ArtistIDLIST struct {
+	ArtistIDList []ArtistID
+}
+
+type AlbumID struct {
 	Album string
 	AlbumID string
+}
+
+type AlbumIDLIST struct {
+	AlbumIDList []AlbumID
 }
 
 func read_file_mp3(apath string) {
@@ -158,17 +166,17 @@ func read_file_pages(apath string) {
 }
 
 func read_artist_ids(apath string) {
-	var artids []ArtistIDS
+	var artids ArtistIDLIST
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &artids)
-	check(err)
+		check(err)
+		InsertArtistIDS("maindb", "artistids", artids)
 	fmt.Println(artids)
-	InsertArtistIDS("maindb", "artistids", artids)
 }
 
 func read_album_ids(apath string) {
-	var albids []AlbumIDS
+	var albids AlbumIDLIST
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &albids)
@@ -340,16 +348,16 @@ func Setup() {
 	// var wg5 sync.WaitGroup
 	// // var wg15 sync.WaitGroup
 	// var artpage int = 0
-	// for artIdx, DArtt := range DistArtist {
-	// 	if artIdx < OffSet {
+	// for artIdsx, DArtt := range DistArtist {
+	// 	if artIdsx < OffSet {
 	// 		artpage = 1
-	// 	} else if artIdx%OffSet == 0 {
+	// 	} else if artIdsx%OffSet == 0 {
 	// 		artpage++
 	// 	} else {
 	// 		artpage = artpage + 0
 	// 	}
 
-	// 	APL := ArtPipline(DArtt, artpage, artIdx)
+	// 	APL := ArtPipline(DArtt, artpage, artIdsx)
 
 	// 	wg5.Add(1)
 	// 	go func(APL ArtVieW2) {
@@ -358,7 +366,7 @@ func Setup() {
 	// 	}(APL)
 	// 	wg5.Wait()
 
-	// 	// APL2 := ArtPipline2(DArtt, artpage, artIdx)
+	// 	// APL2 := ArtPipline2(DArtt, artpage, artIdsx)
 
 	// 	// wg15.Add(1)
 	// 	// go func(APL2 ArtVieW3) {
