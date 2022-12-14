@@ -130,6 +130,7 @@ func read_file_mp3(apath string) {
 	err := json.Unmarshal(data, &jsonmp3)
 	check(err)
 	fmt.Println(jsonmp3)
+	InsertMP3Json("maindb", "mp3s", jsonmp3)
 }
 
 func read_file_jpg(apath string) {
@@ -139,15 +140,17 @@ func read_file_jpg(apath string) {
 	err := json.Unmarshal(data, &jsonjpg)
 	check(err)
 	fmt.Println(jsonjpg)
+	InsertJPGJson("maindb", "jpgs", jsonjpg)
 }
 
 func read_file_pages(apath string) {
-	var jsonpages []JsonJPG
+	var jsonpages []JsonMP3
 	data, er := os.ReadFile(apath)
 	check(er)
 	err := json.Unmarshal(data, &jsonpages)
 	check(err)
 	fmt.Println(jsonpages)
+	InsertPagesJson("maindb", "pages", jsonpages)
 }
 
 // var titlepage int = 0
