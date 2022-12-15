@@ -28,7 +28,7 @@ import (
 	// "path"
 	"runtime"
 
-	// "sync"
+	"sync"
 	"time"
 	// "context"
 	"encoding/json"
@@ -51,12 +51,15 @@ func CheckError(err error, msg string) {
 	if err != nil {
 		fmt.Println(msg)
 		fmt.Println(err)
+		log.Println(msg)
+		log.Println(err)
 		panic(err)
 	}
 }
 
 func check(e error) {
     if e != nil {
+		log.Println(e)
         panic(e)
     }
 }
@@ -141,7 +144,7 @@ func read_file_mp3(apath string) {
 	check(er)
 	err := json.Unmarshal(data, &jsonmp3)
 	check(err)
-	fmt.Println(jsonmp3)
+	// fmt.Println(jsonmp3)
 	InsertMP3Json("maindb", "mp3s", jsonmp3)
 }
 
@@ -151,7 +154,7 @@ func read_file_jpg(apath string) {
 	check(er)
 	err := json.Unmarshal(data, &jsonjpg)
 	check(err)
-	fmt.Println(jsonjpg)
+	// fmt.Println(jsonjpg)
 	InsertJPGJson("maindb", "jpgs", jsonjpg)
 }
 
@@ -161,7 +164,7 @@ func read_file_pages(apath string) {
 	check(er)
 	err := json.Unmarshal(data, &jsonpages)
 	check(err)
-	fmt.Println(jsonpages)
+	// fmt.Println(jsonpages)
 	InsertPagesJson("maindb", "pages", jsonpages)
 }
 
@@ -224,7 +227,7 @@ func Setup() {
         fmt.Println(err)
     }
 
-	fmt.Println("starting walk")
+	log.Println("starting walk")
 	for idx, foo := range files {
 		switch{
 		case strings.Contains(foo, "mp3"):
@@ -248,25 +251,26 @@ func Setup() {
 		// 	read_album_ids(foo)
 		}
 	}
-	fmt.Println("walk is complete")
+	log.Println("walk is complete")
 
-	// fmt.Println("starting GetDistAlbumMeta1")
+	log.Println("starting GetDistAlbumMeta1")
 	// dalb := AmpgoDistinct("tempdb1", "meta1", "album")
+	dalb := AmpgoDistinct("maindb", "mp3s", "album")
+	log.Println(dalb)
 	// fmt.Println(dalb)
-	// fmt.Println(dalb)
-	// fmt.Println("GetDistAlbumMeta1 is complete ")
+	log.Println("GetDistAlbumMeta1 is complete ")
 
-	// fmt.Println("starting InsAlbumID")
-	// var wg1 sync.WaitGroup
-	// for _, alb := range dalb {
-	// 	wg1.Add(1)
-	// 	go func(alb string) {
-	// 		InsAlbumID(alb)
-	// 		wg1.Done()
-	// 	}(alb)
-	// 	wg1.Wait()
-	// }
-	// fmt.Println("InsAlbumID is complete ")
+	log.Println("starting InsAlbumID")
+	var wg1 sync.WaitGroup
+	for _, alb := range dalb {
+		wg1.Add(1)
+		go func(alb string) {
+			InsAlbumID(alb)
+			wg1.Done()
+		}(alb)
+		wg1.Wait()
+	}
+	log.Println("InsAlbumID is complete ")
 
 	// fmt.Println("starting GDistArtist")
 	// dart := AmpgoDistinct("tempdb1", "meta1", "artist")
