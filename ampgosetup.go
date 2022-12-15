@@ -70,12 +70,12 @@ type JsonJPG struct {
     File_Size string
     Ext string
     Filename string
-    Dir string
-    Dir_Split_List []string
+    // Dir string
+    // Dir_Split_List []string
     Dir_catagory string
     Dir_artist string
     Dir_album string
-    Index int
+    Index string
     Dir_delem string
     File_id string
     Jpg_width string
@@ -91,18 +91,18 @@ type JsonMP3 struct {
     Ext string
     Dir string
     Filename string
-    Dir_Split_List []string
+    // Dir_Split_List []string
     Dir_catagory string
     Dir_artist string
     Dir_album string
     Dir_delem string
     File_delem string
-    File_split_list []string
+    // File_split_list []string
     Track string
     File_artist string
     File_album string
     File_song string
-	Index int
+	Index string
     File_id string
     Tags_artist string
     Tags_album string
@@ -110,7 +110,6 @@ type JsonMP3 struct {
     Artist_first string
     Album_first string
     Song_first string
-    Jpg_exists bool
 	Img_base64_str string
     Play_length string
 }
@@ -128,6 +127,7 @@ func read_file_mp3(apath string) {
 	check(err)
 	// fmt.Println(jsonmp3)
 	InsertMP3Json("maindb", "mp3s", jsonmp3)
+	log.Printf("%s : read_file_mp3 complete", apath)
 }
 
 func read_file_jpg(apath string) {
@@ -138,6 +138,7 @@ func read_file_jpg(apath string) {
 	check(err)
 	// fmt.Println(jsonjpg)
 	InsertJPGJson("maindb", "jpgs", jsonjpg)
+	log.Printf("%s : read_file_jpg complete", apath)
 }
 
 func read_file_pages(apath string) {
@@ -148,6 +149,7 @@ func read_file_pages(apath string) {
 	check(err)
 	// fmt.Println(jsonpages)
 	InsertPagesJson("maindb", "pages", jsonpages)
+	log.Printf("%s : read_file_pages complete", apath)
 }
 
 func StartSetupLogging() string {
