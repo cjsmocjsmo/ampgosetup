@@ -120,24 +120,6 @@ type JsonPage struct {
 	PageList []JsonMP3
 }
 
-// type ArtistID struct {
-// 	Artist string
-// 	ArtistID string
-// }
-
-// type ArtistIDLIST struct {
-// 	ArtistIDList []ArtistID
-// }
-
-// type AlbumID struct {
-// 	Album string
-// 	AlbumID string
-// }
-
-// type AlbumIDLIST struct {
-// 	AlbumIDList []AlbumID
-// }
-
 func read_file_mp3(apath string) {
 	var jsonmp3 JsonMP3
 	data, er := os.ReadFile(apath)
@@ -168,26 +150,6 @@ func read_file_pages(apath string) {
 	InsertPagesJson("maindb", "pages", jsonpages)
 }
 
-// func read_artist_ids(apath string) {
-// 	var artids ArtistIDLIST
-// 	data, er := os.ReadFile(apath)
-// 	check(er)
-// 	err := json.Unmarshal(data, &artids)
-// 	check(err)
-// 	InsertArtistIDS("maindb", "artistids", artids)
-// 	fmt.Println(artids)
-// }
-
-// func read_album_ids(apath string) {
-// 	var albids AlbumIDLIST
-// 	data, er := os.ReadFile(apath)
-// 	check(er)
-// 	err := json.Unmarshal(data, &albids)
-// 	check(err)
-// 	fmt.Println(albids)
-// 	InsertAlbumIDS("maindb", "albumids", albids)
-// }
-
 func StartSetupLogging() string {
 	logtxtfile := os.Getenv("AMPGO_SETUP_LOG_PATH")
 	// If the file doesn't exist, create it or append to the file
@@ -199,18 +161,6 @@ func StartSetupLogging() string {
 	fmt.Println("Logging started")
 	return "server logging started"
 }
-
-// func SetUpCheck() {
-// 	// StartLibLogging()
-// 	// StartSetupLogging()
-// 	Setup()
-
-// 	// fileinfo, err := os.Stat("setup.txt")
-// 	// if os.IsNotExist(err) {
-// 	// 	Setup()
-// 	// }
-// 	// fmt.Println(fileinfo)
-// }
 
 //SetUp is exported to main
 func Setup() {
@@ -241,21 +191,13 @@ func Setup() {
 		case strings.Contains(foo, "page"):
 			log.Println(idx, foo)
 			read_file_pages(foo)
-			
-		// case strings.Contains(foo, "Artist_ID"):
-		// 	fmt.Println(idx, foo)
-		// 	read_artist_ids(foo)
-
-		// case strings.Contains(foo, "Album_ID"):
-		// 	fmt.Println(idx, foo)
-		// 	read_album_ids(foo)
 		}
 	}
 	log.Println("walk is complete")
 
 	log.Println("starting GetDistAlbumMeta1")
 	// dalb := AmpgoDistinct("tempdb1", "meta1", "album")
-	dalb := AmpgoDistinct("maindb", "mp3s", "album")
+	dalb := AmpgoDistinct("maindb", "mp3s", "tags_album")
 	log.Println(dalb)
 	// fmt.Println(dalb)
 	log.Println("GetDistAlbumMeta1 is complete ")
@@ -272,21 +214,23 @@ func Setup() {
 	}
 	log.Println("InsAlbumID is complete ")
 
-	// fmt.Println("starting GDistArtist")
+	log.Println("starting GDistArtist")
 	// dart := AmpgoDistinct("tempdb1", "meta1", "artist")
-	// fmt.Println("GDistArtist is complete ")
+	dart := AmpgoDistinct("maindb", "mp3s", "tags_artist")
+	log.Println(dart)
+	log.Println("GDistArtist is complete ")
 
-	// fmt.Println("starting InsArtistID")
-	// var wg2 sync.WaitGroup
-	// for _, art := range dart {
-	// 	wg2.Add(1)
-	// 	go func(art string) {
-	// 		InsArtistID(art)
-	// 		wg2.Done()
-	// 	}(art)
-	// 	wg2.Wait()
-	// }
-	// fmt.Println("InsArtistID is complete ")
+	log.Println("starting InsArtistID")
+	var wg2 sync.WaitGroup
+	for _, art := range dart {
+		wg2.Add(1)
+		go func(art string) {
+			InsArtistID(art)
+			wg2.Done()
+		}(art)
+		wg2.Wait()
+	}
+	log.Println("InsArtistID is complete ")
 
 	// fmt.Println("starting GetTitleOffSetAll")
 	// AllObj := GetTitleOffsetAll()
