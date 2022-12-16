@@ -16,7 +16,7 @@ import (
 	// "os"
 	// "path/filepath"
 	// "strconv"
-	// "strings"
+	"strings"
 	// "time"
 )
 
@@ -50,22 +50,22 @@ func gAlbumInfo(Alb string) map[string]string {
 	return AlbInfo
 }
 
-func gDurationInfo(filename string) map[string]string {
-	fmt.Println(filename)
-	filter := bson.M{"filename": filename}
-	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-	defer Close(client, ctx, cancel)
-	CheckError(err, "MongoDB connection has failed")
-	collection := client.Database("durdb").Collection("durdb")
-	var durinfo map[string]string = make(map[string]string)
-	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
-	if err != nil {
-		fmt.Println("gDuration has failed")
-		fmt.Println(err)
-	}
-	fmt.Println(durinfo)
-	return durinfo
-}
+// func gDurationInfo(filename string) map[string]string {
+// 	fmt.Println(filename)
+// 	filter := bson.M{"filename": filename}
+// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+// 	defer Close(client, ctx, cancel)
+// 	CheckError(err, "MongoDB connection has failed")
+// 	collection := client.Database("durdb").Collection("durdb")
+// 	var durinfo map[string]string = make(map[string]string)
+// 	err = collection.FindOne(context.Background(), filter).Decode(&durinfo)
+// 	if err != nil {
+// 		fmt.Println("gDuration has failed")
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println(durinfo)
+// 	return durinfo
+// }
 
 // func StartsWith(astring string) string {
 // 	if len(astring) > 3 {
@@ -79,49 +79,56 @@ func gDurationInfo(filename string) map[string]string {
 // 	}
 // }
 
-// func UpdateMainDB(m2 map[string]string) (Doko JsonMP3) {
-// 	fmt.Println(m2["Filename"])
+func UpdateMainDB(m2 JsonMP3) (Doko map[string]string) {
+	
+	fmt.Println(m2.Filename)
 
-// 	artID := gArtistInfo(m2["Tags_artist"])
-// 	fmt.Println(artID)
-// 	albID := gAlbumInfo(m2["album"])
-// 	fmt.Println("this is albID")
-// 	fmt.Println(albID)
-// 	fullpath := m2["dirpath"] + "/" + m2["filename"]
-// 	fmt.Println(fullpath)
-// 	duration := gDurationInfo(fullpath)
-// 	fmt.Println("this is duration")
-// 	fmt.Println(duration)
+	artID := gArtistInfo(m2.Tags_artist)
+	fmt.Println(artID)
+
+	albID := gAlbumInfo(m2.Tags_album)
+	fmt.Println("this is albID")
+	fmt.Println(albID)
+
+	fullpath := m2.Full_Filename
+	fmt.Println(fullpath)
+
+	duration := m2.Play_length
+	fmt.Println("this is duration")
+	fmt.Println(duration)
 
 
-// 	Doko.Dirpath = m2["dirpath"]
-// 	Doko.Filename = m2["filename"]
-// 	Doko.Ext = m2["Ext"]
-// 	Doko.File_id = m2["File_id"]
-// 	Doko.File_Size = m2["File_Size"]
-// 	Doko.Artist = m2["artist"]
-// 	Doko.ArtistID = artID["artistID"]
-// 	Doko.Album = m2["album"]
-// 	Doko.AlbumID = albID["albumID"]
-// 	Doko.Title = m2["title"]
-// 	Doko.Genre = m2["genre"]
-// 	Doko.PicID = m2["picID"]
-// 	Doko.PicDB = "thumbnails"
-// 	Doko.TitlePage = m2["titlepage"]
-// 	Doko.Idx = m2["idx"]
-// 	Doko.PicPath = m2["picPath"]
-// 	Doko.PicHttpAddr = m2["picHttpAddr"]
-// 	Doko.HttpAddr = m2["httpaddr"]
-// 	Doko.Duration = duration["duration"]
-// 	// Doko.ArtStart = StartsWith(m2["artist"])
-// 	Doko.ArtStart = strings.ToUpper(m2["artist"][:1])
-// 	Doko.AlbStart = strings.ToUpper(m2["album"][:1])
-// 	Doko.TitStart = strings.ToUpper(m2["title"][:1])
-// 	Doko.Howl = m2["howl"]
-// 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
-// 	CheckError(err, "UpdateMainDB: Connections has failed")
-// 	defer Close(client, ctx, cancel)
-// 	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
-// 	CheckError(err2, "UpdateMainDB: maindb insertion has failed")
-// 	return
-// }
+	Doko["Dir"] = m2.Dir
+	Doko["Filename"] = m2.Filename
+	Doko["Ext"] = m2.Ext
+	Doko["File_id"] = m2.File_id
+	Doko["File_Size"] = m2.File_Size
+	Doko["Artist"] = m2.Tags_artist
+	Doko["ArtistID"] = artID["artistID"]
+	Doko["Album"] = m2.Tags_album
+	Doko["AlbumID"] = albID["albumID"]
+	Doko["Song"] = m2.Tags_song
+	// Doko.Genre = m2["genre"]
+	Doko["Index"] = m2.Index
+	Doko["Play_length"] = m2.Play_length
+	Doko["Artist_first"] = strings.ToUpper(m2.Artist_first)
+	Doko["Album_first"] = strings.ToUpper(m2.Album_first)
+	Doko["Song_first"] = strings.ToUpper(m2.Song_first)
+
+	// Doko.PicID = m2["picID"]
+	// Doko.TitlePage = m2["titlepage"]
+	
+	// Doko.PicPath = m2["picPath"]
+	// Doko.PicHttpAddr = m2["picHttpAddr"]
+	// Doko.HttpAddr = m2["httpaddr"]
+	
+	// Doko.ArtStart = StartsWith(m2["artist"])
+	
+	
+	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
+	CheckError(err, "UpdateMainDB: Connections has failed")
+	defer Close(client, ctx, cancel)
+	_, err2 := InsertOne(client, ctx, "maindb", "maindb", &Doko)
+	CheckError(err2, "UpdateMainDB: maindb insertion has failed")
+	return
+}

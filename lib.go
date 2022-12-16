@@ -178,7 +178,7 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 // func GetAllObjects() (Main2SL []map[string]string) {
 
-func GetAllObjects() (Main2SL JsonMP3) {
+func GetAllObjects() (Main2SL []JsonMP3) {
 	filter := bson.D{}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)

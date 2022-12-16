@@ -239,18 +239,18 @@ func Setup() {
 	log.Println("GetAllObjects is complete ")
 	fmt.Println(AllObjs)
 
-	// fmt.Println("starting UpdateMainDB")
-	// var wg3 sync.WaitGroup
-	// for _, blob := range AllObj {
-	// 	fmt.Println(blob)
-	// 	wg3.Add(1)
-	// 	go func(blob map[string]string) {
-	// 		UpdateMainDB(blob)
-	// 		wg3.Done()
-	// 	}(blob)
-	// 	wg3.Wait()
-	// }
-	// fmt.Println("UpdateMainDB is complete ")
+	log.Println("starting UpdateMainDB")
+	var wg3 sync.WaitGroup
+	for _, blob := range AllObjs {
+		fmt.Println(blob)
+		wg3.Add(1)
+		go func(blob JsonMP3) {
+			UpdateMainDB(blob)
+			wg3.Done()
+		}(blob)
+		wg3.Wait()
+	}
+	log.Println("UpdateMainDB is complete ")
 
 	// fmt.Println("starting ArtistFirst ")
 	// var wg99a sync.WaitGroup
