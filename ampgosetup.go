@@ -242,7 +242,7 @@ func Setup() {
 	log.Println("starting UpdateMainDB")
 	var wg3 sync.WaitGroup
 	for _, blob := range AllObjs {
-		fmt.Println(blob)
+		log.Println(blob)
 		wg3.Add(1)
 		go func(blob JsonMP3) {
 			UpdateMainDB(blob)

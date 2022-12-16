@@ -12,7 +12,7 @@ import (
 	// "go.mongodb.org/mongo-driver/mongo"
 	// "go.mongodb.org/mongo-driver/mongo/options"
 	// "io/ioutil"
-	// "log"
+	"log"
 	// "os"
 	// "path/filepath"
 	// "strconv"
@@ -124,7 +124,7 @@ func UpdateMainDB(m2 JsonMP3) (Doko map[string]string) {
 	
 	// Doko.ArtStart = StartsWith(m2["artist"])
 	
-	
+	log.Println(Doko)
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	CheckError(err, "UpdateMainDB: Connections has failed")
 	defer Close(client, ctx, cancel)
