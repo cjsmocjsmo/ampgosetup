@@ -176,18 +176,20 @@ func TaGmap(apath string, apage int, idx int) (TaGmaP Tagmap) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-func GetTitleOffsetAll() (Main2SL []map[string]string) {
+// func GetAllObjects() (Main2SL []map[string]string) {
+
+func GetAllObjects() (Main2SL JsonMP3) {
 	filter := bson.D{}
 	client, ctx, cancel, err := Connect("mongodb://db:27017/ampgodb")
 	defer Close(client, ctx, cancel)
-	CheckError(err, "GetTitleOffsetAll: MongoDB connection has failed")
+	CheckError(err, "GetAllObjects: MongoDB connection has failed")
 	collection := client.Database("tempdb1").Collection("meta1")
 	cur, err := collection.Find(context.Background(), filter)
 	if err != nil {
 		fmt.Println(err)
 	}
 	if err = cur.All(context.Background(), &Main2SL); err != nil {
-		fmt.Println("GetTitleOffsetAll: cur.All has failed")
+		fmt.Println("GetAllObjects: cur.All has failed")
 		fmt.Println(err)
 	}
 	return

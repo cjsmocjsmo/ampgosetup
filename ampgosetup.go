@@ -234,9 +234,10 @@ func Setup() {
 	}
 	log.Println("InsArtistID is complete ")
 
-	// fmt.Println("starting GetTitleOffSetAll")
-	// AllObj := GetTitleOffsetAll()
-	// fmt.Println("GetTitleOffSetAll is complete ")
+	log.Println("starting GetAllObjects")
+	AllObjs := GetAllObjects()
+	log.Println("GetAllObjects is complete ")
+	fmt.Println(AllObjs)
 
 	// fmt.Println("starting UpdateMainDB")
 	// var wg3 sync.WaitGroup
